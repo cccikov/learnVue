@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 计算属性和观察者</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <!-- 原始例子 -->
+    <div id="example">
+        {{ message.split('').reverse().join('') }}
+    </div>
+
+    <script type="text/javascript">
+    // 我想做到内容 根据 实时的message做出处理
+    var vm1 = new Vue({
+        el: "#example",
+        data: {
+            message: "Hello World"
+        }
+    });
+    </script>
+
+
+
+
+
+    <!-- 采用计算属性 -->
+    <div id="example2">
+        <p>Original message: "{{ message }}"</p>
+        <p>Computed reversed message: "{{ reversedMessage }}"</p>
+    </div>
+
+    <script type="text/javascript">
+    var vm2 = new Vue({
+        el: '#example2',
+        data: {
+            message: 'Hello'
+        },
+        computed: {
+            // a computed getter
+            reversedMessage: function() {
+                // `this` points to the vm instance
+                return this.message.split('').reverse().join('');
+            }
+        }
+    });
+    setTimeout(function(){
+        vm2.message = "hello world";
+    },1000);
+    </script>
+
+
+
+
+    <!-- 采用method 方法 -->
+    <div id="example3">
+        <p>Original message: "{{ message }}"</p>
+        <p>Computed reversed message: "{{ reversedMessage() }}"</p>
+    </div>
+    <script type="text/javascript">
+    var vm3 = new Vue({
+        el: '#example3',
+        data: {
+            message: 'Hello'
+        },
+        methods: {
+            reversedMessage: function() {
+                return this.message.split('').reverse().join('')
+            }
+        }
+    });
+    setTimeout(function(){
+        vm3.message = "hello world";
+    },1000);
+    </script>
+
+
+
+
+
+    <!-- 采用 watch -->
+    <div id="example4">
+        <p>Original message: "{{ message }}"</p>
+        <p>Computed reversed message: "{{ reversedMessage }}"</p>
+    </div>
+    <script type="text/javascript">
+    var vm4 = new Vue({
+        el: '#example4',
+        data: {
+            message: 'Hello',
+            reversedMessage:"none"
+        },
+        watch:{
+            message:function(val){
+                this.reversedMessage = val.split('').reverse().join('');
+            }
+        }
+    });
+    setTimeout(function(){
+        vm4.message = "hello world";
+    },1000);
+    /*然而，通常更好的想法是使用 computed 属性而不是命令式的 watch 回调。*/
+    </script>
+
+
+
+
+
+
+
+
+    <!-- 计算属性 对比 method -->
+    <div id="date">
+        <p>{{time_c}}</p>
+        <p>{{time_m()}}</p>
+
+        <p>{{now_c}}</p>
+        <p>{{now_m}}</p>
+    </div>
+    <script type="text/javascript">
+    var vm5 = new Vue({
+        el: "#date",
+        computed: {
+            time_c: function() {
+                console.log("time_c 执行");
+                return Date.now();
+            },
+            now_c:function(){
+               return new Date(this.time_c);// 不需要再次运行 time_c
+            },
+            now_m:function(){
+               return new Date(this.time_m());// 需要再次运行 time_m 耗费资源
+            }
+        },
+        methods:{
+            time_m:function(){
+                console.log("time_m 执行");
+                return Date.now();
+            }
+        }
+    });
+    // 在控制台中可以看出 time_c 执行了一次 而 time_m 执行了两次
+
+
+    /*计算属性是基于它们的依赖进行缓存的。计算属性只有在它的相关依赖发生改变时才会重新求值。*/
+    /*而method 不会缓存 , 用一次运行一次 , 如果是一个好复杂的操作 , 就会好耗费性能。比如要是time_m操作是好复杂的 , now_m由于需要用到time_m的值 , 所以又不可避免地运行多一次*/
+    </script>
+
+
+    <!-- 计算属性 对比 watch -->
+    <div id="demo1">{{ fullName }}</div>
+    <div id="demo2">{{ fullName }}</div>
+
+    <script type="text/javascript">
+    // 采用watch
+    var vm6 = new Vue({
+        el: '#demo1',
+        data: {
+            firstName: 'Foo',
+            lastName: 'Bar',
+            fullName: 'Foo Bar'
+        },
+        watch: {
+            firstName: function(val) {
+                this.fullName = val + ' ' + this.lastName
+            },
+            lastName: function(val) {
+                this.fullName = this.firstName + ' ' + val
+            }
+        }
+    });
+
+    // 采用计算属性
+    var vm7 = new Vue({
+        el: '#demo2',
+        data: {
+            firstName: 'Foo',
+            lastName: 'Bar'
+        },
+        computed: {
+            fullName: function() {
+                return this.firstName + ' ' + this.lastName
+            }
+        }
+    });
+    // 明显是计算属性更加简单一点
+    </script>
+
+
+
+
+
+
+    <!-- 计算属性 setter -->
+    <div id="name">
+        {{full}}
+    </div>
+    <script type="text/javascript">
+    // 计算属性默认只有 getter ，不过在需要时你也可以提供一个 setter
+    var vm8 = new Vue({
+        el: "#name",
+        data: {
+            first: "chucong",
+            last: "chen"
+        },
+        computed: {
+            full: {
+                // getter
+                get: function() {
+                    return this.first + ' ' + this.last
+                },
+                // setter
+                set: function(newValue) {
+                    var names = newValue.split(' ');
+                    // this.first = names[0];
+                    this.last = names[names.length - 1];
+                }
+            }
+        }
+    });
+    setTimeout(function(){
+        vm8.full = "tomato cao"
+    }, 1000);
+    </script>
+
+</body>
+
+</html>
