@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue Class 与 Style 绑定</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <!-- *********绑定class************ -->
+    <!-- =========对象语法========== -->
+
+    <!-- 我们可以传给 v-bind:class 一个对象，以动态地切换 class -->
+    <div id="app1">
+        <div v-bind:class="{ active: isActive }"></div>
+        <!-- 等同于 -->
+        <div v-bind:class="{ 'active': isActive }"></div>
+        <!-- 渲染结果: <div class="active"></div> -->
+
+
+
+        <div v-bind:class="{'text-danger': hasError}"></div>
+        <!-- 渲染结果:<div class=""></div> -->
+        <div v-bind:class="{'text-danger': 'hasError'}"></div>
+        <!-- 渲染结果:<div class="text-danger"></div> -->
+    </div>
+    <script type="text/javascript">
+        var vm1 = new Vue({
+            "el": "#app1",
+            data: {
+                isActive: true, // 只要isActive的值转化为boolean值为true , 上面div就会有active className
+                hasError: false // 要是{'text-danger': 'hasError'}这样写法 由于'hasError'是字符串不是变量 , 转化成boolean值为true 所以第四个div会显示 text-danger className
+            }
+        });
+    </script>
+
+
+    <!-- 你可以在对象中传入更多属性用来动态切换多个 class。此外， v-bind:class 指令也可以与普通的 class 属性共存。如下模板： -->
+    <div id="app2">
+        <div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError }">
+        </div>
+        <!-- 等同于 -->
+        <div v-bind:class="{ static: true, active: isActive, 'text-danger': hasError }">
+        </div>
+        <!-- 渲染结果: <div class="static active"></div> -->
+    </div>
+    <script type="text/javascript">
+        var vm2 = new Vue({
+            "el": "#app2",
+            data: {
+                isActive: true,
+                hasError: false
+            }
+        });
+    </script>
+
+
+    <!-- 直接绑定数据里的一个对象： -->
+    <div id="app3">
+        <div v-bind:class="classObject"></div>
+        <!-- 渲染结果: <div class="active"></div> -->
+    </div>
+    <script>
+        var vm3 = new Vue({
+            "el": "#app3",
+            data: {
+                classObject: {
+                    active: true,
+                    'text-danger': false
+                }
+            }
+        });
+    </script>
+
+
+    <!-- 也可以用到计算属性 -->
+    <div id="app4">
+        <div v-bind:class="classObject"></div>
+        <!-- 渲染结果: <div class="active"></div> -->
+    </div>
+    <script>
+        var vm4 = new Vue({
+            "el": "#app4",
+            data: {
+                isActive: true,
+                error: false
+                    // error: {
+                    //     type: "fatal"
+                    // }
+            },
+            computed: {
+                classObject: function() {
+                    return {
+                        active: this.isActive && !this.error,
+                        'text-danger': this.error && this.error.type === 'fatal',
+                    }
+                }
+            }
+        });
+    </script>
+
+
+
+    <!-- =========对象语法========== -->
+    <!-- 上面的例子 都是给 v-bind:class 传入一个对象 , 还可以传入一个数组 , 以应用一个 class 列表 -->
+    <div id="app5">
+        <div v-bind:class="[activeClass, errorClass,'static']"></div>
+        <!-- 渲染结果: <div class="active text-danger static"></div> -->
+
+        <div v-bind:class="[isActive ? activeClass : '', errorClass,'static']"></div>
+        <!-- 等同于 -->
+        <div v-bind:class="[isActive ? 'active' : '', errorClass,'static']"></div>
+        <!-- 等同于 -->
+        <div v-bind:class="[{active:isActive}, errorClass,'static']"></div>
+        <!-- 渲染结果: <div class="text-danger static"></div> -->
+    </div>
+    <script>
+        var vm5 = new Vue({
+            el: "#app5",
+            data: {
+                isActive: false,
+                activeClass: "active", // 其实就是对应绑定数组里面的变量
+                errorClass: "text-danger"
+            }
+        });
+    </script>
+
+
+    <!-- 总结一下: 绑定css - 对象语法中 , 属性值为true的时候 , 属性名就添加为className ; 数组语法中 , 数组里面的元素就添加为className(数组元素为变量时,className就添加该变量值 ; 数组元素为字符串是 , className就添加该字符串) -->
+
+
+
+    <!-- 组件上 -->
+    <div id="app6">
+        <my-component class="baz boo" v-bind:class="{ active: isActive }"></my-component>
+        <!-- 渲染结果 <p class="foo bar baz boo active">Hi</p> -->
+    </div>
+    <script>
+        Vue.component('my-component', {
+            template: '<p class="foo bar">Hi</p>'
+        });
+
+        var vm6 = new Vue({
+            el: "#app6",
+            data: {
+                isActive: true
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- *********绑定内联样式************ -->
+
+    <!-- =======对象语法======== -->
+    <div id="app7">
+        <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
+        <!-- 等同于 -->
+        <div v-bind:style="{ color: activeColor, 'fontSize': fontSize + 'px' }"></div>
+        <!-- 等同于 -->
+        <div v-bind:style="{ color: activeColor, 'font-size': fontSize + 'px' }"></div>
+        <!-- CSS 属性名可以用驼峰式 (camelCase) 或 (配合引号的) 短横分隔命名 (kebab-case)： -->
+
+
+        <!-- 直接绑定到一个样式对象通常更好，让模板更清晰： -->
+        <div v-bind:style="styleObject"></div>
+
+        <!-- 渲染结果: <div style="color: red; font-size: 30px;"></div> -->
+    </div>
+    <script>
+        var vm7 = new Vue({
+            el: "#app7",
+            data: {
+                activeColor: 'red',
+                fontSize: 30,
+                // 更加清晰
+                styleObject: {
+                    color: 'red',
+                    fontSize: '13px'
+                }
+            }
+        });
+    </script>
+
+
+    <!-- =======数组语法====== -->
+    <div id="app8">
+        <div v-bind:style="[baseStyles, overridingStyles]"></div>
+        <!-- 渲染结果 : <div style="color: red; font-size: 16px; transform: translate(10px, 10px);"></div> -->
+
+        <!-- 你可以为 style 绑定中的属性提供一个包含多个值的数组，常用于提供多个带前缀的值，例如： -->
+        <div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }"></div>
+        <!-- 渲染结果 : <div style="display: flex;"></div> -->
+        <!-- 这会渲染数组中最后一个被浏览器支持的值。在这个例子中，如果浏览器支持不带浏览器前缀的 flexbox，那么渲染结果会是  -->
+    </div>
+    <script>
+        var vm8 = new Vue({
+            el: "#app8",
+            data: {
+                // 多个样式对象
+                baseStyles: {
+                    color: 'red',
+                    fontSize: '13px'
+                },
+                overridingStyles: {
+                    transform: 'translate(10px,10px)',
+                    fontSize: '16px'
+                }
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

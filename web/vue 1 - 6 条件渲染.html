@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 条件渲染</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <!-- *** 条件渲染 *** -->
+
+    <!-- v-if 指令 -->
+
+    <div id="app1">
+        <p v-if="ok">例子1</p>
+        <p v-if="show">显示</p>
+        <p v-eles>上一个没有显示</p>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app1",
+            data: {
+                ok: true,
+                show: false
+            }
+        });
+    </script>
+
+
+
+    <!-- 在 <template> 中配合 v-if 条件渲染一整组 -->
+    <div id="app2">
+        <!-- 假如我要#app2无论如何都可以显示出来 , 但是3个子元素是同时根据一个数据来确定是否显示 , 这时就可以用到<template>-->
+        <template v-if="ok">
+            <p>Paragraph 1</p>
+            <p>Paragraph 2</p>
+            <p>Paragraph 3</p>
+        </template>
+        <!-- 最终的渲染结果不会包含 <template> 元素。 -->
+    </div>
+    <script>
+        var vm2 = new Vue({
+            el: "#app2",
+            data: {
+                ok: true
+            }
+        });
+    </script>
+
+
+    <!-- v-else 指令      v-else-if 指令 -->
+    <!-- v-else 元素必须紧跟在 v-if 或者 v-else-if 元素的后面——否则它将不会被识别。 -->
+    <!-- 类似于 v-else，v-else-if 必须紧跟在 v-if 或者 v-else-if 元素之后。 -->
+    <div id="app3">
+        <div v-if="type === 'A'">
+            A
+        </div>
+        <div v-else-if="type === 'B'">
+            B
+        </div>
+        <div v-else-if="type === 'C'">
+            C
+        </div>
+        <div v-else>
+            Not A/B/C
+        </div>
+    </div>
+    <script>
+        var vm3 = new Vue({
+            el: "#app3",
+            data: {
+                // type: "A",
+                // type: "B",
+                // type: "C",
+                type: "D",
+            }
+        });
+    </script>
+
+
+
+
+    <!-- === 用 key 管理可复用的元素 === -->
+    <div id="app4">
+        <!-- Vue 会尽可能高效地渲染元素，通常会复用已有元素而不是从头开始渲染。 -->
+        <p>在输入框中输入一些文本，然后按下切换按钮</p>
+        <template v-if="loginType === 'username'">
+            <label>Username</label>
+            <input placeholder="Enter your username">
+        </template>
+        <template v-else>
+            <label>Email</label>
+            <input placeholder="Enter your email address">
+        </template>
+        <button v-on:click="change">切换登录方式</button>
+    </div>
+    <script>
+        var vm4 = new Vue({
+            el: "#app4",
+            data: {
+                flag: true,
+            },
+            computed: {
+                loginType: function() {
+                    if (this.flag) {
+                        return 'username'
+                    } else {
+                        return 'email'
+                    }
+                }
+            },
+            methods: {
+                change: function() {
+                    this.flag = !this.flag;
+                }
+            }
+        });
+        /* 那么在上面的代码中切换 loginType 将不会清除用户已经输入的内容。因为两个模板使用了相同的元素，<input> 不会被替换掉——仅仅是替换了它的 placeholder。 */
+    </script>
+
+
+
+    <!-- 如果不想复用 -->
+
+</body>
+
+</html>

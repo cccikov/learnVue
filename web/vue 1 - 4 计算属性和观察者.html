@@ -14,13 +14,13 @@
     </div>
 
     <script type="text/javascript">
-    // 我想做到内容 根据 实时的message做出处理
-    var vm1 = new Vue({
-        el: "#example",
-        data: {
-            message: "Hello World"
-        }
-    });
+        // 我想做到内容 根据 实时的message做出处理
+        var vm1 = new Vue({
+            el: "#example",
+            data: {
+                message: "Hello World"
+            }
+        });
     </script>
 
 
@@ -34,22 +34,22 @@
     </div>
 
     <script type="text/javascript">
-    var vm2 = new Vue({
-        el: '#example2',
-        data: {
-            message: 'Hello'
-        },
-        computed: {
-            // a computed getter
-            reversedMessage: function() {
-                // `this` points to the vm instance
-                return this.message.split('').reverse().join('');
+        var vm2 = new Vue({
+            el: '#example2',
+            data: {
+                message: 'Hello'
+            },
+            computed: {
+                // a computed getter
+                reversedMessage: function() {
+                    // `this` points to the vm instance
+                    return this.message.split('').reverse().join('');
+                }
             }
-        }
-    });
-    setTimeout(function(){
-        vm2.message = "hello world";
-    },1000);
+        });
+        setTimeout(function() {
+            vm2.message = "hello world";
+        }, 1000);
     </script>
 
 
@@ -61,20 +61,20 @@
         <p>Computed reversed message: "{{ reversedMessage() }}"</p>
     </div>
     <script type="text/javascript">
-    var vm3 = new Vue({
-        el: '#example3',
-        data: {
-            message: 'Hello'
-        },
-        methods: {
-            reversedMessage: function() {
-                return this.message.split('').reverse().join('')
+        var vm3 = new Vue({
+            el: '#example3',
+            data: {
+                message: 'Hello'
+            },
+            methods: {
+                reversedMessage: function() {
+                    return this.message.split('').reverse().join('')
+                }
             }
-        }
-    });
-    setTimeout(function(){
-        vm3.message = "hello world";
-    },1000);
+        });
+        setTimeout(function() {
+            vm3.message = "hello world";
+        }, 1000);
     </script>
 
 
@@ -87,22 +87,22 @@
         <p>Computed reversed message: "{{ reversedMessage }}"</p>
     </div>
     <script type="text/javascript">
-    var vm4 = new Vue({
-        el: '#example4',
-        data: {
-            message: 'Hello',
-            reversedMessage:"none"
-        },
-        watch:{
-            message:function(val){
-                this.reversedMessage = val.split('').reverse().join('');
+        var vm4 = new Vue({
+            el: '#example4',
+            data: {
+                message: 'Hello',
+                reversedMessage: "none"
+            },
+            watch: {
+                message: function(val) {
+                    this.reversedMessage = val.split('').reverse().join('');
+                }
             }
-        }
-    });
-    setTimeout(function(){
-        vm4.message = "hello world";
-    },1000);
-    /*然而，通常更好的想法是使用 computed 属性而不是命令式的 watch 回调。*/
+        });
+        setTimeout(function() {
+            vm4.message = "hello world";
+        }, 1000);
+        /*然而，通常更好的想法是使用 computed 属性而不是命令式的 watch 回调。*/
     </script>
 
 
@@ -121,32 +121,32 @@
         <p>{{now_m}}</p>
     </div>
     <script type="text/javascript">
-    var vm5 = new Vue({
-        el: "#date",
-        computed: {
-            time_c: function() {
-                console.log("time_c 执行");
-                return Date.now();
+        var vm5 = new Vue({
+            el: "#date",
+            computed: {
+                time_c: function() {
+                    console.log("time_c 执行");
+                    return Date.now();
+                },
+                now_c: function() {
+                    return new Date(this.time_c); // 不需要再次运行 time_c
+                },
+                now_m: function() {
+                    return new Date(this.time_m()); // 需要再次运行 time_m 耗费资源
+                }
             },
-            now_c:function(){
-               return new Date(this.time_c);// 不需要再次运行 time_c
-            },
-            now_m:function(){
-               return new Date(this.time_m());// 需要再次运行 time_m 耗费资源
+            methods: {
+                time_m: function() {
+                    console.log("time_m 执行");
+                    return Date.now();
+                }
             }
-        },
-        methods:{
-            time_m:function(){
-                console.log("time_m 执行");
-                return Date.now();
-            }
-        }
-    });
-    // 在控制台中可以看出 time_c 执行了一次 而 time_m 执行了两次
+        });
+        // 在控制台中可以看出 time_c 执行了一次 而 time_m 执行了两次
 
 
-    /*计算属性是基于它们的依赖进行缓存的。计算属性只有在它的相关依赖发生改变时才会重新求值。*/
-    /*而method 不会缓存 , 用一次运行一次 , 如果是一个好复杂的操作 , 就会好耗费性能。比如要是time_m操作是好复杂的 , now_m由于需要用到time_m的值 , 所以又不可避免地运行多一次*/
+        /*计算属性是基于它们的依赖进行缓存的。计算属性只有在它的相关依赖发生改变时才会重新求值。*/
+        /*而method 不会缓存 , 用一次运行一次 , 如果是一个好复杂的操作 , 就会好耗费性能。比如要是time_m操作是好复杂的 , now_m由于需要用到time_m的值 , 所以又不可避免地运行多一次*/
     </script>
 
 
@@ -155,38 +155,38 @@
     <div id="demo2">{{ fullName }}</div>
 
     <script type="text/javascript">
-    // 采用watch
-    var vm6 = new Vue({
-        el: '#demo1',
-        data: {
-            firstName: 'Foo',
-            lastName: 'Bar',
-            fullName: 'Foo Bar'
-        },
-        watch: {
-            firstName: function(val) {
-                this.fullName = val + ' ' + this.lastName
+        // 采用watch
+        var vm6 = new Vue({
+            el: '#demo1',
+            data: {
+                firstName: 'Foo',
+                lastName: 'Bar',
+                fullName: 'Foo Bar'
             },
-            lastName: function(val) {
-                this.fullName = this.firstName + ' ' + val
+            watch: {
+                firstName: function(val) {
+                    this.fullName = val + ' ' + this.lastName
+                },
+                lastName: function(val) {
+                    this.fullName = this.firstName + ' ' + val
+                }
             }
-        }
-    });
+        });
 
-    // 采用计算属性
-    var vm7 = new Vue({
-        el: '#demo2',
-        data: {
-            firstName: 'Foo',
-            lastName: 'Bar'
-        },
-        computed: {
-            fullName: function() {
-                return this.firstName + ' ' + this.lastName
+        // 采用计算属性
+        var vm7 = new Vue({
+            el: '#demo2',
+            data: {
+                firstName: 'Foo',
+                lastName: 'Bar'
+            },
+            computed: {
+                fullName: function() {
+                    return this.firstName + ' ' + this.lastName
+                }
             }
-        }
-    });
-    // 明显是计算属性更加简单一点
+        });
+        // 明显是计算属性更加简单一点
     </script>
 
 
@@ -199,32 +199,97 @@
         {{full}}
     </div>
     <script type="text/javascript">
-    // 计算属性默认只有 getter ，不过在需要时你也可以提供一个 setter
-    var vm8 = new Vue({
-        el: "#name",
-        data: {
-            first: "chucong",
-            last: "chen"
-        },
-        computed: {
-            full: {
-                // getter
-                get: function() {
-                    return this.first + ' ' + this.last
-                },
-                // setter
-                set: function(newValue) {
-                    var names = newValue.split(' ');
-                    // this.first = names[0];
-                    this.last = names[names.length - 1];
+        // 计算属性默认只有 getter ，不过在需要时你也可以提供一个 setter
+        var vm8 = new Vue({
+            el: "#name",
+            data: {
+                first: "chucong",
+                last: "chen"
+            },
+            computed: {
+                full: {
+                    // getter
+                    get: function() {
+                        return this.first + ' ' + this.last
+                    },
+                    // setter
+                    set: function(newValue) {
+                        var names = newValue.split(' ');
+                        // this.first = names[0];
+                        this.last = names[names.length - 1];
+                    }
                 }
             }
-        }
-    });
-    setTimeout(function(){
-        vm8.full = "tomato cao"
-    }, 1000);
+        });
+        setTimeout(function() {
+            vm8.full = "tomato cao"
+        }, 1000);
     </script>
+
+
+
+    <!-- 观察者 -->
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="js/lodash.min.js"></script>
+    <div id="watch-example">
+        <p>
+            Ask a yes/no question:
+            <input v-model="question">
+        </p>
+        <p>{{ answer }}</p>
+    </div>
+
+    <script type="text/javascript">
+        var watchExampleVM = new Vue({
+            el: '#watch-example',
+            data: {
+                question: '',
+                answer: 'I cannot give you an answer until you ask a question!'
+            },
+            watch: {
+                // 如果 question 发生改变，这个函数就会运行
+                question: function(newQuestion) {
+                    this.answer = 'Waiting for you to stop typing...'
+                    this.getAnswer()
+                }
+            },
+            methods: {
+                // _.debounce 是一个通过 lodash 限制操作频率的函数。
+                // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
+                // ajax 请求直到用户输入完毕才会发出
+                // 学习更多关于 _.debounce function (and its cousin
+                // _.throttle), 参考: https://lodash.com/docs#debounce
+                getAnswer: _.debounce(
+                    function() {
+                        if (this.question.indexOf('?') === -1) {
+                            this.answer = 'Questions usually contain a question mark. ;-)'
+                            return
+                        }
+                        this.answer = 'Thinking...'
+                        var vm = this
+                        axios.get('https://yesno.wtf/api')
+                            .then(function(response) {
+                                vm.answer = _.capitalize(response.data.answer)
+                            })
+                            .catch(function(error) {
+                                vm.answer = 'Error! Could not reach the API. ' + error
+                            })
+                    },
+                    // 这是我们为用户停止输入等待的毫秒数
+                    500
+                )
+            }
+        });
+        /*虽然计算属性在大多数情况下更合适，但有时也需要一个自定义的 watcher。这是为什么 Vue 通过 watch 选项提供一个更通用的方法，来响应数据的变化。当你想要在数据变化响应时，执行异步操作或开销较大的操作，这是很有用的。*/
+
+
+
+        /*计算属性更多是为了得到数据改变后的结果  数据=>数据,对过程不关心,只关心数据变化后得到新的计算数据*/
+        /*而观察者 watch 是为了监控数据变化而进行某些操作 数据=>过程=>数据 这个是关心过程*/
+    </script>
+
+
+
 
 </body>
 
