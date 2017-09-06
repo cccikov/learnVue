@@ -15,7 +15,7 @@
     <div id="app1">
         <p v-if="ok">例子1</p>
         <p v-if="show">显示</p>
-        <p v-eles>上一个没有显示</p>
+        <p v-else>上一个没有显示</p>
     </div>
     <script>
         var vm = new Vue({
@@ -122,7 +122,74 @@
 
 
     <!-- 如果不想复用 -->
+    <div id="app5">
+        <!-- Vue 提供了一种方式来声明“这两个元素是完全独立的——不要复用它们”。只需添加一个具有唯一值的 key 属性即可： -->
+        <template v-if="loginType === 'username'">
+            <label>Username</label>
+            <input placeholder="Enter your username" key="username-input">
+        </template>
+        <template v-else>
+            <label>Email</label>
+            <input placeholder="Enter your email address" key="email-input">
+        </template>
+        <button v-on:click="change">切换登录方式</button>
+    </div>
+    <script>
+        var vm5 = new Vue({
+            el: "#app5",
+            data: {
+                flag: true,
+            },
+            computed: {
+                loginType: function() {
+                    if (this.flag) {
+                        return 'username'
+                    } else {
+                        return 'email'
+                    }
+                }
+            },
+            methods: {
+                change: function() {
+                    this.flag = !this.flag;
+                }
+            }
+        });
+    </script>
 
+
+
+
+
+
+
+
+
+
+
+    <!-- v-show 指令 -->
+    <div id="app6">
+        <p v-show="ok">v-show</p>
+        <p v-show="show">v-show</p>
+        <!-- 渲染结果: <p style="display: none;">v-show</p> -->
+    </div>
+    <script>
+        var vm6 = new Vue({
+            el: "#app6",
+            data: {
+                ok: true,
+                show: false
+            }
+        });
+        /* 带有 v-show 的元素始终会被渲染并保留在 DOM 中。v-show 是简单地切换元素的 CSS 属性 display */
+
+        /* v-if是会添加dom或者删除dom ; 而v-show的dom是一直存在的,元素总是会被渲染,并,知识切换css属性display */
+    </script>
+
+
+
+
+    <!-- 当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级。 -->
 </body>
 
 </html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 表单</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+
+    <!-- v-model 会随表单控件类型不同而行为不同 -->
+
+    <div id="app1">
+        <input type="text" v-model="val">
+        <input type="checkbox" id="box1" v-model="val">
+        <label for="box1">{{ val }}</label>
+    </div>
+    <script>
+        var vm1 = new Vue({
+            el: "#app1",
+            data: {
+                val: true
+            }
+        });
+        setInterval(function() {
+            vm1.val = !vm1.val;
+        }, 1000);
+    </script>
+
+
+    <div id="app2">
+        <input type="text" v-model="txt">
+        <input type="checkbox" id="box2" v-model="val">
+        <label for="box2">{{ val }}</label>
+    </div>
+    <script>
+        var vm2 = new Vue({
+            el: "#app2",
+            data: {
+                txt: false,
+                flag: false
+            },
+            computed: {
+                val: function() {
+                    if (this.txt == "true") {
+                        this.flag = true;
+                    } else if (this.txt == "false") {
+                        this.flag = false;
+                    }
+                    return this.flag
+                }
+            }
+        });
+    </script>
+
+    <div id="app3">
+        <input type="text" v-model="val">
+        <input type="checkbox" id="box3" v-model="val">
+        <label for="box3">{{ val }}</label>
+    </div>
+    <script>
+        var vm3 = new Vue({
+            el: "#app3",
+            data: {
+                val: false
+            },
+            watch: {
+                val: function(value) {
+                    if (value == "false") { // 如果没有这个由于input输入的字符串 "false"也会看成是true
+                        this.val = false;
+                    }
+                }
+            }
+        });
+    </script>
+
+
+    <div id="app4">
+        <input type="text" v-model="val">
+        <input type="checkbox" id="box4" v-model="val" v-bind:true-value="a" v-bind:false-value="b">
+        <label for="box4">{{ val }}</label>
+    </div>
+    <script>
+        var vm4 = new Vue({
+            el: "#app4",
+            data: {
+                val: "haha",
+                a: "haha",
+                b: "meme"
+            }
+        });
+    </script>
+
+</body>
+
+</html>

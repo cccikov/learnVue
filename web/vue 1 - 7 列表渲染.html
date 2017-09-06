@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 列表渲染</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <ul id="app1">
+        <li v-for="item in arr" :key="item.id"> {{item.message}}{{item.id}}</li>
+        <!-- key这个属性是vue里面的特殊特性 , 是不会渲染出来的 , 是为了避免复用渲染 -->
+        <li v-for="(item,index) in arr" :key="item.id"> {{index}} --- {{item.message}}</li>
+        <li v-for="(a,b) in arr" :key="a.id"> {{b}} --- {{a.message}}</li>
+        <li v-for="(item,index) of arr" :key="item.id"> {{index}} --- {{item.message}}</li>
+
+
+
+
+        <li v-for="val in obj" :key="val"> {{val}}</li>
+        <li v-for="(val,key) of obj" :key="key">{{key}} ------ {{val}}</li>
+        <li v-for="(val,key,index) of obj" :key="key">{{index}}-----{{key}} ------ {{val}}</li>
+        <!-- index可能会因为不同的js引擎读取对象属性顺序而不同 , 要有明确顺序只能使用数组-->
+
+
+        <!-- key属性的值一定要是唯一的有效的 , 如果数据里面有id最好就用id , 没有的话 , 数组型数据可以用index , 对象型属性可以用属性名 -->
+    </ul>
+    <script>
+        var vm1 = new Vue({
+            el: "#app1",
+            data: {
+                arr: [{
+                    message: 'Foo',
+                    id: 0
+                }, {
+                    message: 'Bar',
+                    id: 1
+                }],
+                obj: {
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    age: 30
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

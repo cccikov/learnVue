@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 列表渲染</title>
+    <script type="text/javascript" src="vue.js"></script>
+    <script>
+        function ranInt(max, min) {
+            if (min > max) {
+                var mid = max;
+                max = min;
+                min = mid;
+            }
+            return parseInt(Math.random() * (max - min + 1) + min)
+        }
+    </script>
+</head>
+
+<body>
+    <div id="app1">
+        <!-- 有效id -->
+        <h5>有效id</h5>
+        <ul>
+            <li v-for="item in arr" :key="item.id">{{item.message}}</li>
+        </ul>
+        <button v-on:click="add">前面增加</button>
+        <!-- 只有第一个元素会重新渲染 -->
+    </div>
+
+    <div id="app2">
+        <!-- 无效id -->
+        <h5>无效id</h5>
+        <ul>
+            <li v-for="item in arr" :key="item.id">{{item.message}}</li>
+        </ul>
+        <button v-on:click="add">前面增加</button>
+        <!-- 最后三个元素会重新渲染 -->
+    </div>
+
+    <script>
+        var vm1 = new Vue({
+            el: "#app1",
+            data: {
+                arr: [{
+                    message: 'Foo',
+                    id: 0
+                }, {
+                    message: 'Bar',
+                    id: 1
+                }],
+            },
+            methods: {
+                add: function() {
+                    this.arr.unshift({
+                        message: 'ccc',
+                        id: ranInt(3, 10000)
+                    });
+                }
+            }
+        });
+        var vm2 = new Vue({
+            el: "#app2",
+            data: {
+                arr: [{
+                    message: 'Foo',
+                }, {
+                    message: 'Bar',
+                }],
+            },
+            methods: {
+                add: function() {
+                    this.arr.unshift({
+                        message: 'ccc',
+                    });
+                }
+            }
+        });
+    </script>
+
+
+    <p>
+        <img src="./img/key01.png" alt="">
+        <img src="./img/key02.png" alt="">
+    </p>
+    <p>
+        有两个增加成三个的时候 , 有效id:不复用之前的li,直接插入一个新的li在前面; 无效id(没有key属性):复用前面li,将第一个li的内容由Foo改为ccc,将第二li的内容由Bar改为Foo,增加一个li内容为Bar(这种情况下要是dom绑定了事件就会引起混乱) . 所以使用列表渲染的时候如果会有改变数据 , 一定要加上key属性
+    </p>
+
+
+</body>
+
+</html>
