@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 组件</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+
+    <!-- <script>
+        // Vue.component('my-component', {
+        //     template: '<span>{{ message }}</span>',
+        //     data: {
+        //         message: 'hello'
+        //     },
+        // }); // 报错 , 组件data必须是函数
+    </script> -->
+
+
+    <div id="app2">
+        <simple-counter2></simple-counter2>
+        <simple-counter2></simple-counter2>
+        <simple-counter2></simple-counter2>
+    </div>
+    <script>
+        var dataObj = {
+            counter: 0
+        }
+        Vue.component('simple-counter2', {
+            template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+            // 技术上 data 的确是一个函数了，因此 Vue 不会警告，
+            // 但是我们返回给每个组件的实例却引用了同一个 data 对象
+            data: function() {
+                return dataObj
+            }
+        })
+        var vm1 = new Vue({
+            el: '#app2'
+        })
+    </script>
+
+
+
+
+    <div id="app3">
+        <simple-counter3></simple-counter3>
+        <simple-counter3></simple-counter3>
+        <simple-counter3></simple-counter3>
+    </div>
+    <script>
+        Vue.component('simple-counter3', {
+            template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+            // 技术上 data 的确是一个函数了，因此 Vue 不会警告，
+            // 但是我们返回给每个组件的实例却引用了同一个 data 对象
+            data: function() {
+                return {
+                    counter: 0,
+                    // 以及其他属性
+                }
+            },
+            /* 
+            比如
+            data: {
+                txt: false,
+                flag: false
+            }改写为
+            data: function() {
+                return {
+                    txt: false,
+                    flag: false
+                }
+            }
+             */
+        })
+        var vm1 = new Vue({
+            el: '#app3'
+        })
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 在 Vue 中，父子组件的关系可以总结为 props down, events up。父组件通过 props 向下传递数据给子组件，子组件通过 events 给父组件发送消息。看看它们是怎么工作的。 -->
+
+
+
+    <!-- 组件实例的作用域是孤立的。这意味着不能 (也不应该) 在子组件的模板内直接引用父组件的数据。要让子组件使用父组件的数据，我们需要通过子组件的 props 选项。 -->
+    <!-- 子组件要显式地用 props 选项声明它期待获得的数据： -->
+
+    <!-- prop -->
+    <script>
+        Vue.component('child', { // 组件的名字由于不是一个变量 , 是一个字符串 , 所以可以采用驼峰式 , 短横线隔开式
+            // 声明 props
+            props: ['myMessage', 'myClass', "message"], // 在js中只能采用驼峰式,或者纯小写 myMessage是一个prop放在props属性里面
+            // 就像 data 一样，prop 可以用在模板内
+            // 同样也可以在 vm 实例中像“this.message”这样使用
+            template: '<span v-bind:class="myClass">{{ myMessage }}{{message}}</span>'
+        });
+    </script>
+
+    <div id="app4">
+        <child my-message="hello" my-class="id1" message=" world!"></child>
+        <!-- 渲染结果: <span class="id1">hello world!</span>  my-message属性的值,就是组件中myMessage的值-->
+
+        <!-- 由于HTML不区分大小写 ,  所以在标签中写myMessage只会识别为mymessage , 所以在js中采用camelCased (驼峰式) 命名的 prop 需要转换为相对应的 kebab-case (短横线隔开式) 命名的标签属性 -->
+        <div ID="ID" id="id"></div>
+        <!-- 渲染结果: <div id="ID"></div> 由于对于html标签来说 有个两个id属性,只取一个-->
+    </div>
+    <script>
+        new Vue({
+            el: "#app4",
+        });
+    </script>
+
+
+    <!-- 动态prop -->
+    <div id="app5">
+        <input v-model="message">
+        <br>
+        <tpl v-bind:my-class="className" v-bind:live-message="message" static-message="Hello "></tpl>
+
+
+        <!-- my-class,live-message 是动态的,该属性值是一个变量在js中获取值 static-message是静态的,值就是这个属性的值-->
+
+        <div v-bind:my-class="className" v-bind:live-message="message" static-message="Hello "></div>
+        <!-- 渲染结果: <div my-class="active" live-message="world!" static-message="Hello "></div> -->
+        <!--
+             属性想要动态采用v-bind方式绑定数据,绑定后的值是一个变量,如上面的className,message , 是动态的; 如果不采用v-bind就是静态的,这个属性会直接出现在标签中,值就是字符串就是属性值了 , 是写死的 ,如上面的Hello ; 
+             就是说只有加上v-bind: 值才会被当成JavaScript表达式计算
+         -->
+
+        <!-- 上面的如果值不变,类似于  变量className初始值为active  message初始值为world! , 然后这些值再传到组件中的props-->
+        <tpl my-class="active" live-message="world!" static-message="Hello "></tpl>
+        <!-- 渲染结果: <div class="active">Hello  world! </div> -->
+    </div>
+    <script>
+        Vue.component('tpl', {
+            props: ['liveMessage', 'myClass', "staticMessage"],
+            template: '<div v-bind:class="myClass">{{staticMessage}} {{ liveMessage }} </div>'
+        });
+        new Vue({
+            el: "#app5",
+            data: {
+                className: "active",
+                message: "world!"
+            }
+        });
+    </script>
+
+
+
+
+
+    <!-- 字面量语法 vs 动态语法 -->
+    <!-- 其实还是上面所说的静态 , 动态问题 -->
+    <div id="app6">
+        <p data-val="haha"></p>
+        <!-- 等价于 -->
+        <p v-bind:data-val="'haha'"></p>
+        <!-- 若是value1的值也为"haha" , 也等同于 , 这里value1是一个js表达式 , 是一个变量-->
+        <p v-bind:data-val="value1"></p>
+        <!-- 渲染结果: <p data-val="haha"></p> v-bind: 绑定后的属性值是一个js表达式-->
+
+        <!-- 向组件传入 字符串"1" -->
+        <tpl-second value="1"></tpl-second>
+        <!-- 等价于 向组件传入 字符串"1"-->
+        <tpl-second v-bind:value="'1'"></tpl-second>
+        <!-- 向组件传入 数字1 -->
+        <tpl-second v-bind:value="1"></tpl-second>
+
+        <!-- 加上v-bind: 值是JavaScript表达式计算 -->
+    </div>
+    <script>
+        Vue.component('tpl-second', {
+            template: "<p>{{value}}</p>",
+            props: ["value"],
+            data: function() {
+                console.log(typeof this.value);
+                return {}
+            }
+        });
+        // string
+        // string
+        // number
+        /* 可以看出第一二次都是传入的是字符串 , 第三次传入的是number */
+
+        new Vue({
+            el: "#app6",
+            data: {
+                value1: "haha"
+            }
+        });
+    </script>
+</body>
+
+</html>

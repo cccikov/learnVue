@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 组件</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <!-- 单向数据流 -->
+    <!-- prop 是单向绑定的：当父组件的属性变化时，将传导给子组件，但是不会反过来。这是为了防止子组件无意修改了父组件的状态——这会让应用的数据流难以理解。 -->
+    <!-- 另外，每次父组件更新时，子组件的所有 prop 都会更新为最新值。这意味着你不应该在子组件内部改变 prop。如果你这么做了，Vue 会在控制台给出警告。 -->
+
+
+    <!-- 情况1: prop 作为初始值传入后，子组件想把它当作局部数据来用 -->
+    <div id="app1">
+        <!-- 定义一个局部变量，并用 prop 的值初始化它 -->
+        <tpl-first initial-counter="10"></tpl-first>
+    </div>
+    <script>
+        Vue.component("tpl-first", {
+            template: "<button v-on:click='add(counter)'>{{counter}}</button>",
+            props: ['initialCounter'],
+            data: function() {
+                return {
+                    counter: Number(this.initialCounter)
+                }
+            },
+            methods: {
+                add: function(num) {
+                    this.counter += 2;
+                    console.log(num);
+                    // this.initialCounter += 1;// 如果我们直接操作这个 , 会报错
+                }
+            }
+        });
+        new Vue({
+            el: "#app1",
+        });
+    </script>
+
+
+
+
+    <!-- 情况2:prop 作为初始值传入，由子组件处理成其它数据输出 -->
+    <div id="app2">
+        <!-- 定义一个计算属性，处理 prop 的值并返回。 -->
+        <tpl-second size=" HeLLO WORLD "></tpl-second>
+    </div>
+    <script>
+        Vue.component("tpl-second", {
+            template: "<div>{{normalizedSize}}</div>",
+            props: ['size'],
+            computed: {
+                normalizedSize: function() {
+                    return this.size.trim().toLowerCase()
+                }
+            }
+        });
+        new Vue({
+            el: "#app2",
+        });
+    </script>
+
+
+    <!-- 注意在 JavaScript 中对象和数组是引用类型，指向同一个内存空间，如果 prop 是一个对象或数组，在子组件内部改变它会影响父组件的状态。 -->
+    <div id="app3">
+        <!-- 定义一个计算属性，处理 prop 的值并返回。 -->
+        <tpl-third :obj="someObj"></tpl-third>
+        <!-- 组件就在这里应用了 , 并且数据就在这里传递 , 子组件需要的数据是obj这里得到的值是一个js表达式-变量someObj -->
+
+        <span>{{someObj.message}}</span>
+    </div>
+    <script>
+        // 这是子组件
+        Vue.component("tpl-third", {
+            template: "<div>{{obj.message}}{{txt}}</div>",
+            props: ['obj'], // obj在子组件里面是prop , 是用来传输数据 , 有父组件传到子组件 , 所以在子组件里面只能读取prop的数据(或者子组件里面定义的数据) , 而不能直接读取父组件的数据(如someObj)
+            computed: {
+                txt: function() {
+                    this.obj.message = "hi"; // 这里就影响了父组件的数据了 所以prop是个引用类型时一定要小心
+                }
+            }
+        });
+
+        // 这相当于是父组件
+        new Vue({
+            el: "#app3",
+            data: {
+                someObj: {
+                    message: "hello",
+                    id: 1
+                }
+            }
+        });
+    </script>
+
+
+
+
+
+    <!-- prop 验证 -->
+    <div id="app4">
+        <tpl-a prop-d="50"></tpl-a>
+        <!-- 渲染结果: <div>   50  100</div> -->
+    </div>
+    <script>
+        // 要指定验证规格，需要用对象的形式，而不能用字符串数组：
+        /**
+         * String
+         * Number
+         * Boolean
+         * Function
+         * Object
+         * Array
+         * Symbol
+         */
+        /* 注意 props 会在组件实例创建之前进行校验，所以在 default 或 validator 函数里，诸如 data、computed 或 methods 等实例属性还无法使用。 */
+        Vue.component("tpl-a", {
+            props: {
+                propA: null, // 表示任何类型都可以
+                propB: Number, //必须是Number类型
+                propC: [Number, String],
+                propD: {
+                    type: [Number, String],
+                    required: true, // 必须传入
+                },
+                propE: {
+                    type: [Number, String], //类型
+                    default: 100, // 默认值
+                    required: false, // 必须传入
+                    validator: function(value) { // 验证函数
+                        return value > 10;
+                    }
+                },
+            },
+            template: "<div>{{propA}} {{propB}} {{propC}} {{propD}}  {{propE}}</div>"
+        });
+
+
+        new Vue({
+            el: "#app4"
+        });
+    </script>
+
+
+
+
+
+
+    <!-- 非 prop 属性 -->
+    <!-- 所谓非 prop 属性，就是它可以直接传入组件，而不需要定义相应的 prop -->
+    <div id="app5">
+        <tpl-b class="active" theid="top" value="50"></tpl-b>
+        <!-- 渲染结果: <div data-flag="true" id="top" data-val="50" class="active">top的值为:50</div> -->
+        <!-- 上面的class就是非 prop 属性 -->
+    </div>
+    <script>
+        Vue.component("tpl-b", {
+            props: ["value", "theid"],
+            template: "<div data-flag = 'true' v-bind:id='theid' v-bind:data-val='value'>{{theid}}的值为:{{value}}</div>"
+        });
+
+        new Vue({
+            el: "#app5"
+        });
+    </script>
+
+
+    <!-- 替换-覆盖现有的特性 -->
+    <!-- 要是组件和从父组件传过来是同一个属性呢 -->
+    <div id="app6">
+        <tpl-c class="active danger" data-val="100" style="color:red" message="hello world!"></tpl-c>
+        <!-- <div data-val="100" class="main-top danger active danger" style="color: red; font-size: 16px;">hello world!</div> -->
+
+        <!-- 传递给组件的值会覆盖组件本身设定的值 ; class 和 style 这两个特性的值都会做合并 (merge) 操作-->
+        <!-- 可以看出对于class 和 style 来说 , 父组件的值是会写在子组件后面的 , 所以实际style是这样写的 , html 会自动把color:red覆盖color:blue-->
+        <div data-val="100" class="main-top danger active danger" style="color: blue; font-size: 16px; color:red">hello world!</div>
+
+    </div>
+    <script>
+        Vue.component("tpl-c", {
+            props: ["message"],
+            template: "<div class='main-top danger' data-val='1' style='color:blue;font-size:16px'>{{message}}</div>"
+        });
+
+        new Vue({
+            el: "#app6"
+        });
+    </script>
+</body>
+
+
+
+</html>
