@@ -50,20 +50,19 @@
         <code>&lt;option&gt;</code>,<code>&lt;li&gt;</code> 这样的元素只能出现在某些其它元素内部。
     </p>
 
-
-    <ul id="app3">
-        <!-- <my-li></my-li> -->
-        <!-- <my-li>标签在html引擎中会被认为是无效内容 , 因为不是标准标签嘛 , 有可能在渲染过程中导致错误 -->
+    <table id="app3">
+        <my-row>...</my-row>
+        <!-- <<my-row>标签在html引擎中会被认为是无效内容 , 因为不是标准标签嘛 , 有可能在渲染过程中导致错误 -->
         <!-- 这时候我们就可以使用is属性 -->
-        <li is="my-li"></li>
-    </ul>
+        <tr is="my-row">...</tr>
+    </table>
     <script>
         new Vue({
             el: '#app3',
             // 注册局部组件
             components: {
-                "my-li": {
-                    template: '<div>A custom component li!</div>'
+                "my-row": {
+                    template: '<tr><td>A custom component li!</td></tr>'
                 }
             }
         });

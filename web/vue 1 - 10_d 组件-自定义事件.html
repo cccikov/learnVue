@@ -342,4 +342,85 @@
             vm8.outside(data);
         });
     </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="app">
+        <checkbox-test></checkbox-test>
+    </div>
+    <script>
+        var content = "content-test";
+        Vue.component('checkbox-test', {
+            template: `<div  @click="check">
+                  <div class="title">{{ title }}</div>
+                  <div class="title">${content}</div>
+                </div>`,
+            data() {
+                return {
+                    checked: false,
+                    title: 'title-test'
+                }
+            },
+            methods: {
+                check() {
+                    this.checked = !this.checked;
+                }
+            }
+        });
+
+        window.vm = new Vue({
+            el: "#app",
+        });
+    </script>
+
+
 </body>
