@@ -148,7 +148,7 @@
             template: '<div v-bind:class="myClass">{{staticMessage}} {{ liveMessage }} </div>'
         });
         new Vue({
-            el: "#app5",
+            el: "#app5", // #app5这个实例里面是不可以直接控制 组件tpl的数据的 它与tpl有各自的作用域 , 所以可以看成是一个父组件
             data: {
                 className: "active",
                 message: "world!"
@@ -198,6 +198,36 @@
             data: {
                 value1: "haha"
             }
+        });
+    </script>
+
+
+
+
+
+
+
+    <div id="app7">
+        <tpl-second value="lorem"></tpl-second>
+        <!-- prop 在实例里面 是以属性形式存在的 -->
+
+        <!-- 渲染结果: <p auto="lorem">lorem</p> -->
+    </div>
+    <script>
+        Vue.component('tpl-second', {
+            props: ["value"], // prop 在定义里面是作为变量存在
+            template: "<p :auto='autoGo()'>{{value}}</p>",
+            methods: {
+                autoGo: function() {
+                    console.log(this.value); // 在组里面里面的作用域是可以访问这个prop的
+                    return this.value;
+                }
+            }
+        });
+
+        new Vue({
+            el: "#app7",
+            data: {}
         });
     </script>
 </body>

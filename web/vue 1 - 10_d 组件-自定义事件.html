@@ -111,4 +111,235 @@
         });
     </script>
 
+
+
+
+
+
+
+
+
+
+
+
+    <!-- .sync修饰符 -->
+    <!-- 从 2.3.0 起我们重新引入了 .sync 修饰符，但是这次它只是作为一个编译时的语法糖存在。它会被扩展为一个自动更新父组件属性的 v-on 侦听器。 -->
+    <div id="app3">
+        <comp :foo.sync="bar"></comp>
+        <!-- 相当于 -->
+        <comp :foo="bar" @update:foo="val => bar = val"></comp>
+    </div>
+    <script>
+        Vue.component("comp", {
+            props: ["foo"],
+            template: "<p @click='listener1()'>{{foo}}</p>",
+            methods: {
+                listener1: function() {
+                    var newValue = "world";
+                    this.$emit('update:foo', newValue); // 这个是语法糖
+                }
+            }
+        });
+
+        new Vue({
+            el: "#app3",
+            data: {
+                bar: "hello"
+            },
+            watch: {
+                bar: function(newVal) {
+                    console.log("bar的值改变了 , 变成" + newVal);
+                }
+            }
+        });
+    </script>
+
+    <!-- 其实上面的完全可以靠自己来实现 -->
+    <div id="app4">
+        <tpl-c :foo="bar" v-on:update="parentListener"></tpl-c>
+    </div>
+    <script>
+        Vue.component("tpl-c", {
+            props: ["foo"],
+            template: "<p @click='sonListener()'>{{foo}}</p>",
+            methods: {
+                sonListener: function() {
+                    var newValue = "world";
+                    this.$emit('update', newValue);
+                }
+            }
+        });
+
+        new Vue({
+            el: "#app4",
+            data: {
+                bar: "hello"
+            },
+            methods: {
+                parentListener: function(data) {
+                    this.bar = data;
+                }
+            },
+            watch: {
+                bar: function(newVal) {
+                    console.log("bar的值改变了 , 变成" + newVal);
+                }
+            }
+        });
+
+        // 实际就是子组件触发一个事件 , 传入数据
+        // 父组件监听事件 , 在侦听器里面改变相对应的数据
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 使用自定义事件的表单输入组件 -->
+    <div id="app5">
+        <!-- 先看看Vue提供的v-model -->
+        <input v-model="something1"> {{something1}}
+        <!-- 实际 v-model 是个语法糖 等同于-->
+        <input v-bind:value="something2" v-on:input="something2 = $event.target.value"> {{something2}}
+
+
+
+        <custom-input v-model="something3"></custom-input>{{something3}}
+        <!-- 所以在组件中使用时，它相当于下面的简写： -->
+        <custom-input v-bind:value="something4" v-on:input="something4 = arguments[0]">
+        </custom-input>{{something4}}
+        <!--
+            要让组件的 v-model 生效
+
+            接受一个 value 属性 (代码 v-bind:value="something4") 
+            在有新的值时触发 input 事件 (代码 this.$emit('input', e.target.value);)
+         -->
+    </div>
+    <script>
+        Vue.component("custom-input", {
+            template: "<input v-on:input='change' :value='value'>",
+            props: ["value"], // 如果没有这个value prop , 组件v-mobel绑定的量就不能改变组件里面input的值  就是父组件的值改变不了子组件的值
+            methods: {
+                change: function(e) {
+                    this.$emit('input', e.target.value); //触发 input 事件( 这里的input是自定义事件)
+                }
+            }
+        });
+        new Vue({
+            el: "#app5",
+            data: {
+                something1: "",
+                something2: "",
+                something3: "hi",
+                something4: "hi"
+            }
+        });
+    </script>
+
+
+
+    <!-- 默认情况下，一个组件的 v-model 会使用 value 属性和 input 事件，但是诸如单选框、复选框之类的输入类型可能把 value 属性用作了别的目的。model 选项可以回避这样的冲突： -->
+    <div id="app6">
+        <checkbox-input v-model="status" value="some value"></checkbox-input>{{status}}
+        <!-- 等价于 -->
+        <checkbox-input :checkedval="status2" @self-input="val => {status2 = val}"></checkbox-input>{{status2}}
+        <!-- 渲染结果: <input type="checkbox"> 是看不到checked属性的 可能vue做了改动 , input标签的:checked是控制是否选上的 , 而不是控制是否默认选上-->
+
+        <input type="checkbox" checked>
+    </div>
+    <script>
+        Vue.component("checkbox-input", {
+            template: "<input :checked='checkedval' type='checkbox' v-on:change='sonListener'>", // 由于复选框触发的 change事件 , 所以这里要监听的原生的change事件
+            // 可能vue做了改动 , input标签的:checked是控制是否选上的 , 而不是控制是否默认选上 
+            // 可能是因为checked标签属性只要一出现(无论任何值,或者有无值)就是默认选上的意思 , 所以vue做了改动 checked变成控制是否控制
+            model: {
+                prop: "checkedval",
+                event: "self-input" // 指定 组件v-model 监听的事件
+            },
+            props: {
+                checkedval: Boolean,
+            },
+            methods: {
+                sonListener: function(e) {
+                    console.log(e.target === this.$el); // true 所以在某些情况下需要获取dom节点 , 可以用this.$el
+                    this.$emit('self-input', e.target.checked); //触发 self-input 事件 ; 由于是复选框,这里传过去的值不再是input的value , 而是checked(这个checked属性是表单原生js的checked,表示是否选中;不是默认选上的那个标签checked属性)
+                }
+            },
+        });
+
+        var vm6 = new Vue({
+            el: "#app6",
+            data: {
+                status: true,
+                status2: true
+            }
+        });
+
+        let max = 5;
+        let n = 0;
+        let timer = setInterval(function() {
+            if (n > max) {
+                clearInterval(timer);
+            }
+            vm6.status2 = !vm6.status2;
+            n++;
+        }, 200);
+    </script>
+
+
+
+
+
+
+
+
+
+
+    <!-- 非父子组件通信 -->
+    <p id="app7">
+        <button @click='btnclick'>app7按钮</button>
+    </p>
+    <div id="app8">
+        <p>上面的app7的按钮按了{{times}}次 ; 得到的数据是{{data}}</p>
+    </div>
+    <script>
+        // 在简单的场景下，可以使用一个空的 Vue 实例作为中央事件总线：
+        var middleVue = new Vue({});
+
+        new Vue({
+            el: "#app7",
+            methods: {
+                btnclick: function() {
+                    var data = Math.random();
+                    middleVue.$emit('somethindchange', data);
+                }
+            }
+        });
+
+
+        var vm8 = new Vue({
+            el: "#app8",
+            data: {
+                times: 0,
+                data: "暂时没有数据"
+            },
+            methods: {
+                outside: function(data) {
+                    console.log("从外面获取的数据", data);
+                    this.data = data;
+                    // this.times++ // 一般来说应该在这里面进行times的递加 , 但是为了体现中央事件总线就在外面的 somethindchange事件侦听器里面操作
+                }
+            }
+        });
+        middleVue.$on('somethindchange', function(data) { // 在app8里面用v-on去监听somethindchange是没有用的 , 因为somethindchange不是实例vm8的事件 , 是实例middle里面定义的事件
+            vm8.times++;
+            vm8.outside(data);
+        });
+    </script>
 </body>
