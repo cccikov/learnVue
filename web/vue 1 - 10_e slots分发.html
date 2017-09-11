@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue slots分发</title>
+    <style>
+        body * {
+            margin: 0;
+        }
+        
+        .content {
+            margin: 15px 0;
+        }
+        
+        .content * {
+            margin: 0;
+        }
+        
+        .container {
+            margin: 15px 0;
+            box-shadow: 0px 0px 0px 1px #E4E2E2;
+        }
+        
+        .container header {
+            box-shadow: 0px 0px 0px 1px #71ECE2;
+        }
+        
+        .container footer {
+            box-shadow: 0px 0px 0px 1px #B3EC71;
+        }
+    </style>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <!-- 编译作用域 -->
+    <div id="app1">
+        {{fatherMessage1}}
+        <tpl-a>{{fatherMessage2}}</tpl-a>
+    </div>
+    <script>
+        Vue.component("tpl-a", {
+            template: '<p>{{sonMessage1}}</p>',
+            data: function() {
+                return {
+                    sonMessage1: "子内容1"
+                }
+            }
+        });
+        new Vue({
+            el: "#app1",
+            data: {
+                fatherMessage1: "父内容1",
+                fatherMessage2: "父内容2",
+            }
+        });
+
+        // 父组件模板的内容在父组件作用域内编译；子组件模板的内容在子组件作用域内编译。
+        // 父组件模板的内容 - 父模板包裹着(除去组件里面)全部内容(其实也是template属性里面内容 , 只是没有template属性 , 就把el挂载元素作为模板)
+        // 子组件模板的内容 - 组件template里面的内容
+    </script>
+
+
+    <!-- 除非子组件模板包含至少一个 <slot> 插口，否则父组件中直接写在子组件的内容将会被丢弃。 -->
+    <div id="app2">
+        <tpl-b>
+            <p>这是在父组件添加的内容</p>
+        </tpl-b>
+        <!-- 渲染结果:<div>我是组件tpl-b内容</div> 里面的p元素被完全替换了 -->
+
+
+
+        <tpl-c>
+            <p>这是在父组件添加的内容</p>
+        </tpl-c>
+        <!-- 渲染结果: <div>
+            我是组件tpl-c内容
+            <p>这是在父组件添加的内容</p>
+        </div> -->
+
+
+
+        <tpl-c></tpl-c>
+        <!-- 渲染结果:<div>
+            我是组件tpl-c内容 这里是放分发内容的 , 如果父组件没有分发内容就显示这段话
+        </div> -->
+    </div>
+    <script>
+        Vue.component("tpl-b", {
+            template: `
+                <div>我是组件tpl-b内容</div>
+            `
+        });
+        Vue.component("tpl-c", {
+            template: `
+                <div class="content">
+                    我是组件tpl-c内容
+                    <slot>这里是放分发内容的 , 如果父组件没有分发内容就显示这段话</slot>
+                </div>
+            `
+        });
+        new Vue({
+            el: "#app2"
+        });
+
+        // 若是子组件没有slot标签 , 那父组件里面写在子组件实例里面的内容将直接会被子组件替换 ; 若有slot标签 , 那么写在子组件实例里面的内容将全部插到slot标签里面.
+        // <slot> 渲染后是不会显示出来的
+    </script>
+
+
+
+
+    <!-- 具名插槽 -->
+    <div id="app3">
+        <app-layout>
+            <div>这里可能是一个页面标题</div>
+            <p>主要内容的一个段落。</p>
+            <p>另一个主要段落。</p>
+            <p>这里有一些联系信息</p>
+        </app-layout>
+
+        <!-- <slot> 元素可以用一个特殊的属性 name 来配置如何分发内容。多个插槽可以有不同的名字。具名插槽将匹配内容片段中有对应 slot 特性的元素。 -->
+        <app-layout>
+            <div slot="header">这里可能是一个页面标题</div>
+            <p>主要内容的一个段落。</p>
+            <p>另一个主要段落。</p>
+            <p slot="footer">这里有一些联系信息</p>
+        </app-layout>
+    </div>
+    <script>
+        Vue.component('app-layout', {
+            template: `
+            <div class="container">
+                <header>
+                    <slot name="header"></slot>
+                </header>
+                <main>
+                    <slot></slot>
+                </main>
+                <footer>
+                    <slot name="footer"></slot>
+                </footer>
+            </div>  
+            `
+        });
+        // 在子组件实例中 具有slot属性的元素 放在 子组件模板中具有相同name属性的slot标签
+
+        new Vue({
+            el: "#app3"
+        });
+    </script>
+
+
+
+
+
+
+
+
+    <!-- 作用域插槽 -->
+    <div id="app4">
+        <child>
+            <template scope="data">
+                <p>hello from parent</p>
+                <p>子组件中传递的数据{{ data }}  ----  {{ data.text }} {{data.propA}} {{data.propB}}</p>
+            </template>
+        </child>
+    </div>
+    <script>
+        Vue.component("child", {
+            template: `
+            <div>
+                <slot text="hello from child" propA="属性A" propB="属性B"></slot>
+            </div>
+            `, // 作用域插槽 传递给插槽里面的数据就是slot标签的属性
+            props: []
+        });
+
+        new Vue({
+            el: "#app4"
+        });
+    </script>
+
+
+    <!-- 作用域插槽更具代表性的用例是列表组件 -->
+    <div id="app5">
+        <my-awesome-list :items="items">
+
+            <!-- 作用域插槽也可以是具名的 -->
+            <template slot="theli" scope="data">
+                <li class="my-fancy-item">{{ data.content }} 时间:{{ data.date }} id:{{data.id}} --- 全部数据:{{data}}</li>
+            </template>
+        </my-awesome-list>
+    </div>
+    <script>
+        Vue.component("my-awesome-list", {
+            template: `
+            <ul>
+                <slot name="theli"
+                    v-for="item in items"
+                    :content="item.text" date="2017.09.11">
+                    <!-- 这里写入备用内容 -->
+                </slot>
+            </ul>
+            `,
+            props: ["items"],
+        });
+
+        new Vue({
+            el: "#app5",
+            data: {
+                items: [{
+                    id: 0,
+                    text: "这是代表性的用例a"
+                }, {
+                    id: 1,
+                    text: "这是代表性的用例b"
+                }, {
+                    id: 2,
+                    text: "这是代表性的用例c"
+                }, {
+                    id: 3,
+                    text: "这是代表性的用例d"
+                }, {
+                    id: 4,
+                    text: "这是代表性的用例e"
+                }]
+            }
+        });
+    </script>
+
+</body>
+
+</html>
