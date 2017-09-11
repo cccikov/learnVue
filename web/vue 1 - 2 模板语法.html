@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>模板语法</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+
+    <!-- 双大括号会将数据解释为普通文本，而非 HTML 代码。为了输出真正的 HTML ，你需要使用 v-html 指令： -->
+    <div id="app1">
+        <p>{{message}}</p>
+        <p v-html='message'></p>
+    </div>
+    <script>
+        new Vue({
+            el: "#app1",
+            data: {
+                message: '<span>hi</span>'
+            }
+        });
+    </script>
+
+
+    <!-- 以下这样是错误的 , 你不能使用 v-html 来复合局部模板 -->
+    <!-- 这样会造成作用域的混乱 , 一个 Vue实例的挂载目标(dom元素,如.tpl1) 里面不应该有 另一个Vue实例的挂载目标(如tpl2) ; 这样message 应该读取那个实例里面的数据呢 ; 是好容易造成混乱的。想在一个vue实例里面使用其他模板，应该使用组件-->
+    <div class="tpl1">
+        模板1内容:{{message}}
+        <div>
+            {{theTpl}}
+        </div>
+        <div v-html="theTpl">
+        </div>
+    </div>
+    <div class="tpl2">
+        模板2内容:{{message}}
+    </div>
+    <div class="tpl2">
+        模板2内容:{{message}}
+    </div>
+    <script>
+        new Vue({
+            el: ".tpl1",
+            data: {
+                message: "hello",
+                theTpl: '<div class="tpl2">模板2内容:{{message}}</div>'
+            }
+        });
+        new Vue({
+            el: ".tpl2",
+            data: {
+                message: "world",
+            }
+        });
+        // 可以看到 多个tpl2元素只有第一个会被创建成vue实例 , 要是想要复用模板应该使用组件
+    </script>
+
+</body>
+
+</html>

@@ -25,6 +25,20 @@
         });
     </script>
 
+    <!-- !!!!注意 对于全局组件 , 一定要先有模板再有创建实例 ; 因为在渲染过程的时候 自定义标签找不到对应的组件 , 就会直接渲染-->
+    <!-- <div id="app1b">
+        <my-app1b>哈哈哈哈哈哈</my-app1b>
+    </div>
+    <script>
+        new Vue({
+            el: '#app1b'
+        });
+        // 先创建实例 , 模板( <div id="app1b"> )里面还有组件(my-app1b) , 在vue环境下会报错
+        Vue.component('my-app1b', {
+            template: '<div>A custom component!</div>'
+        });
+    </script> -->
+
 
 
     <!-- 局部组件 -->
@@ -66,7 +80,128 @@
                 }
             }
         });
+        /**
+         * 应当注意，如果您使用来自以下来源之一的字符串模板，这些限制将不适用：
+         * <script type="text/x-template">
+         * JavaScript 内联模板字符串
+         * .vue 组件
+         * 因此，有必要的话请使用 字符串模板。(下面有例子解释)
+         */
     </script>
+
+
+
+
+    <!-- 要知道 Vue.js 使用了基于 HTML 的模板语法(Vue.js 使用了模板语法(是以html为基础的)) -->
+
+    <!-- 使用 DOM 作为模板 -->
+    <div id="app4">{{message}}</div>
+    <!-- 渲染结果: <div id="app4">hello world</div> 模板为:<div id="app4">{{message}}</div> 这个dom-->
+    <script>
+        new Vue({
+            el: "#app4",
+            data: {
+                message: "hello world"
+            }
+        });
+    </script>
+    <!-- 上面等价于 -->
+    <!-- 使用 字符串模板 -->
+    <div id="app5">lorem</div>
+    <!-- 渲染结果: <div id="app5">hello world</div> 模板为:'<div id="app5">{{message}}</div>'-->
+    <script>
+        new Vue({
+            el: "#app5",
+            template: '<div id="app5">{{message}}</div>', // 字符串模板
+            data: {
+                message: "hello world"
+            }
+        });
+        // 一个字符串模板作为 Vue 实例的标识使用。模板将会 替换 挂载的元素。挂载元素的内容都将被忽略，除非模板的内容有分发 slot。
+        // 意思就是创建实例的时候要是有template属性 ,挂载el属性的dom元素(如上面的<div id="app5">)会被替换 , 且忽略里面的内容(如上面的lorem)(除非模板的内容有分发 slot。)
+    </script>
+
+    <div id="app6"></div>
+    <!-- 渲染结果 : <p>hello world</p> -->
+    <script>
+        new Vue({
+            el: "#app6",
+            template: "<p>{{message}}</p>",
+            data: {
+                message: "hello world"
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+    <!-- JavaScript 内联模板字符串模板 -->
+    <div id="app7"></div>
+    <script>
+        new Vue({
+            el: '#app7',
+            template: `<table>
+                            <my-row></my-row>
+                       </table>`,
+            components: {
+                "my-row": {
+                    template: '<tr><td>A custom component li!</td></tr>'
+                }
+            }
+        });
+    </script>
+
+
+
+
+    <!-- <script type="text/x-template">模板 -->
+    <script type="text/x-template" id="app8Tpl">
+        <!-- type="text/x-template"(可能是vue约定俗成) 可以写成 type="text/template" (一般模板框架约定俗成 , 规范推荐) 甚至不写这个属性都可以 -->
+        <table data-mark="8">
+            <tpl-a></tpl-a>
+        </table>
+    </script>
+    <div id="app8">
+    </div>
+    <script>
+        Vue.component("tpl-a", {
+            template: '<tr><td>A custom component li!</td></tr>'
+        });
+        new Vue({
+            el: '#app8',
+            template: "#app8Tpl" // 模板标签的id
+        });
+    </script>
+
+
+    <!-- 原理 -->
+    <script type="text/template" id="tpl">
+        <p>
+            <span>hello world</span>
+        </p>
+    </script>
+    <div id="main">
+        原生运用模板
+        <!-- 
+            解释为:
+            原生运用模板
+            <p>
+                <span>hello world</span>
+            </p>
+        -->
+    </div>
+    <script>
+        var tpl = document.getElementById('tpl').innerHTML;
+        var main = document.getElementById('main');
+        main.innerHTML += tpl;
+    </script>
+
+
 </body>
 
 </html>
