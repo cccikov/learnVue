@@ -98,7 +98,7 @@
 
     <!-- prop -->
     <script>
-        Vue.component('child', { // 组件的名字由于不是一个变量 , 是一个字符串 , 所以可以采用驼峰式 , 短横线隔开式;只是实例就一定要用短横线隔开式
+        Vue.component('child', { // 组件的名字由于不是一个变量 , 是一个字符串 , 所以可以采用驼峰式 , 短横线隔开式(但是html模板规范是短横线隔开式);只是实例就一定要用短横线隔开式
             // 声明 props
             props: ['myMessage', 'myClass', "message"], // 在js中只能采用驼峰式,或者纯小写 myMessage是一个prop放在props属性里面
             // 就像 data 一样，prop 可以用在模板内

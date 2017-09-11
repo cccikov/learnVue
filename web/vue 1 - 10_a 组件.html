@@ -50,6 +50,8 @@
         <code>&lt;option&gt;</code>,<code>&lt;li&gt;</code> 这样的元素只能出现在某些其它元素内部。
     </p>
 
+
+
     <table id="app3">
         <my-row>...</my-row>
         <!-- <<my-row>标签在html引擎中会被认为是无效内容 , 因为不是标准标签嘛 , 有可能在渲染过程中导致错误 -->
@@ -67,6 +69,42 @@
             }
         });
     </script>
+
+
+
+    <table id="app4">
+        <tpl-a></tpl-a>
+    </table>
+    <script>
+        new Vue({
+            el: '#app4',
+            template: "<table><tr><td>haha</td></tr></table>"
+        });
+    </script>
+
+
+
+
+
+    <script type="text/x-template" id="tpl1">
+        <!-- type="text/x-template"(vue框架约定俗成) 写成 type="text/template"(一般模板框架约定俗成) 或者连type不写都没有事 -->
+        <table>
+            <tr>
+                <td>haha</td>
+            </tr>
+        </table>
+    </script>
+    <table id="app5">
+        <tpl-a></tpl-a>
+    </table>
+    <script>
+        new Vue({
+            el: '#app5',
+            template: "#tpl1"
+        });
+    </script>
+
+
 </body>
 
 </html>
