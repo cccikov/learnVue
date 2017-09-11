@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 动态组件</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <script>
+        Vue.component("normal", {
+            template: `
+            <div>
+                <h5>这是常态下的内容</h5>
+                <div>...假设这里有好多元素 , 元素嵌套; 内容好多</div>
+            </div>
+            `
+        });
+        Vue.component("edit", {
+            template: `
+            <div>
+                <h5>这是编辑下的内容</h5>
+                <div>...假设好多表单,输入框,确定按钮</div>
+            </div>
+            `
+        });
+        Vue.component("active", {
+            template: `
+            <div>
+                <h5>这是激活状态下的内容</h5>
+                <div>...假设这里是激活状态下的内容</div>
+            </div>
+            `
+        });
+    </script>
+
+    <div id="app">
+        <!-- 通过动态地绑定到它的 is 特性 , 来动态切换使用的组件 -->
+        <div class="main" :is="view"></div>
+    </div>
+    <script>
+        var vm1 = new Vue({
+            el: "#app",
+            data: {
+                view: 'normal'
+            }
+        });
+        var viewArr = ['normal', 'edit', 'active'];
+        var n = 0;
+        setInterval(function() {
+            n++;
+            if (n > viewArr.length - 1) {
+                n = 0;
+            }
+            vm1.view = viewArr[n];
+        }, 1000);
+    </script>
+
+
+
+
+
+
+
+
+    <div id="app2">
+        <div :is="currentView"></div>
+    </div>
+    <script>
+        var Home = {
+            template: '<p>Welcome home!</p>'
+        }
+        var vm = new Vue({
+            el: '#app2',
+            data: {
+                currentView: Home
+            }
+        })
+    </script>
+
+
+    <!-- is的值是个字符串的时候,就会使用对应名字的组件 ; 若是个对象的时候,就会使用对象的template属性作为模板 -->
+
+
+
+
+    <!-- keep-alive -->
+    <!-- 如果把切换出去的组件保留在内存中，可以保留它的状态或避免重新渲染。 -->
+
+    <div id="app3">
+        <keep-alive>
+            <div class="main" :is="view"></div>
+        </keep-alive>
+    </div>
+    <script>
+        var vm3 = new Vue({
+            el: "#app3",
+            data: {
+                view: 'normal'
+            }
+        });
+        var viewArr = ['normal', 'edit', 'active'];
+        var n = 0;
+        setInterval(function() {
+            n++;
+            if (n > viewArr.length - 1) {
+                n = 0;
+            }
+            vm3.view = viewArr[n];
+        }, 1000);
+    </script>
+
+</body>
+
+</html>

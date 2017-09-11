@@ -101,7 +101,8 @@
         new Vue({
             el: "#app4",
             data: {
-                message: "hello world"
+                message: "hello world",
+                // 如果 render 函数和 template 属性都不存在，挂载 DOM 元素的 HTML 会被提取出来用作模板
             }
         });
     </script>
@@ -174,9 +175,11 @@
         });
         new Vue({
             el: '#app8',
-            template: "#app8Tpl" // 模板标签的id
+            template: "#app8Tpl" // 模板标签的id 也是字符串模板
         });
     </script>
+
+    <!-- 可以看出 上面两个例子由于使用了字符串模板 DOM模板解析限制将不复存在-->
 
 
     <!-- 原理 -->
