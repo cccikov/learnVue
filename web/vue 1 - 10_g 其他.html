@@ -8,7 +8,126 @@
 </head>
 
 <body>
+    <p>Vue</p>
+    <p>Vue.extend</p>
+    <p>Vue.component</p>
 
+
+
+    <h2>Vue是vue实例的构造函数</h2>
+    <div id="app1">
+        {{message}}
+    </div>
+    <script>
+        // Vue是vue实例的构造函数
+        new Vue({
+            el: "#app1",
+            data: {
+                message: "hello"
+            }
+        }); // 在构造的时候可以传一个一个对象作为参数
+    </script>
+
+
+    <div id="app2">
+        {{message}}
+    </div>
+    <script>
+        // Vue是vue实例的构造函数
+        var vm2 = new Vue({
+            data: {
+                message: "hello"
+            }
+        }); // 在构造的时候可以传一个一个对象作为参数
+
+        // 当没有el属性的时候可以手动指定
+        vm2.$mount('#app2')
+    </script>
+
+
+
+    <h2>Vue.extend 是用来生成新的构造函数 , 来创建vue实例</h2>
+    <div id="app3">
+        {{message}}
+    </div>
+    <div id="app4">
+        {{message}}
+    </div>
+    <script>
+        // 创建新的构造 , 把一些可以通用的选项先通过参数传入
+        var NewVue = Vue.extend({
+            data: function() { // data 选项是特例，需要注意 - 在 Vue.extend() 中它必须是函数
+                    return {
+                        message: "hello"
+                    }
+                }
+                // Vue.extend参数选项里面一般是不添加el属性的 , 因为这样就无法给别的元素使用 , 就没有构造函数的意义(复用)了
+        });
+
+        // 通过新的构造函数创建实例 , 其实就类似扩展了Vue构造函数 , 把一些可以通用的选项先通过Vue.extend变成新的构造函数
+        var vm3 = new NewVue(); // 这个构造函数不同于Vue , 不可以传参了
+        vm3.$mount('#app3');
+
+        new NewVue().$mount('#app4'); // 可以直接挂在到别的元素中实现重用
+
+        // 来到这里 , 你会发现Vue.extend新生成的 新构造函数(如NewVue) , 可以通过实例化和挂载元素来生成许多用共同功能的 vue实例 ; 没错 , Vue.extend返回的对象也可以当做是组件
+
+
+
+
+
+
+
+        // 你会看到 Vue.component API 是这么说的
+
+        // 注册组件，传入一个扩展过的构造器
+        Vue.component('my-component', Vue.extend({ /* ... */ }))
+            // 注册组件，传入一个选项对象（自动调用 Vue.extend）
+        Vue.component('my-component', { /* ... */ })
+            // 获取注册的组件（始终返回构造器）
+        var MyComponent = Vue.component('my-component')
+
+
+        /* 所以其实我们 使用Vue.component来创建组件的时候已经会自动调用Vue.extend */
+    </script>
+
+
+
+    <div id="app5">
+        <tpl-a></tpl-a>
+    </div>
+    <div id="app6"></div>
+    <script>
+        var NewVueTem = Vue.extend({
+            data: function() {
+                return {
+                    message: "hello"
+                }
+            },
+            template: "<div>{{message}}</div>"
+        });
+        var Component = Vue.component('tpl-a', NewVueTem);
+        // Vue.component 与 Vue.extend不同的是 , Vue.component的第一个参数是一个自定义元素 , 所以就不用再特意去调用$mount()来指定挂载元素 , 但是也因此Vue.component的组件必须有template属性(或者render函数属性) , 因为没有挂载元素作为模板 . 而且Vue.component定义好之后 , 不再需要用new去调用 , 只要一个实例里面有对应的自定义元素 , 就会自动实例化
+
+
+        new Vue({
+            el: "#app5"
+        });
+        (new Component()).$mount("#app6"); // 组件也可以通过new来调用
+    </script>
+
+
+
+
+    <script>
+        console.log(Vue);
+        console.log(new Vue());
+
+        console.log(Vue.extend({}))
+        console.log(new(Vue.extend({}))()); // 是一个 VueComponent Vue组件实例
+        console.log(Vue.component("tpl", {}));
+        console.log(new(Vue.component("tpl", {}))()); // 也是一个 VueComponent Vue组件实例
+    </script>
 </body>
 
 </html>

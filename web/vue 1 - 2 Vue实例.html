@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 实例</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{message}}
+    </div>
+    <script>
+        var vm1 = new Vue({
+            el: "#app",
+            data: {
+                message: "hello world"
+            },
+            created: function() {
+                // 实例创建的时候会触发 , 可以在这里写一个获取数据的代码
+                console.log("创建vue实例");
+                setTimeout(function() {
+                    vm1.message = "lorem";
+                }, 100);
+            },
+            mounted: function() {
+                console.log("el 被新创建的 vm.$el 替换，并挂载到实例上");
+            },
+            updated: function() {
+                console.log("更新数据");
+            },
+            destroyed: function() {
+                console.log("销毁实例");
+            }
+        });
+
+        setTimeout(function() {
+            vm1.message = "hello world";
+        }, 5000);
+    </script>
+
+</body>
+
+</html>
