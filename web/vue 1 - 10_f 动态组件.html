@@ -111,6 +111,76 @@
         }, 1000);
     </script>
 
+
+
+
+
+
+    <div id="app4">
+        <div @click="say">{{content}}</div>
+        <div id="time"></div>
+        <div id="time2"></div>
+        <div id="addTpl">
+            <!-- <normal></normal> -->
+        </div>
+    </div>
+    <script>
+        var vm4 = new Vue({
+            el: "#app4",
+            data: {
+                content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius, itaque atque? Officia, voluptate. Nulla, explicabo laborum minima labore iusto deserunt modi tempore repellendus culpa repudiandae facilis earum facere quis eligendi!"
+            },
+            methods: {
+                say: function() {
+                    alert("点击了");
+                }
+            }
+        });
+
+        var addTpl = document.getElementById("addTpl");
+        var time = document.getElementById("time");
+        var time2 = document.getElementById("time2");
+
+        addTpl.innerHTML = "<normal></normal>"; // 应该改用动态组件
+        time.innerHTML = "<div @click='say'>{{content}}</div>"; //
+        time2.innerHTML = "<div onclick='vm4.say()'>" + vm4.content + "</div>"; // 如果是dom操作之后 , 只能利用vm对象去访问里面的数据,方法了
+
+        // 以上两个通过增加dom的方式去绑定是错误的。因为vue是根据 “模板” 去绑定内容的 ; 不是单纯的根据字符串，就是不是只要出现相对于的vue指令（比如"<div @click='say'>{{content}}</div>"里面的@click）或者自定义元素（"<normal></normal>"）,这些内容确实是在后面出现在document中 , 但是Vue实例创建的时候 , 模板里面并没有它们。Vue个人理解是根据模板和数据，实时地生成对应的内容出来
+        // Vue2是通过 虚拟 DOM 来实时生成内容，并替换模板，所以性能比vue1好
+
+        // 上面的动态组件 , 好像内容也是后面加载出来那样 , 但是由于已经在模板中已经用is去绑定了对应的组件 , 所以is的值一变化 , 模板就会根据这个变化在 虚拟dom 生成全部内容(包括组件的内容) , 生成好后就直接替换原来的内容 . 所以其实Vue是根据模板上面的指令 , 绑定了什么数据有什么处理 , 根据数据慢慢往模板上填内容(在虚拟dom中) , 好了 , 全部内容填好了 , 在去替换到真实dom上面 , 就变成了我们看到的内容了 . 实例化之后 , 其实可以是看成是全部内容填好了已经替换到真实dom上了, 所以通过js去直接改变dom的时候 ,已经无用了.
+    </script>
+
+
+
+    <div id="app5">
+        <div @click="say">{{content}}</div>
+        <div id="time"></div>
+        <div id="addTpl">
+        </div>
+    </div>
+    <script>
+        var addTpl = document.getElementById("addTpl");
+        var time = document.getElementById("time");
+
+        addTpl.innerHTML = "<normal></normal>";
+        time.innerHTML = "<div @click='say'>{{content}}</div>";
+
+
+        var vm5 = new Vue({
+            el: "#app5",
+            data: {
+                content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eius, itaque atque? Officia, voluptate. Nulla, explicabo laborum minima labore iusto deserunt modi tempore repellendus culpa repudiandae facilis earum facere quis eligendi!"
+            },
+            methods: {
+                say: function() {
+                    alert("点击了");
+                }
+            }
+        });
+
+        /* 由于上面在实例化前就已经通过js添加了dom , 所以可以看成实例化的时候 , 读取的模板中已经有了那些通过js添加的元素 , 所以是有效的*/
+    </script>
 </body>
 
 </html>
