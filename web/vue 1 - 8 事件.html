@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>事件</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <a href="javascript:void(0)" @click='listener'>
+            <p>我是a里面的p元素</p>
+            <div>我是div</div>
+        </a>
+        <a href="javascript:void(0)" @click='fn("哈哈哈",$event)'>
+            <p>我是a里面的p元素</p>
+            <div>我是div</div>
+        </a>
+    </div>
+    <script>
+        new Vue({
+            el: "#app",
+            methods: {
+                listener(e) {
+                    console.log(e.target);
+                    console.log(e.currentTarget);
+                },
+                fn(str, e) {
+                    console.log(e.target);
+                    console.log(e.currentTarget);
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
