@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 组件其他</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <script>
+        Vue.component('tree-folder', {
+            template: `
+                <p>
+                    <span>{{ folder.name }}</span>
+                    <tree-folder-contents :children="folder.children"/>
+                </p>
+            `,
+        });
+        Vue.component('tree-folder', {
+            template: `
+                <ul>
+                    <li v-for="child in children">
+                        <tree-folder v-if="child.children" :folder="child"/>
+                        <span v-else>{{ child.name }}</span>
+                    </li>
+                </ul>
+            `,
+        });
+    </script>
+</body>
+
+</html>

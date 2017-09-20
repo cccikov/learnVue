@@ -39,5 +39,8 @@ gulp.task('browser-sync', function() {
             }
         }
     });
-    gulp.watch(browserSyncPath).on("change", reload);
+    // gulp.watch(browserSyncPath).on("change", reload);
+    gulp.watch(browserSyncPath).on("change", function(event) { // 这个就会比上面那个稍微高级点 , 会显示是哪个文件修改了
+        gulp.src(event.path).pipe(reload({ stream: true }));
+    });
 });

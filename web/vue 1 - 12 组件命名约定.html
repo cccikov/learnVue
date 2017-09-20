@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 组件其他</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <script>
+        Vue.component('kebab-cased', {
+            template: "<p>{{variable}} --- {{use}}</p>",
+            props: ["use"],
+            data: function() {
+                return {
+                    variable: "短横杠式声明"
+                }
+            }
+        });
+        Vue.component('camelCased', {
+            template: "<p>{{variable}} --- {{use}}</p>",
+            props: ["use"],
+            data: function() {
+                return {
+                    variable: "驼峰式声明"
+                }
+            }
+        });
+        Vue.component('PascalCased', { // 通过结果看出 , PascalCased声明方式 , 实例的时候是可以随便选择任意方式实例
+            template: "<p>{{variable}} --- {{use}}</p>",
+            props: ["use"],
+            data: function() {
+                return {
+                    variable: "首字母大写驼峰式声明"
+                }
+            }
+        });
+    </script>
+
+
+
+
+    <div id="app1">
+        <!-- 在 HTML 模板中始终使用 kebab-case 短横杠式 -->
+        <kebab-cased use="短横杠式使用"></kebab-cased>
+        <camel-cased use="短横杠式使用"></camel-cased>
+        <pascal-cased use="短横杠式使用"></pascal-cased>
+        <!-- 通过结果看出 , 任何声明方式都可以使用 kebab-cased来实例化  -->
+    </div>
+    <script>
+        new Vue({
+            el: "#app1",
+        });
+    </script>
+
+    <!-- 字符串模板 -->
+    <div id="app2"></div>
+    <script>
+        new Vue({
+            el: "#app2",
+            template: `
+                <div>
+                    <kebab-cased use="短横杠式使用"></kebab-cased>
+                    <camel-cased use="短横杠式使用"></camel-cased>
+                    <camelCased use="驼峰式使用"></camelCased>
+                    <pascal-cased use="短横杠式使用"></pascal-cased>
+                    <pascalCased use="驼峰式使用"></pascalCased>
+                    <PascalCased use="首字母大写驼峰式使用"></PascalCased>
+                </div>
+            `
+        });
+    </script>
+
+    <!-- 这意味着 PascalCase 是最通用的 声明约定              而 kebab-case 是最通用的 使用约定。 -->
+
+
+
+    <!-- 在字符串模板中甚至可以直接使用自闭合标签来实例化组件 -->
+    <div id="app3"></div>
+    <script>
+        new Vue({
+            el: "#app3",
+            template: `
+                <div>
+                    <kebab-cased use="短横杠式使用 , 自闭合"/>
+                    <camel-cased use="短横杠式使用 , 自闭合"/>
+                    <camelCased use="驼峰式使用 , 自闭合"/>
+                    <pascal-cased use="短横杠式使用 , 自闭合"/>
+                    <pascalCased use="驼峰式使用 , 自闭合"/>
+                    <PascalCased use="首字母大写驼峰式使用 , 自闭合"/>
+                </div>
+            `
+        });
+    </script>
+    <!-- 当然，这只在字符串模板中有效。因为自闭的自定义元素是无效的 HTML，浏览器原生的解析器也无法识别它。 -->
+</body>
+
+</html>

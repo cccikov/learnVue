@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 组件其他</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        /**
+         * 在编写组件时，留意是否要复用组件是有好处的。一次性组件跟其它组件紧密耦合没关系，但是可复用组件应当定义一个清晰的公开接口。
+         * Vue 组件的 API 来自三部分 - props, events 和 slots
+         * Props 允许外部环境传递数据给组件
+         * Events 允许从外部环境监听组件内触发的事件(组件内部信息可用通过事件参数传出)
+         * Slots 允许外部环境将额外的内容组合在组件中。
+         */
+    </script>
+
+
+
+    <!-- 子组件索引 -->
+    <div id="app1">
+        <tpl-a ref='tpl_a'></tpl-a>
+    </div>
+    <script type="text/javascript">
+        Vue.component("tpl-a", {
+            template: "<p>{{message}}</p>",
+            data: function() {
+                return {
+                    message: "hello"
+                }
+            }
+        });
+
+        var vm = new Vue({
+            el: "#app1",
+        });
+        console.log(vm.$refs, vm.$refs.tpl_a)
+    </script>
+
+    <div id="app2">
+        <tpl-a v-for="item in 'abcd'" :key='item' ref='tpl_a'></tpl-a>
+    </div>
+    <script type="text/javascript">
+        var vm2 = new Vue({
+            el: "#app2",
+        });
+        console.log(vm2.$refs, vm2.$refs.tpl_a)
+    </script>
+    <!-- $refs 只在组件渲染完成后才填充，并且它是非响应式的。它仅仅作为一个直接访问子组件的应急方案——应当避免在模板或计算属性中使用 $refs。 -->
+
+
+
+
+
+
+
+
+    <!-- 异步组件 -->
+
+
+
+</body>
+
+</html>
