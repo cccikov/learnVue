@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 组件间的循环使用</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <!-- 尽管在 Vue 中渲染 HTML 很快，不过当组件中包含大量静态内容时，可以考虑使用 v-once 将渲染结果缓存起来 -->
+    <script>
+        Vue.component('terms-of-service', {
+            template: '\
+                <div v-once>\
+                <h1>Terms of Service</h1>\
+                ... a lot of static content ...\
+                </div>\
+            '
+        });
+    </script>
+</body>
+
+</html>

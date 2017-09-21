@@ -3,13 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>vue 组件其他</title>
+    <title>vue 组件间的循环使用</title>
     <script type="text/javascript" src="vue.js"></script>
 </head>
 
 <body>
     <script>
         Vue.component('tree-folder', {
+            props: ["folder"],
             template: `
                 <p>
                     <span>{{ folder.name }}</span>
@@ -17,7 +18,8 @@
                 </p>
             `,
         });
-        Vue.component('tree-folder', {
+        Vue.component('tree-folder-contents', {
+            props: ["children"],
             template: `
                 <ul>
                     <li v-for="child in children">
@@ -26,6 +28,48 @@
                     </li>
                 </ul>
             `,
+        });
+    </script>
+
+
+    <div id="app1">
+        <tree-folder :folder='fold_data'></tree-folder>
+    </div>
+    <script>
+        new Vue({
+            el: "#app1",
+            data: {
+                fold_data: {
+                    name: "D盘",
+
+                    children: [{
+                        "name": "cccgit"
+                    }, {
+                        "name": "project",
+
+                        children: [{
+                            "name": "公司项目",
+
+                            children: [{
+                                "name": "带投兵",
+
+                                "children": [{
+                                    "name": "后台"
+                                }, {
+                                    "name": "前台"
+                                }]
+
+                            }, {
+                                "name": "全民钢铁",
+                            }]
+
+                        }, {
+                            "name": "自己项目"
+                        }]
+
+                    }, ]
+                }
+            }
         });
     </script>
 </body>
