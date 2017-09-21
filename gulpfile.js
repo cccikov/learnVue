@@ -4,8 +4,8 @@ let reload = browserSync.reload;
 
 
 
-let browserSyncPath = ["./web/*.html","./web/*.js","./web/*.css"]; // 监视同步路径
-let browserSyncRootPath = "./web";
+let browserSyncPath = ["web/*.html", "web/*.js", "web/*.css"]; // 监视同步路径  多了./的话增加新文件会没有反应 所以这里取消
+let browserSyncRootPath = "web";
 let browserSyncIndex = "index.html"; // 服务器启动的时候,默认打开的文件
 
 
