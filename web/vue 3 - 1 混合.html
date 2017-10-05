@@ -9,6 +9,61 @@
 
 <body>
 
+    <script type="text/javascript">
+    /**
+     * 混合对象可以包含任意组件选项。当组件使用混合对象时，所有混合对象的选项将被混入该组件本身的选项。
+     */
+
+    var mixin = {
+        data: function() {
+            return {
+                msg: "这是混合内容"
+            }
+        },
+        methods:{
+            sayHi:function(){
+                console.log("hi");
+            }
+        },
+        created: function() {
+            console.log("实例创建的时候会触发")
+        }
+    }
+
+    var NewVue = Vue.extend({
+        mixins: [mixin],
+        data: function() {
+            return {
+                proto: "NewVue",
+                name: "NewVue的实例"
+            }
+        },
+        created:function(){
+            console.log("NewVue实例创建");
+        }
+    });
+
+    /**
+     * 当组件和混合对象含有同名选项时，这些选项将以恰当的方式混合。
+     *
+     * 同名钩子函数将混合为一个数组，因此都将被调用
+     * 值为对象的选项，例如 methods, components 和 directives，将被混合为同一个对象。两个对象键名冲突时，取组件对象的键值对。
+     */
+
+    // 要区分开来 , 通常实例参数对象的第一层属性才是选项 , 如data , methods , created ... ; data里面的msg等 , 这些是选项值里面的内容
+    </script>
+
+    <div id="app1">
+        <p>prototype:{{proto}}</p>
+        <p>msg:{{msg}}</p>
+        <p>name:{{name}}</p>
+    </div>
+    <script type="text/javascript">
+        var vm1 = new NewVue();
+        vm1.$mount("#app1");
+        vm1.sayHi();
+    </script>
+    <!-- 混合的作用就类似自定义组件的时候先提供一个默认值 -->
 </body>
 
 </html>
