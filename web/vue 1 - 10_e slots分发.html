@@ -29,6 +29,9 @@
         .container footer {
             box-shadow: 0px 0px 0px 1px #B3EC71;
         }
+        .mar{
+            margin:20px 0;
+        }
     </style>
     <script type="text/javascript" src="vue.js"></script>
 </head>
@@ -215,16 +218,17 @@
 
     <!-- 作用域插槽更具代表性的用例是列表组件 -->
     <div id="app5">
-        <my-awesome-list :items="items">
 
+        <tpl-d :items="items">
             <!-- 作用域插槽也可以是具名的 -->
             <template slot="theli" scope="data">
                 <li class="my-fancy-item">{{ data.content }} 时间:{{ data.date }} id:{{data.id}} --- 全部数据:{{data}}</li>
             </template>
-        </my-awesome-list>
+        </tpl-d>
+
     </div>
     <script>
-        Vue.component("my-awesome-list", {
+        Vue.component("tpl-d", {
             template: `
             <ul>
                 <slot name="theli"
@@ -260,6 +264,70 @@
         });
     </script>
 
+
+
+    <h4>app6</h4>
+    <div id="app6">
+        {{2}}
+        <tpl-e :parent="msg"></tpl-e>
+        <tpl-f :parent="msg">
+            <div>
+                jalskdjkalsjd
+            </div>
+        </tpl-f>
+        <tpl-f :parent="msg">
+            <template scope="data">
+                <div>
+                    <p>jalskdjkalsjd</p>
+                    <p>{{data}}</p>
+                    <p>{{data.mainData}}</p>
+                    <p>{{data.mainData.id}}</p>
+                </div>
+            </template>
+        </tpl-f>
+    </div>
+    <script>
+        Vue.component("tpl-e", {
+            template: `<div class='mar'>
+                <p>tpl-e</p>
+                <p>{{parent}} {{parent.id}}</p>
+            </div>`,
+            props: ["parent"],
+            data: function () {
+                return {
+                    self: {
+                        "name": "ccc"
+                    }
+                }
+            }
+        });
+
+        Vue.component("tpl-f", {
+            template: `<div class='mar'>
+                <p>tpl-f</p>
+                <p>{{parent}} {{parent.id}}</p>
+                <slot :mainData='parent'></slot>
+            </div>`,
+            props: ["parent"],
+            data: function () {
+                return {
+                    self: {
+                        "name": "ccc"
+                    }
+                }
+            }
+        });
+
+
+        new Vue({
+            el: "#app6",
+            data: {
+                msg: {
+                    id: 1234,
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

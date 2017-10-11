@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>渲染函数 & JSX.html</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <!-- 编译作用域 -->
+    <div id="app1"></div>
+
+
+    <script>
+        var vm3 = new Vue({
+            el: "#app1",
+            render: function (createElement) {
+                return createElement("div",
+                    // data 可选
+                    {
+                        // 和`v-bind:class`一样的 API
+                        'class': {
+                            foo: true,
+                            bar: false,
+                            container: true
+                        },
+                        // 正常的 HTML 特性 
+                        attrs: {
+                            id: 'foo',
+                            class: "container"
+                        },
+                        // 和`v-bind:style`一样的 API
+                        style: {
+                            color: 'red',
+                            fontSize: '14px'
+                        },
+                    },
+                    [
+                        "<p>haha<p>", // 在这里用字符串写标签 , 是得不到标签的
+                        createElement("p","haha"),
+                    ]);
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
