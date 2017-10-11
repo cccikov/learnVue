@@ -8,7 +8,6 @@
 </head>
 
 <body>
-
     <script type="text/javascript">
     /**
      * 混合对象可以包含任意组件选项。当组件使用混合对象时，所有混合对象的选项将被混入该组件本身的选项。
@@ -64,6 +63,32 @@
         vm1.sayHi();
     </script>
     <!-- 混合的作用就类似自定义组件的时候先提供一个默认值 -->
+
+
+
+
+
+    <!-- 全局混合 -->
+    <script>
+        Vue.mixin({
+            data:function(){
+                return{
+                    global:"全局信息"
+                }
+            },
+            created:function(){
+                console.log("Vue实例创建");
+            }
+        });
+    </script>
+    <div id="app2"></div>
+    <script>
+        /* 注意使用！ 一旦使用全局混合对象，将会影响到 所有 之后创建的 Vue 实例。 */
+        // 所以 之后
+        new Vue({
+            el:"#app2"
+        });
+    </script>
 </body>
 
 </html>

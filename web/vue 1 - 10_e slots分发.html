@@ -8,24 +8,24 @@
         body * {
             margin: 0;
         }
-        
+
         .content {
             margin: 15px 0;
         }
-        
+
         .content * {
             margin: 0;
         }
-        
+
         .container {
             margin: 15px 0;
             box-shadow: 0px 0px 0px 1px #E4E2E2;
         }
-        
+
         .container header {
             box-shadow: 0px 0px 0px 1px #71ECE2;
         }
-        
+
         .container footer {
             box-shadow: 0px 0px 0px 1px #B3EC71;
         }
@@ -42,7 +42,7 @@
     <script>
         Vue.component("tpl-a", {
             template: '<p>{{sonMessage1}}</p>',
-            data: function() {
+            data: function () {
                 return {
                     sonMessage1: "子内容1"
                 }
@@ -142,11 +142,39 @@
                     <slot name="footer"></slot>
                 </footer>
             </div>  
-            `
+            `,
+            render: function (ele) {
+                console.log(this.$slots);
+                return ele("div",
+                    // data 可选
+                    {
+                        // 和`v-bind:class`一样的 API
+                        'class': {
+                            foo: true,
+                            bar: false,
+                            container: true
+                        },
+                        // 正常的 HTML 特性 
+                        attrs: {
+                            id: 'foo',
+                            class: "container"
+                        },
+                        // 和`v-bind:style`一样的 API
+                        style: {
+                            color: 'red',
+                            fontSize: '14px'
+                        },
+                    },
+                    [
+                        ele("header", { attrs: { class: "header" } }, this.$slots.header),
+                        ele("main", this.$slots.default),
+                        ele("footer", this.$slots.footer)
+                    ]);
+            }
         });
         // 在子组件实例中 具有slot属性的元素 放在 子组件模板中具有相同name属性的slot标签
 
-        new Vue({
+        var vm3 = new Vue({
             el: "#app3"
         });
     </script>
@@ -160,20 +188,22 @@
 
     <!-- 作用域插槽 -->
     <div id="app4">
-        <child>
+        <child-tpl>
+            <!-- 组件实例中 具有特殊属性 scope 的 <template> 元素必须存在 -->
             <template scope="data">
+                <!-- scope 的值对应一个临时变量名 , 插槽里面的数据就通过这个变量来获取 -->
                 <p>hello from parent</p>
-                <p>子组件中传递的数据{{ data }}  ----  {{ data.text }} {{data.propA}} {{data.propB}}</p>
+                <p>子组件中传递的数据{{ data }} ---- {{ data.text }} {{data.propA}} {{data.propB}}</p>
             </template>
-        </child>
+        </child-tpl>
     </div>
     <script>
-        Vue.component("child", {
+        Vue.component("child-tpl", {
             template: `
             <div>
-                <slot text="hello from child" propA="属性A" propB="属性B"></slot>
+                <slot text="这是在模板中slot上面属性text的值" propA="属性A" propB="属性B"></slot>
             </div>
-            `, // 作用域插槽 传递给插槽里面的数据就是slot标签的属性
+            `, // 作用域插槽 传递给插槽里面的数据就是slot标签的属性 具有特殊属性 scope
             props: []
         });
 
