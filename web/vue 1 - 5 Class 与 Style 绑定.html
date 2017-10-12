@@ -16,6 +16,8 @@
         <div v-bind:class="{ active: isActive }"></div>
         <!-- 等同于 -->
         <div v-bind:class="{ 'active': isActive }"></div>
+        <!-- 等同于 -->
+        <div v-bind:class="'active'"></div>
         <!-- 渲染结果: <div class="active"></div> -->
 
 
@@ -102,7 +104,7 @@
 
 
 
-    <!-- =========对象语法========== -->
+    <!-- =========数组语法========== -->
     <!-- 上面的例子 都是给 v-bind:class 传入一个对象 , 还可以传入一个数组 , 以应用一个 class 列表 -->
     <div id="app5">
         <div v-bind:class="[activeClass, errorClass,'static']"></div>
@@ -262,7 +264,8 @@
     </script>
 
 
-
+    <!-- v-bind:style 若是直接绑定字符串 , 则相当于直接在标签上写样式那样 -->
+    <!-- v-bind:class 若是直接绑定字符串 , 则相当于直接在标签上添加className -->
 
 
 </body>

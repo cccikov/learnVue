@@ -14,25 +14,29 @@
         Vue.component("tpl-component", {
             // 组件模板
             template: `
-                    <div :data-style='VueToComponentStyle' :style='VueToComponentStyle'>
-                        <p>tpl-e</p>
+                    <div :class="attr.class" :data-style='VueToComponentStyle' :style='attr.style'>
+                        <p>组件名: {{info.name}}</p>
                         <p class="self">{{componentSelf}}<p>
                         <p>{{VueToComponent}}</p>
                         <p>{{VueToComponentSlot}}</p>
-                        <slot :ComponentToSlot="VueToComponentSlot" txt="文字"></slot>
+                        <slot :ComponentToSlot="VueToComponentSlot" txt="这是单纯从组件传入到slot的文字内容"></slot>
                     </div>
                     `,
             // VueToComponent 表示数据是由vue传到component(组件)
-            props: ["VueToComponent", "VueToComponentStyle", "VueToComponentSlot", "some"],
+            props: ["VueToComponent", "VueToComponentStyle", "VueToComponentSlot"],
             data: function () {
+                var _this = this;
                 return {
                     // componentSelf 表示 component(组件) 自己的数据
-                    componentSelf: {
-                        "name": "ccc",
-                    },
+                    componentSelf: "组件自己内容",
                     info: {
-                        "name": "tpl-component"
+                        "name": "tpl-component",
+                    },
+                    attr: {
+                        style: _this.VueToComponentStyle, // 其实这也是一种数据传递的方式 , 不用先将传入得数据(prop)写在模板上 如 :data-style='VueToComponentStyle' 是直接将prop写在模板上了 ; 可以先在data里面整理 , 如这里的attr属性 , 先整理了传入的prop , 再写在模板上
+                        class: _this.VueToComponent.class
                     }
+                    // 其实先将prop整理的话 , 条理更加清晰 , 不然直接将prop写在模板上 , 会有点混乱
                 }
             },
             created: function () {
@@ -40,28 +44,53 @@
             }
         });
     </script>
-    <h4>app6</h4>
-    <div id="app6">
-        <span :style='{color:"green"}'>Lorem, ipsum dolor.</span>
-        <tpl-component some="asdasdasdasdljasdlj" :vue-to-component="componentData" :vue-to-component-slot="slotData" vue-to-component-style="componentStyle">
-            <template scope="data">
-                {{data}}
-            </template>
-        </tpl-component>
+
+
+
+
+
+    <!-- vue实例 -->
+    <div id="app">
+        <div class="app-content">
+            <h4>这里面是Vue实例的内容</h4>
+            <p>{{vueData}}</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, fuga. Nostrum nemo eos, accusamus harum
+                quo ipsum exercitationem qui sint nulla doloremque consequuntur ut a nihil itaque expedita sapiente? Molestias!</p>
+        </div>
+        <div>
+            <h4>这里面是Vue组件的内容</h4>
+            <tpl-component :vue-to-component="componentData" :vue-to-component-slot="slotData" :vue-to-component-style="componentStyle">
+                <template scope="data">
+                    <div class="slot">
+                        {{data}}
+                    </div>
+                </template>
+            </tpl-component>
+        </div>
     </div>
     <script>
         new Vue({
-            el: "#app6",
+            el: "#app",
             data: {
                 vueData: "这是vue实例本身的数据",
-                componentData: "这是传入到组件的数据",
-                slotData: "这是传入到slot里面的数据",
-                componentStyle: {
+                componentData: {
+                    describe: "这是从vue实例传入到组件的数据",
+                    class: {
+                        active:true,
+                        tpl:true
+                    }
+                },
+                slotData: "这是从vue实例传入到slot里面的数据",
 
-                }
+                // 控制组件样式
+                componentStyle: {
+                    padding: "20px",
+                    boxShadow: "rgba(0, 0, 0, 0.28) 0px 0px 20px 0px"
+                },
             }
         });
     </script>
+
 
 </body>
 
