@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>复用性高组件研究</title>
+    <script type="text/javascript" src="vue.js"></script>
+    <style>
+        .slot {
+            box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 20px 0px;
+            color:blue;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 组件 -->
+    <script>
+        Vue.component("tpl-component", {
+            // 组件模板
+            template: `
+                    <div class="component" :class="attr.class" :style='attr.style'>
+                        <p>组件名: {{info.name}}</p>
+                        <p>{{VueToComponent}}</p>
+                        <div>
+                            <button @click='click1'>按钮1</button>
+                            <button @click='click2'>按钮2</button>
+                            <button @click='click3'>按钮3</button>
+                        </div>
+                        <slot :ComponentToSlot="ComponentToSlot"></slot>
+                    </div>
+                    `,
+            // VueToComponent 表示数据是由vue传到component(组件)
+            props: ["VueToComponent"],
+            data: function () {
+                var _this = this;
+                return {
+                    info: {
+                        "name": "tpl-component",
+                    },
+                    attr: {
+                        style: _this.VueToComponent.style,
+                        class: _this.VueToComponent.class,
+                    },
+                    ComponentToSlot: _this.VueToComponent.slot,
+                    msg: _this.VueToComponent
+                    // 其实先将prop整理的话 , 条理更加清晰 , 不然直接将prop写在模板上 , 会有点混乱
+                }
+            },
+            created: function () {
+                console.log(this);
+            },
+            methods: {
+                click1: function (e) {
+                    this.update("组件按钮1点击", {
+                        "time": new Date(),
+                        "target": e.currentTarget,
+                    });
+                },
+                click2: function (e) {
+                    this.update("组件按钮2点击", {
+                        "target": e.currentTarget,
+                        "scrollTop": document.body.srcollTop || document.documentElement.scrollTop
+                    });
+                },
+                click3: function (e) {
+                    this.update("组件按钮3点击", {
+                        "target": e.currentTarget,
+                        "height": document.body.offsetHeight
+                    });
+                },
+                // 通用触发 'update' 事件方法 , 传入 type:描述 , data:数据
+                update: function (type, data) {
+                    this.$emit('update', { type: type, data: data });
+                },
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+    <!-- vue实例 -->
+    <div id="app">
+        <div class="app-content">
+            <h4>这里面是Vue实例的内容</h4>
+            <p>{{vueData}}</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, fuga. Nostrum nemo eos, accusamus harum
+                quo ipsum exercitationem qui sint nulla doloremque consequuntur ut a nihil itaque expedita sapiente? Molestias!</p>
+        </div>
+        <div>
+            <h4>这里面是Vue组件的内容</h4>
+            <tpl-component :vue-to-component="componentData" @update="componentInside">
+                <!--  @update是监听组件自定义事件 -->
+                <template scope="slotSelfData">
+                    <div class="slot">
+                        <p>{{vueData}}</p>
+                        <p>{{slotSelfData.ComponentToSlot}}</p>
+                        <p>{{slot}}</p>
+                        <a href="javascript:void(0)" @click="slotClick">我是按钮 , 点击我啊</a>
+                        <p>
+                            <strong>虽然slot可以读取组件里面的数据 , 但其实作用域还是在Vue实例里面 , 所以slot里面的数据最好还是直接从Vue实例里面传入</strong>
+                        </p>
+                    </div>
+                </template>
+            </tpl-component>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                vueData: "这是vue实例本身的数据",
+                slot:"这是vue实例直接传入到slot里面的数据 , 其实也就是Vue实例本身的数据",
+                componentData: {
+                    describe: "这是从vue实例传入到组件的全部数据 , 包括样式 , class , 传入到slot里面的数据",
+                    class: {
+                        active: true,
+                        tpl: true
+                    },
+                    style: {
+                        padding: "20px",
+                        boxShadow: "rgba(0, 0, 0, 0.28) 0px 0px 20px 0px",
+                        color: "red"
+                    },
+                    slot: {
+                        describe: "这是从vue实例打算经过component组件 , 传入到slot里面的数据"
+                    },
+                    data: {
+                        "describe": "这是vue实例传入到组件的展示数据",
+                        arr: [
+                            {
+                                "id": 15,
+                                "amount": 10000
+                            },
+                            {
+                                "id": 16,
+                                "amount": 2000
+                            }
+                        ]
+                    }
+                },
+            },
+            methods: {
+                componentInside: function (msg) {
+                    console.log(msg);
+                },
+                slotClick: function () {
+                    console.log("slot里面有东西点击了");
+                }
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
