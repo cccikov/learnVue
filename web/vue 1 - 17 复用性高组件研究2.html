@@ -106,6 +106,10 @@
                         <p>
                             <strong>虽然slot可以读取组件里面的数据 , 但其实作用域还是在Vue实例里面 , 所以slot里面的数据最好还是直接从Vue实例里面传入</strong>
                         </p>
+                        <div style="padding:20px">
+                            <h6>这是在slot里面再嵌套一个组件</h6>
+                            <tpl-component :vue-to-component="componentData" @update="componentInsideInside"></tpl-component>
+                        </div>
                     </div>
                 </template>
             </tpl-component>
@@ -149,6 +153,9 @@
             methods: {
                 componentInside: function (msg) {
                     console.log(msg);
+                },
+                componentInsideInside: function (msg) {
+                    console.log(msg.type);
                 },
                 slotClick: function () {
                     console.log("slot里面有东西点击了");
