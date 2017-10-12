@@ -85,12 +85,12 @@
             data: {
                 isActive: true,
                 error: false
-                    // error: {
-                    //     type: "fatal"
-                    // }
+                // error: {
+                //     type: "fatal"
+                // }
             },
             computed: {
-                classObject: function() {
+                classObject: function () {
                     return {
                         active: this.isActive && !this.error,
                         'text-danger': this.error && this.error.type === 'fatal',
@@ -245,7 +245,21 @@
 
 
 
+    <div id="app9">
+        <!-- v-bind:style 若是直接绑定字符串 , 则相当于直接在标签上写样式那样 -->
+        <p :style="'background:red;color:green'">Lorem, ipsum dolor.</p>
 
+        <!-- v-bind:style 绑定对象的话 , 则是属性名 作为 样式属性名 , 属性值 作为 样式属性值 -->
+        <p :style="{'background':'red','color':'green'}">Lorem, ipsum dolor.</p>
+
+
+        <!-- 均解释为 : <p style="background: red; color: green;">Lorem, ipsum dolor.</p> -->
+    </div>
+    <script>
+        new Vue({
+            el: "#app9",
+        });
+    </script>
 
 
 

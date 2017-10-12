@@ -54,55 +54,6 @@
 
 
 
-
-    <!-- 模板 -->
-    <script>
-        Vue.component("tpl-component", {
-            // 组件模板
-            template: `
-                <div :style='VueToComponent_style'>
-                    <p>tpl-e</p>
-                    <p class="self">{{componentSelf}}<p>
-                    <p>{{VueToComponent}}</p>
-                    <p>{{VueToComponent_slot}}</p>
-                    <slot :ComponentToSlot="VueToComponent_slot" txt="文字"></slot>
-                </div>
-                `,
-            // VueToComponent 表示数据是由vue传到component(组件)
-            props: ["VueToComponent", "VueToComponent_style", "VueToComponent_slot"],
-            data: function() {
-                return {
-                    // componentSelf 表示 component(组件) 自己的数据
-                    componentSelf: {
-                        "name": "ccc",
-                    }
-                }
-            }
-        });
-    </script>
-    <h4>app6</h4>
-    <div id="app6">
-        <tpl-component :VueToComponent="msg" VueToComponent_slot="什么鬼" :VueToComponent_style="'{color:red}'">
-            <template scope="data">
-                {{data}}
-            </template>
-        </tpl-component>
-    </div>
-    <script>
-        new Vue({
-            el: "#app6",
-            data: {
-                msg: {
-                    ComponentToSlot: "memeda",
-                    id: 1234,
-                }
-            }
-        });
-    </script>
-
-
-
-
     <!-- 异步组件 -->
 
 

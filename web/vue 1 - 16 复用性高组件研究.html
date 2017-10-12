@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>复用性高组件研究</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+
+    <!-- 组件 -->
+    <script>
+        Vue.component("tpl-component", {
+            // 组件模板
+            template: `
+                    <div :data-style='VueToComponentStyle' :style='VueToComponentStyle'>
+                        <p>tpl-e</p>
+                        <p class="self">{{componentSelf}}<p>
+                        <p>{{VueToComponent}}</p>
+                        <p>{{VueToComponentSlot}}</p>
+                        <slot :ComponentToSlot="VueToComponentSlot" txt="文字"></slot>
+                    </div>
+                    `,
+            // VueToComponent 表示数据是由vue传到component(组件)
+            props: ["VueToComponent", "VueToComponentStyle", "VueToComponentSlot", "some"],
+            data: function () {
+                return {
+                    // componentSelf 表示 component(组件) 自己的数据
+                    componentSelf: {
+                        "name": "ccc",
+                    },
+                    info: {
+                        "name": "tpl-component"
+                    }
+                }
+            },
+            created: function () {
+                console.log(this, this.componentSelf, this.VueToComponent);
+            }
+        });
+    </script>
+    <h4>app6</h4>
+    <div id="app6">
+        <span :style='{color:"green"}'>Lorem, ipsum dolor.</span>
+        <tpl-component some="asdasdasdasdljasdlj" :vue-to-component="componentData" :vue-to-component-slot="slotData" vue-to-component-style="componentStyle">
+            <template scope="data">
+                {{data}}
+            </template>
+        </tpl-component>
+    </div>
+    <script>
+        new Vue({
+            el: "#app6",
+            data: {
+                vueData: "这是vue实例本身的数据",
+                componentData: "这是传入到组件的数据",
+                slotData: "这是传入到slot里面的数据",
+                componentStyle: {
+
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
