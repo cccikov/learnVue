@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue tab切换</title>
+    <script src="./vue.min.js"></script>
+
+</head>
+
+<body>
+    <script type="x-template" id="tabTpl">
+    </script>
+
+
+    <div id="app">
+
+        <div class="tab">
+            <div class="tab-nav">
+                <a class="tab-nav-btn" href="javascript">标签1</a>
+                <a class="tab-nav-btn" href="javascript">标签2</a>
+                <a class="tab-nav-btn" href="javascript">标签3</a>
+                <a class="tab-nav-btn" href="javascript">标签4</a>
+            </div>
+            <div class="tab-panel">
+                <div class="tab-panel-item">1</div>
+                <div class="tab-panel-item">2</div>
+                <div class="tab-panel-item">3</div>
+                <div class="tab-panel-item">4</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                tabName: ["标签页1", "标签页2", "标签页3", "标签页4"]
+            },
+            methods: {
+
+            }
+        });
+    </script>
+
+</body>
+
+</html>
