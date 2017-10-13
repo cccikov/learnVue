@@ -81,7 +81,7 @@ gulp.task("lessSync", function () {
             .pipe(gulp.dest("web/css/"))
             .pipe(reload({ stream: true }));
     });
-    gulp.watch(["web/*.html", "web/*.js"]).on("change", function (event) { // 这个就会比上面那个稍微高级点 , 会显示是哪个文件修改了
+    gulp.watch(["web/*.html", "web/js/*.js"]).on("change", function (event) { // 这个就会比上面那个稍微高级点 , 会显示是哪个文件修改了
         gulp.src(event.path).pipe(reload({ stream: true }));
     });
 });

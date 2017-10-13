@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>vue tab切换</title>
+    <link rel="stylesheet" href="./css/tab.css">
     <script src="./vue.min.js"></script>
+    <script src="./js/tab.js"></script>
 
 </head>
 
@@ -16,35 +18,25 @@
 
 
     <div id="app">
-
-        <div class="tab">
-            <div class="tab-nav">
-                <a class="tab-nav-btn" href="javascript">标签1</a>
-                <a class="tab-nav-btn" href="javascript">标签2</a>
-                <a class="tab-nav-btn" href="javascript">标签3</a>
-                <a class="tab-nav-btn" href="javascript">标签4</a>
-            </div>
-            <div class="tab-panel">
-                <div class="tab-panel-item">1</div>
-                <div class="tab-panel-item">2</div>
-                <div class="tab-panel-item">3</div>
-                <div class="tab-panel-item">4</div>
-            </div>
-        </div>
-
+        <tab>
+            <template slot="1">
+                标签内容1
+            </template>
+            <template slot="2">
+                标签内容2
+            </template>
+            <template slot="3">
+                标签内容3
+            </template>
+            <template slot="4">
+                标签内容4
+            </template>
+            <template slot="5">
+                标签内容5
+            </template>
+        </tab>
     </div>
 
-    <script>
-        new Vue({
-            el: "#app",
-            data: {
-                tabName: ["标签页1", "标签页2", "标签页3", "标签页4"]
-            },
-            methods: {
-
-            }
-        });
-    </script>
 
 </body>
 
