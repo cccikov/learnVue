@@ -43,8 +43,84 @@
                     age: 30
                 }
             }
-        })
+        });
     </script>
+
+
+
+    <!-- vue不能检测某些变动 -->
+    <div id="app2">
+        <p>{{arr}}</p>
+        <p>
+            <button @click="change1">按钮1</button>
+            <button @click="change2">按钮2</button>
+            <button @click="change3">按钮3</button>
+        </p>
+
+
+        <p>
+            <label>
+                {{obj}}
+                <input type="text" v-model="obj.name">
+            </label>
+        </p>
+        <p>
+            <button @click="change4">按钮4</button>
+            <button @click="change5">按钮5</button>
+            <button @click="change6">按钮6</button>
+            <button @click="change7">按钮7</button>
+            <button @click="change8">按钮8</button>
+        </p>
+    </div>
+    <script>
+        new Vue({
+            el: "#app2",
+            data: {
+                arr: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                obj: {
+                    name: "ccc"
+                }
+            },
+            methods: {
+                // vue不能检测利用索引值设置一个项的时候
+                change1: function () {
+                    this.arr[2] = "单个替换";
+                },
+                change2: function () {
+                    this.arr = [0, 1, "整体替换", 3, 4, 5, 6, 7, 8, 9]
+                },
+                change3: function () {
+                    this.arr.splice(2, 1, "splice方法替换");
+                },
+
+                // Vue 不能检测对象属性的添加或删除
+                change4: function () {
+                    this.obj = {};
+                },
+                change5: function () {
+                    this.obj.name = "单个修改";
+                    this.obj.age = "28";
+                },
+                change6: function () {
+                    this.obj = {
+                        name: "整体修改",
+                        age: 27
+                    }
+                },
+                change7: function () {
+                    this.obj = Object.assign({}, this.obj, {
+                        gender: "male",
+                        height: 175
+                    });
+                },
+                change8:function(){
+                    delete this.obj.name;
+                }
+            }
+        });
+
+    </script>
+
 </body>
 
 </html>
