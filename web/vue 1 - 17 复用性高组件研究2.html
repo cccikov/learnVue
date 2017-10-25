@@ -45,7 +45,8 @@
                     },
                     ComponentToSlot: _this.VueToComponent.slot,
                     msg: _this.VueToComponent
-                    // 其实先将prop整理的话 , 条理更加清晰 , 不然直接将prop写在模板上 , 会有点混乱
+                    // 其实先将prop整理的话 , 条理更加清晰 , 不然直接将prop写在模板上 , 会有点混乱 , 
+                    // 但是这种写法 , vue实例数据更新 , 这些数据不会更新 , 要实时随着vue实例数据更新 , 只可以使用props
                 }
             },
             created: function () {

@@ -102,7 +102,7 @@
                 flag: true,
             },
             computed: {
-                loginType: function() {
+                loginType: function () {
                     if (this.flag) {
                         return 'username'
                     } else {
@@ -111,7 +111,7 @@
                 }
             },
             methods: {
-                change: function() {
+                change: function () {
                     this.flag = !this.flag;
                 }
             }
@@ -141,7 +141,7 @@
                 flag: true,
             },
             computed: {
-                loginType: function() {
+                loginType: function () {
                     if (this.flag) {
                         return 'username'
                     } else {
@@ -150,7 +150,7 @@
                 }
             },
             methods: {
-                change: function() {
+                change: function () {
                     this.flag = !this.flag;
                 }
             }
@@ -184,9 +184,35 @@
         /* 带有 v-show 的元素始终会被渲染并保留在 DOM 中。v-show 是简单地切换元素的 CSS 属性 display */
 
         /* v-if是会添加dom或者删除dom ; 而v-show的dom是一直存在的,元素总是会被渲染,并,知识切换css属性display */
+
     </script>
 
 
+
+
+    <div id="app7">
+        <div v-show="ok">
+            <p>Paragraph 1</p>
+            <p>Paragraph 2</p>
+            <p>Paragraph 3</p>
+        </div>
+        <button @click="change">按钮</button>
+        <!-- 最终的渲染结果不会包含 <template> 元素。 -->
+    </div>
+    <script>
+        /* 注意，v-show 不支持 <template> 语法，也不支持 v-else。我们可以用一个大的div包裹着需要v-show的元素 */
+        var vm7 = new Vue({
+            el: "#app7",
+            data: {
+                ok: true
+            },
+            methods: {
+                change: function () {
+                    this.ok = !this.ok;
+                }
+            }
+        });
+    </script>
 
 
     <!-- 当 v-if 与 v-for 一起使用时，v-for 具有比 v-if 更高的优先级。 -->

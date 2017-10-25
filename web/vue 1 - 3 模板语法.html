@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <title>模板语法</title>
     <script type="text/javascript" src="vue.js"></script>
+    <style type="text/css">
+        #app3{
+            padding:20px;
+        }
+        #app4{
+            padding:20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -56,6 +64,150 @@
         });
         // 可以看到 多个tpl2元素只有第一个会被创建成vue实例 , 要是想要复用模板应该使用组件
     </script> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="app2">
+        <div class="p1">名字:ccc</div>
+        <div class="p2">年龄:18</div>
+        <div class="p3">性别:男</div>
+        <div class="p4">职业:医生</div>
+        <div class="p5">地址:佛山</div>
+    </div>
+    <div>
+        <button onclick = "origin1('哈哈哈')">原生修改姓名</button>
+        <button onclick = "origin2(28)">原生修改年龄</button>
+    </div>
+    <script type="text/javascript">
+        // 我们替换数据一般是
+        var app2 = document.getElementById("app2");
+        var p1 = document.getElementsByClassName("p1")[0];
+        var p2 = document.getElementsByClassName("p2")[0];
+        var p3 = document.getElementsByClassName("p3")[0];
+        var p4 = document.getElementsByClassName("p4")[0];
+        var p5 = document.getElementsByClassName("p5")[0];
+
+        // 比如 有些时候我们仅仅需要修改一下名字 , 年龄
+        function origin1(name){
+            p1.innerHTML = "名字:"+name;
+        }
+        function origin2(age){
+            p2.innerHTML = "年龄"+age;
+        }
+    </script>
+
+
+
+
+
+
+
+    <!-- 模拟vue模板语法 , vue的一切都需要模板 , 实例 , 组件等-->
+    <div id="app3">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </div>
+    <div>
+        <button onclick = "likeVue1('哈哈哈')">模拟vue修改姓名</button>
+        <button onclick = "likeVue2(28)">模拟vue修改年龄</button>
+    </div>
+    <script type="text/javascript">
+        var data = {
+            name:"ccc",
+            age:18,
+            gender:"男",
+            job:"医生",
+            address:"佛山"
+        };
+
+        function fill(property,newValue){
+            if(property && newValue){
+                data[property] = newValue;
+            }
+            // 模板
+            var template =  `
+                <div id="app3">
+                    <div class="p1">名字:${data.name}</div>
+                    <div class="p2">年龄:${data.age}</div>
+                    <div class="p3">性别:${data.gender}</div>
+                    <div class="p4">职业:${data.job}</div>
+                    <div class="p5">地址:${data.address}</div>
+                </div>
+            `;
+            var app3 = document.getElementById("app3");
+            app3.outerHTML = template;
+        }
+
+        fill();
+
+        function likeVue1(name){
+            fill("name",name);
+        }
+        function likeVue2(age){
+            fill("age",age);
+        }
+
+        // vue的模板作用就类似这样 , 而且vue还有有所优化的。
+        // 个人理解 , vue实例创建的时候 , 挂载元素的内容都将被忽略而且会被填好内容的模板覆盖 ; 覆盖后 , 有数据刷新 , 就只会在绑定变化数据的地方的dom变化 , 而不是再一次用新的好内容的模板覆盖 ;
+
+        // 可以打开chrome控制台 Rendering->Paint Flashing 去查看dom变化
+        // 或者直接在 chrome 控制台 Elements 里面查看dom变化
+    </script>
+
+
+
+
+    <div id="app4">
+        <div class="p1">名字:{{name}}</div>
+        <div class="p2">年龄:{{age}}</div>
+        <div class="p3">性别:{{gender}}</div>
+        <div class="p4">职业:{{job}}</div>
+        <div class="p5">地址:{{address}}</div>
+        <div>
+            <button @click = vue1("haha")>vue修改名字</button>
+            <button @click = vue2(28)>vue修改年龄</button>
+        </div>
+    </div>
+   <script type="text/javascript">
+    new Vue({
+        el: "#app4",
+        data: {
+            name: "ccc",
+            age: 18,
+            gender: "男",
+            job: "医生",
+            address: "佛山"
+        },
+        // #app4元素的HTML会被提取出来用作模板
+        methods: {
+            vue1: function(name) {
+                this.name = name;
+            },
+            vue2: function(age) {
+                this.age = age;
+            }
+        },
+    });
+    </script>
+
+    <img src="img/vue01.png">
+    <img src="img/vue02.png">
+    <p>图片可以看出是 , 页面载入的时候 , 是整个把挂载元素内容替换了</p>
 
 </body>
 
