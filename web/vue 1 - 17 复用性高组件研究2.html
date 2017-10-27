@@ -8,7 +8,7 @@
     <style>
         .slot {
             box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 20px 0px;
-            color:blue;
+            color: blue;
         }
     </style>
 </head>
@@ -22,7 +22,8 @@
             template: `
                     <div class="component" :class="attr.class" :style='attr.style'>
                         <p>组件名: {{info.name}}</p>
-                        <p>{{VueToComponent}}</p>
+                        <p>静态数据: {{VueToComponentStatic}}</p>
+                        <p>动态数据: {{VueToComponentLive}}</p>
                         <div>
                             <button @click='click1'>按钮1</button>
                             <button @click='click2'>按钮2</button>
@@ -32,7 +33,7 @@
                     </div>
                     `,
             // VueToComponent 表示数据是由vue传到component(组件)
-            props: ["VueToComponent"],
+            props: ["VueToComponentStatic", "VueToComponentLive"],
             data: function () {
                 var _this = this;
                 return {
@@ -40,11 +41,11 @@
                         "name": "tpl-component",
                     },
                     attr: {
-                        style: _this.VueToComponent.style,
-                        class: _this.VueToComponent.class,
+                        style: _this.VueToComponentStatic.style,
+                        class: _this.VueToComponentStatic.class,
                     },
-                    ComponentToSlot: _this.VueToComponent.slot,
-                    msg: _this.VueToComponent
+                    ComponentToSlot: _this.VueToComponentStatic.slot,
+                    msg: _this.VueToComponentStatic
                     // 其实先将prop整理的话 , 条理更加清晰 , 不然直接将prop写在模板上 , 会有点混乱 , 
                     // 但是这种写法 , vue实例数据更新 , 这些数据不会更新 , 要实时随着vue实例数据更新 , 只可以使用props
                 }
@@ -96,7 +97,7 @@
         </div>
         <div>
             <h4>这里面是Vue组件的内容</h4>
-            <tpl-component :vue-to-component="componentData" @update="componentInside">
+            <tpl-component :vue-to-component-static="componentData" :vue-to-component-live="componentData" @update="componentInside">
                 <!--  @update是监听组件自定义事件 -->
                 <template scope="slotSelfData">
                     <div class="slot">
@@ -121,7 +122,7 @@
             el: "#app",
             data: {
                 vueData: "这是vue实例本身的数据",
-                slot:"这是vue实例直接传入到slot里面的数据 , 其实也就是Vue实例本身的数据",
+                slot: "这是vue实例直接传入到slot里面的数据 , 其实也就是Vue实例本身的数据",
                 componentData: {
                     describe: "这是从vue实例传入到组件的全部数据 , 包括样式 , class , 传入到slot里面的数据",
                     class: {
