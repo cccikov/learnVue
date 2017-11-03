@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 自定义指令</title>
+    <script type="text/javascript" src="vue.js"></script>
+    <script type="text/javascript">
+    // 在实例使用前就要先定义好
+    Vue.directive('demo', function(el, binding) {
+        console.log(binding.value);
+        binding.value.val = 100;
+        console.log(this);
+    });
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <span v-demo="{name:'email',val:msg}">{{msg}}</span>
+    </div>
+    <script type="text/javascript">
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            msg: "123123123"
+        }
+    });
+    </script>
+</body>
+
+</html>
