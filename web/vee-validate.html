@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vee-validate 学习</title>
+    <script type="text/javascript" src="vue.js"></script>
+    <script type="text/javascript" src="js/vee-validate.min.js"></script>
+    <script type="text/javascript">
+    Vue.use(VeeValidate); // good to go.
+
+    var Validator = VeeValidate.Validator;
+    const isMobile = {
+        messages: {
+            en: (field, args) => field + '必须是11位手机号码且是真实电话号码',
+        },
+        validate: (value, args) => {
+            return value.length == 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
+        }
+    }
+    Validator.extend('mobile', isMobile);
+
+    const dictionary = {
+        en: {
+            messages: {
+                required: () => '这项不可以空'
+            }
+        },
+    };
+
+    Validator.updateDictionary(dictionary);
+
+    new Validator();
+    </script>
+</head>
+
+<body>
+    <div id="wrap">
+        <div>
+            <p>邮箱</p>
+            <p>
+                <input v-validate="'required|email'" name="email" type="text" placeholder="Email">
+                <span v-show="errors.has('email')">{{ errors.first('email') }}</span>
+            </p>
+            <ul>
+                <li>errors.has('email') {{errors.has('email')}}</li>
+                <li>errors.first('email') {{errors.first('email')}}</li>
+                <li>errors.collect('email') {{errors.collect('email')}}</li>
+            </ul>
+        </div>
+        <!-- 自定义 -->
+        <input v-validate = "'required|mobile'" :class="{'input': true, 'is-danger': errors.has('mobile') }" name="mobile" type="text" placeholder="Mobile">
+        <span v-show="errors.has('mobile')" class="help is-danger">{{ errors.first('mobile') }}</span>
+        <!-- 汇总错误 -->
+        <h4>汇总错误</h4>
+        <p>{{errors}}}</p>
+        <ul>
+            <li>errors.all() {{errors.all()}}</li>
+            <li>errors.any() {{errors.any()}}</li>
+            <li>errors.count() {{errors.count()}}</li>
+        </ul>
+    </div>
+    <script>
+    /*创建vue实例*/
+    new Vue({
+        el: "#wrap"
+    });
+    </script>
+</body>
+
+</html>
