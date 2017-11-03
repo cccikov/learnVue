@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>复用性高组件研究</title>
+    <title>复用性高组件研究2</title>
     <script type="text/javascript" src="vue.js"></script>
     <style>
         .slot {
@@ -46,7 +46,7 @@
                     },
                     ComponentToSlot: _this.VueToComponentStatic.slot,
                     msg: _this.VueToComponentStatic
-                    // 其实先将prop整理的话 , 条理更加清晰 , 不然直接将prop写在模板上 , 会有点混乱 , 
+                    // 其实先将prop整理的话 , 条理更加清晰 , 不然直接将prop写在模板上 , 会有点混乱 ,
                     // 但是这种写法 , vue实例数据更新 , 这些数据不会更新 , 要实时随着vue实例数据更新 , 只可以使用props
                 }
             },
@@ -110,7 +110,7 @@
                         </p>
                         <div style="padding:20px">
                             <h6>这是在slot里面再嵌套一个组件</h6>
-                            <tpl-component :vue-to-component="componentData" @update="componentInsideInside"></tpl-component>
+                            <tpl-component :vue-to-component-static="componentData" @update="componentInsideInside"></tpl-component>
                         </div>
                     </div>
                 </template>
