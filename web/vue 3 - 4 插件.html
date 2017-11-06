@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 插件</title>
+    <script type="text/javascript" src="https://cccikov.github.io/cccgit/test/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="vue.js"></script>
+    <script type="text/javascript" src="js/vue-cc-validate.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>
+            <input type="text" name="phone" v-focus="'required|phone'">
+            <span v-if="validate('phone').required == false">必须填写</span>
+            <span v-if="validate('phone').check == false">号码格式不对</span>
+            <span v-if="validate('phone').ajax == false">号码重复</span>
+        </p>
+        <p>
+             <input type="" name="e-mail" v-focus="'mail'">
+        </p>
+    </div>
+    <script type="text/javascript">
+    Vue.use(validate, {
+        "someOption": true
+    })
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            msg: "haha"
+        },
+        methods: {
+            sayHi: function() {
+                console.log("hi");
+            }
+        }
+    });
+    vm.addRule({
+        phone: {
+            reg: /^0?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/,
+            ajax: "https://cccikov.github.io/remoteData/array.json"
+        },
+        mail: {
+            reg: /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/
+        }
+    });
+    </script>
+</body>
+
+</html>
