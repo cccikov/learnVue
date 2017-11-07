@@ -3,6 +3,24 @@
  * by ccc
  * 2017-11-6
  */
+function getArg(arg) {
+    var arg, // 这个arg 应该是arguments对象
+        arr = [];
+    /*根据不同的参数方式 , 获取参数内容*/
+    if (arg.length == 1) {
+        var type = typeof arg[0];
+        if (type == "object") { // (['a','b','c'])
+            arr = arg[0];
+        } else if (type == "string") { // ('a|b|c')
+            arr = (arg[0]).split("|");
+        }
+    } else { // ('a','b','c')
+        arr = [].slice.call(arg);
+    }
+    return arr;
+}
+
+
 var validate = {};
 validate.install = function(Vue, options) {
     /* 实例属性 */
@@ -13,6 +31,7 @@ validate.install = function(Vue, options) {
         }
     }
 
+    /*根据错误类型数字返回中文*/
     Vue.prototype.errorType = function(num) {
         switch (num) {
             case 0:
@@ -27,6 +46,7 @@ validate.install = function(Vue, options) {
 
     }
 
+    /*查看错误类型 返回数字*/
     if (!Vue.prototype.error) {
         Vue.prototype.error = function(name) {
             return this.validate_boolean[name];
@@ -38,20 +58,7 @@ validate.install = function(Vue, options) {
     /* 组合全正确 */
     if (!Vue.prototype.group) {
         Vue.prototype.group = function() {
-            var arg = arguments;
-            var arr = [];
-
-            /*根据不同的参数方式 , 获取参数内容*/
-            if (arg.length == 1) {
-                var type = typeof arg[0];
-                if (type == "object") { // (['a','b','c'])
-                    arr = arg[0];
-                } else if (type == "string") { // ('a|b|c')
-                    arr = (arg[0]).split("|");
-                }
-            } else { // ('a','b','c')
-                arr = [].slice.call(arg);
-            }
+            var arr = getArg(arguments);
 
             var result = arr.every(function(val) {
                 return this.validate_boolean[val] == 0;
@@ -63,6 +70,17 @@ validate.install = function(Vue, options) {
         console.error("group已被声明");
     }
 
+    /*聚焦一组验证表单中的错误元素*/
+    Vue.prototype.focusErrorEl = function() {
+        var arr = getArg(arguments);
+        var result = arr.every(function(val) {
+            var flag = (this.validate_boolean[val] == 0);
+            if (!flag) {
+                this.validate_el[val].focus();
+            }
+            return flag;
+        }, this);
+    }
 
     /* 全局混合 */
     // 任何vue实例创建的时候 , 都会自动加入下面选项
@@ -70,18 +88,20 @@ validate.install = function(Vue, options) {
         data: function() {
             return {
                 validate_rule: options || {},
-                validate_boolean: {}
+                validate_boolean: {},
+                validate_el: {}
             }
         }
     });
 
     /* 自定义指令 */
-    Vue.directive("focus", {
+    Vue.directive("validata", {
         bind: function(_el, _binding, _vnode) {
             var el = _el; // 当前元素
             var binding_val = _binding.value.split("|"); // 指令值 需要验证的项目
             var vm = _vnode.context; // 当前vue实例
             var input_name = el.name; // 表单名
+            Vue.set(vm.validate_el, input_name, el);
 
             // 将 required 从需要验证的项目里面的剔除
             var required = false; // 表单是否必要输入
@@ -100,17 +120,24 @@ validate.install = function(Vue, options) {
 
             // 事件监听器
             function handle(e) {
-                console.log("执行");
                 var input_val = el.value; // 表单值
                 var rule = vm.validate_rule[field]; // 获取该验证项目的规则
 
                 // 先判断是否符合必须输入
-                if (required && input_val == "") {
-                    vm.validate_boolean[input_name] = 1;
-                    return;
-                } else {
-                    vm.validate_boolean[input_name] = 0;
+                if (required) { // 必填项
+                    if (input_val == "") {
+                        vm.validate_boolean[input_name] = 1;
+                        return;
+                    } else {
+                        vm.validate_boolean[input_name] = 0;
+                    }
+                } else { // 非必填项
+                    if (input_val == "") {
+                        vm.validate_boolean[input_name] = 0; // 对于非必填项来说 , 空着就是正确;
+                        return
+                    }
                 }
+
 
                 // 判断是否符合正则
                 if (!!rule.reg) {
