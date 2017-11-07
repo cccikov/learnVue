@@ -12,8 +12,54 @@ validate.install = function(Vue, options) {
             this.$set(this.validate_rule, i, obj[i]);
         }
     }
-    Vue.prototype.validate = function(name) {
-        return this.validate_boolean[name] || {};
+
+    Vue.prototype.errorType = function(num) {
+        switch (num) {
+            case 0:
+                return "没有错误";
+            case 1:
+                return "空值错误";
+            case 2:
+                return "正则错误";
+            case 3:
+                return "ajax错误";
+        }
+
+    }
+
+    if (!Vue.prototype.error) {
+        Vue.prototype.error = function(name) {
+            return this.validate_boolean[name] || 0;
+        }
+    } else {
+        console.error("error已被声明");
+    }
+
+    if (!Vue.prototype.group) {
+        Vue.prototype.group = function() {
+            var arg = arguments;
+            var arr = [];
+
+            /*根据不同的参数方式 , 获取参数内容*/
+            if (arg.length == 1) {
+                var type = typeof arg[0];
+                if (type == "object") { // (['a','b','c'])
+                    arr = arg[0];
+                } else if (type == "string") { // ('a|b|c')
+                    arr = (arg[0]).split("|");
+                }
+            } else { // ('a','b','c')
+                arr = [].slice.call(arg);
+            }
+
+            var result = arr.every(function(val) {
+                return this.validate_boolean[val] == 0;
+            }, this);
+
+            return result;
+        }
+    } else {
+        console.error("group已被声明");
     }
 
 
@@ -35,7 +81,7 @@ validate.install = function(Vue, options) {
             var binding_val = _binding.value.split("|"); // 指令值 需要验证的项目
             var vm = _vnode.context; // 当前vue实例
             var input_name = el.name; // 表单名
-            Vue.set(vm.validate_boolean, input_name, {});
+            Vue.set(vm.validate_boolean, input_name, 0);
 
             // 将 required 从需要验证的项目里面的剔除
             var required = false; // 表单是否必要输入
@@ -43,6 +89,7 @@ validate.install = function(Vue, options) {
                 var _index = binding_val.indexOf("required");
                 required = true;
                 binding_val.splice(_index, 1);
+                vm.validate_boolean[input_name] = 1; // 一旦要是必填项 , 先设置空值错误
             }
             var field = binding_val[0]; // 获取需要验证的项目 1项
 
@@ -51,50 +98,52 @@ validate.install = function(Vue, options) {
 
             // 事件监听器
             function handle(e) {
+                console.log("执行");
                 var input_val = el.value; // 表单值
                 var rule = vm.validate_rule[field]; // 获取该验证项目的规则
 
                 // 先判断是否符合必须输入
                 if (required && input_val == "") {
-                    Vue.set(vm.validate_boolean, input_name, { required: false });
+                    vm.validate_boolean[input_name] = 1;
                     return;
+                } else {
+                    vm.validate_boolean[input_name] = 0;
                 }
 
                 // 判断是否符合正则
                 if (!!rule.reg) {
                     var reg_result = !!input_val.match(rule.reg);
+                    if (!reg_result) {
+                        vm.validate_boolean[input_name] = 2;
+                        return;
+                    } else {
+                        vm.validate_boolean[input_name] = 0;
+                    }
                 }
-                Vue.set(vm.validate_boolean, input_name, { check: reg_result });
 
                 // 最后判断ajax
-                // if (result) {
-                //     fields.every(function(val) {
-                //         var ajax = rules[val].ajax;
-                //         if (ajax) {
-                //             $.ajax({
-                //                 url: "https://cccikov.github.io/remoteData/object.json",
-                //                 async: true,
-                //                 success: function(result) {
-                //                     if (!!result) {
-                //                         Vue.set(vm.validate_boolean, input_name, { ajax: true });
-                //                     } else {
-                //                         Vue.set(vm.validate_boolean, input_name, { ajax: false });
-                //                     }
-                //                 },
-                //                 error: function(XMLHttpRequest, textStatus, errorThrown) {
-                //                     console.error(XMLHttpRequest);
-                //                     console.error(textStatus);
-                //                     console.error(errorThrown);
-                //                 }
-                //             });
-                //         }
-                //     });
-                // }
-
-
+                if (!!rule.ajax) {
+                    $.ajax({
+                        url: rule.ajax,
+                        async: true,
+                        success: function(result) {
+                            if (!result) {
+                                Vue.set(vm.validate_boolean, input_name, 3);
+                            } else {
+                                Vue.set(vm.validate_boolean, input_name, 0);
+                            }
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            console.error(XMLHttpRequest);
+                            console.error(textStatus);
+                            console.error(errorThrown);
+                        }
+                    });
+                }
             }
 
             // 添加事件监听器
+            el.removeEventListener("blur", handle);
             el.addEventListener("blur", handle, false);
             // el.addEventListener("change", handle, false);
         }

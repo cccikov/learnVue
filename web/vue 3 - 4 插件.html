@@ -12,14 +12,19 @@
 <body>
     <div id="app">
         <p>
-            <input type="text" name="phone" v-focus="'required|phone'">
-            {{validate_boolean}}
-            <span v-if="validate('phone').required == false">必须填写</span>
-            <span v-if="validate('phone').check == false">号码格式不对</span>
-            <span v-if="validate('phone').ajax == false">号码重复</span>
+            <input type="text" name="phone" v-focus="'required|phone'"> {{error('phone')}}
+            <span v-if="error('phone') == 1">空值错误 必须填写</span>
+            <span v-if="error('phone') == 2">正则错误 号码格式不对</span>
+            <span v-if="error('phone') == 3">ajax错误 号码重复</span>
         </p>
         <p>
-             <input type="" name="e-mail" v-focus="'mail'">
+            <input type="" name="email" v-focus="'mail'" value="123@qq.com">
+            {{error('email')}}
+        </p>
+        <p>
+            <button v-show="group('phone|email')">提交</button>
+            <button v-show="group('phone','email')">提交</button>
+            <button v-show="group(['phone','email'])">提交</button>
         </p>
     </div>
     <script type="text/javascript">
@@ -29,7 +34,10 @@
     var vm = new Vue({
         el: "#app",
         data: {
-            msg: "haha"
+            msg: "haha",
+            obj: {
+                name: "ccc"
+            }
         },
         methods: {
             sayHi: function() {
