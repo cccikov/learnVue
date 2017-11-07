@@ -87,9 +87,10 @@ validate.install = function(Vue, options) {
     Vue.mixin({
         data: function() {
             return {
-                validate_rule: options || {},
+                validate_rule: options.rules || {},
                 validate_boolean: {},
-                validate_el: {}
+                validate_el: {},
+                validata_immediate: options.immediate || false, // 立即检验一次 , 适合修改 , 新增的时候一般为false ; 而且true的时候必须
             }
         }
     });
@@ -101,10 +102,11 @@ validate.install = function(Vue, options) {
             var binding_val = _binding.value.split("|"); // 指令值 需要验证的项目
             var vm = _vnode.context; // 当前vue实例
             var input_name = el.name; // 表单名
+            var required = false; // 表单是否必要输入
             Vue.set(vm.validate_el, input_name, el);
 
+
             // 将 required 从需要验证的项目里面的剔除
-            var required = false; // 表单是否必要输入
             if (binding_val.indexOf("required") != -1) {
                 var _index = binding_val.indexOf("required");
                 required = true;
@@ -115,13 +117,20 @@ validate.install = function(Vue, options) {
             }
             var field = binding_val[0]; // 获取需要验证的项目 1项
 
-
-
-
             // 事件监听器
             function handle(e) {
                 var input_val = el.value; // 表单值
+                var input_type = el.type; // 表单类型
                 var rule = vm.validate_rule[field]; // 获取该验证项目的规则
+
+                if (input_type == "radio" || input_type == "checkbox") {
+                    if (required && !el.checked) {
+                        vm.validate_boolean[input_name] = 1;
+                    } else {
+                        vm.validate_boolean[input_name] = 0;
+                    }
+                    return;
+                }
 
                 // 先判断是否符合必须输入
                 if (required) { // 必填项
@@ -138,6 +147,9 @@ validate.install = function(Vue, options) {
                     }
                 }
 
+                if (!rule) { // 有些除了required之外没有别的了
+                    return
+                }
 
                 // 判断是否符合正则
                 if (!!rule.reg) {
@@ -172,9 +184,13 @@ validate.install = function(Vue, options) {
             }
 
             // 添加事件监听器
+            if (vm.validata_immediate) {
+                handle();
+            }
             el.removeEventListener("blur", handle);
             el.addEventListener("blur", handle, false);
-            // el.addEventListener("change", handle, false);
+            el.removeEventListener("change", handle);
+            el.addEventListener("change", handle, false);
         }
     });
 }

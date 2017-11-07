@@ -12,8 +12,10 @@
 <body>
     <div id="app">
         {{validate_boolean}}
+        <!-- v-validata 里面填的是rule 是规则 -->
+        <!-- error,group,focusErrorEl填的是表单元素的name -->
         <p>
-            <input type="text" name="phone" v-validata="'required|phone'"> {{error('phone')}}
+            <input type="text" name="phone" v-validata="'required|phone'" v-model="tel"> {{error('phone')}}
             <span v-if="error('phone') == 1">空值错误 必须填写</span>
             <span v-if="error('phone') == 2">正则错误 号码格式不对</span>
             <span v-if="error('phone') == 3">ajax错误 号码重复</span>
@@ -26,11 +28,21 @@
             <button v-show="group('phone','email')">表单正确才出现 , 提交</button>
             <button v-show="group(['phone','email'])">表单正确才出现 , 提交</button>
         </p>
+        <input type="checkbox" name="read" v-validata="'required'">{{error('read')}}
         <button @click="sublime">先聚焦错误元素,再提交</button>
     </div>
     <script type="text/javascript">
     Vue.use(validate, {
-        "someOption": true
+        immediate: true,
+        rules: {
+            phone: {
+                reg: /^0?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/,
+                ajax: "https://cccikov.github.io/remoteData/array.json"
+            },
+            mail: {
+                reg: /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/
+            }
+        }
     })
     var vm = new Vue({
         el: "#app",
@@ -38,7 +50,8 @@
             msg: "haha",
             obj: {
                 name: "ccc"
-            }
+            },
+            tel: ""
         },
         methods: {
             sublime: function(e) {
@@ -47,14 +60,9 @@
             }
         }
     });
-    vm.addRule({
-        phone: {
-            reg: /^0?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/,
-            ajax: "https://cccikov.github.io/remoteData/array.json"
-        },
-        mail: {
-            reg: /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/
-        }
+
+    setTimeout(function() {
+        vm.tel = 15920789456;
     });
     </script>
 </body>
