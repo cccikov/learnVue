@@ -29,12 +29,13 @@ validate.install = function(Vue, options) {
 
     if (!Vue.prototype.error) {
         Vue.prototype.error = function(name) {
-            return this.validate_boolean[name] || 0;
+            return this.validate_boolean[name];
         }
     } else {
         console.error("error已被声明");
     }
 
+    /* 组合全正确 */
     if (!Vue.prototype.group) {
         Vue.prototype.group = function() {
             var arg = arguments;
@@ -81,7 +82,6 @@ validate.install = function(Vue, options) {
             var binding_val = _binding.value.split("|"); // 指令值 需要验证的项目
             var vm = _vnode.context; // 当前vue实例
             var input_name = el.name; // 表单名
-            Vue.set(vm.validate_boolean, input_name, 0);
 
             // 将 required 从需要验证的项目里面的剔除
             var required = false; // 表单是否必要输入
@@ -89,7 +89,9 @@ validate.install = function(Vue, options) {
                 var _index = binding_val.indexOf("required");
                 required = true;
                 binding_val.splice(_index, 1);
-                vm.validate_boolean[input_name] = 1; // 一旦要是必填项 , 先设置空值错误
+                Vue.set(vm.validate_boolean, input_name, null); // 也不是正确的 , 但是也没有立即报错
+            } else {
+                Vue.set(vm.validate_boolean, input_name, 0); // 非必要的,不填也是正确的嘛;
             }
             var field = binding_val[0]; // 获取需要验证的项目 1项
 
