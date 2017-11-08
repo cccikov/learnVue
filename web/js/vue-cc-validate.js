@@ -3,6 +3,12 @@
  * by ccc
  * 2017-11-6
  */
+
+/**
+ * 整理arguments
+ * @param  {整理arguments} arg 需要整理的arguments
+ * @return {array}     整理好的参数(这里一般是input_name的集合)
+ */
 function getArg(arg) {
     var arg, // 这个arg 应该是arguments对象
         arr = [];
@@ -20,18 +26,100 @@ function getArg(arg) {
     return arr;
 }
 
+/**
+ * 真正的事件处理函数
+ * @param  {element} el 元素
+ * @param  {vnode} vm Vue实例
+ * @return {undefined}    undefined
+ */
+function reallyHandle(el, vm) {
+    var input_val = el.value; // 表单值
+    var input_name = el.name; // 表单名
+    var input_type = el.type; // 表单类型
+
+    var required = vm.validate_required[input_name];
+    var field = vm.validate_field[input_name];
+    var rule = vm.validate_rule[field]; // 获取该验证项目的规则
+
+    // 勾选表单操作 , 就只会有是否必选
+    if (input_type == "radio" || input_type == "checkbox") {
+        if (required && !el.checked) {
+            vm.validate_error[input_name] = 1;
+        } else {
+            vm.validate_error[input_name] = 0;
+        }
+        return;
+    }
+
+    // 先判断是否符合必须输入
+    if (required) { // 必填项
+        if (input_val == "") {
+            vm.validate_error[input_name] = 1;
+            return;
+        } else {
+            vm.validate_error[input_name] = 0;
+        }
+    } else { // 非必填项
+        if (input_val == "") {
+            vm.validate_error[input_name] = 0; // 对于非必填项来说 , 空着就是正确;
+            return
+        }
+    }
+
+    // 是否除了required还有别的认证
+    if (!rule) { // 有些除了required之外没有别的了
+        return
+    }
+
+    // 判断是否符合正则
+    if (!!rule.reg) {
+        var reg_result = !!input_val.match(rule.reg);
+        if (!reg_result) {
+            vm.validate_error[input_name] = 2;
+            return;
+        } else {
+            vm.validate_error[input_name] = 0;
+        }
+    }
+
+    // 最后判断ajax
+    if (!!rule.ajax) {
+        $.ajax({
+            url: rule.ajax,
+            async: true,
+            success: function(result) {
+                if (!result) {
+                    Vue.set(vm.validate_error, input_name, 3);
+                } else {
+                    Vue.set(vm.validate_error, input_name, 0);
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.error(XMLHttpRequest);
+                console.error(textStatus);
+                console.error(errorThrown);
+            }
+        });
+    }
+
+}
+
 
 var validate = {};
 validate.install = function(Vue, options) {
-    /* 实例属性 */
-    // 增加vue实例属性,方法
+    /**
+     * 实例属性
+     * 增加vue实例属性,方法
+     */
+
+    /* 增加验证规则 */
     Vue.prototype.addRule = function(obj) {
         for (var i in obj) {
             this.$set(this.validate_rule, i, obj[i]);
         }
     }
 
-    /*根据错误类型数字返回中文*/
+    /* 根据错误类型数字返回中文 */
     Vue.prototype.errorType = function(num) {
         switch (num) {
             case 0:
@@ -46,22 +134,26 @@ validate.install = function(Vue, options) {
 
     }
 
-    /*查看错误类型 返回数字*/
+    /* 查看错误类型 返回数字 */
     if (!Vue.prototype.error) {
         Vue.prototype.error = function(name) {
-            return this.validate_boolean[name];
+            return this.validate_error[name];
         }
     } else {
         console.error("error已被声明");
     }
 
-    /* 组合全正确 */
+    /**
+     * 组合全正确
+     * @param  ['phone','email'] 或者 'phone|email' 或者 "phone","email" 三种形式选一的参数     需要验证的表单组合
+     * @return {boolean}                      组合是否全验证正确
+     */
     if (!Vue.prototype.group) {
         Vue.prototype.group = function() {
-            var arr = getArg(arguments);
+            var arr = getArg(arguments); // input_name的集合
 
             var result = arr.every(function(val) {
-                return this.validate_boolean[val] == 0;
+                return this.validate_error[val] == 0;
             }, this);
 
             return result;
@@ -70,11 +162,15 @@ validate.install = function(Vue, options) {
         console.error("group已被声明");
     }
 
-    /*聚焦一组验证表单中的错误元素*/
+    /**
+     * 聚焦一组验证表单中的错误元素
+     * @param  ['phone','email'] 或者 'phone|email' 或者 "phone","email" 三种形式选一的参数     需要验证的表单组合
+     * @return {undefined} undefined
+     */
     Vue.prototype.focusErrorEl = function() {
-        var arr = getArg(arguments);
+        var arr = getArg(arguments); // input_name的集合
         var result = arr.every(function(val) {
-            var flag = (this.validate_boolean[val] == 0);
+            var flag = (this.validate_error[val] == 0);
             if (!flag) {
                 this.validate_el[val].focus();
             }
@@ -82,26 +178,58 @@ validate.install = function(Vue, options) {
         }, this);
     }
 
-    /* 全局混合 */
-    // 任何vue实例创建的时候 , 都会自动加入下面选项
+    /**
+     * 手动验证某个组合的表单
+     * @param  ['phone','email'] 或者 'phone|email' 或者 "phone","email" 三种形式选一的参数    需要验证的表单组合
+     * @return {undefined} undefined
+     */
+    Vue.prototype.manual = function() {
+        var arr = getArg(arguments); // input_name的集合
+        var vm = this;
+        arr.forEach(function(val) {
+            var thisEle = vm.validate_el[val];
+            reallyHandle(thisEle, vm);
+        });
+    }
+
+
+
+
+
+    /**
+     * 全局混合
+     * 任何vue实例创建的时候 , 都会自动加入下面选项
+     */
     Vue.mixin({
         data: function() {
             return {
-                validate_rule: options.rules || {},
-                validate_boolean: {},
-                validate_el: {},
+                validate_rule: options.rules || {}, // 记录全部验证规则
                 validata_immediate: options.immediate || false, // 立即检验一次 , 适合修改 , 新增的时候一般为false ; 而且true的时候必须
+                validate_error: {}, // 记录错误 , 以input_name作为属性名
+                validate_el: {}, // 记录元素 , 以input_name作为属性名
+                validate_field: {}, // 记录验证项目 , 以input_name作为属性名
+                validate_required: {}, // 记录是否必填 , 以input_name作为属性名
             }
         }
     });
 
-    /* 自定义指令 */
+
+
+
+
+
+    /**
+     * 自定义指令
+     */
     Vue.directive("validata", {
         bind: function(_el, _binding, _vnode) {
+            // 获取变量
             var el = _el; // 当前元素
+            var input_name = el.name; // 表单名
             var binding_val = _binding.value.split("|"); // 指令值 需要验证的项目
             var vm = _vnode.context; // 当前vue实例
-            var input_name = el.name; // 表单名
+
+            // 设定初始值
             var required = false; // 表单是否必要输入
             Vue.set(vm.validate_el, input_name, el);
 
@@ -111,85 +239,24 @@ validate.install = function(Vue, options) {
                 var _index = binding_val.indexOf("required");
                 required = true;
                 binding_val.splice(_index, 1);
-                Vue.set(vm.validate_boolean, input_name, null); // 也不是正确的 , 但是也没有立即报错
+                Vue.set(vm.validate_error, input_name, null); // 也不是正确的 , 但是也没有立即报错
             } else {
-                Vue.set(vm.validate_boolean, input_name, 0); // 非必要的,不填也是正确的嘛;
+                Vue.set(vm.validate_error, input_name, 0); // 非必要的,不填也是正确的嘛;
             }
             var field = binding_val[0]; // 获取需要验证的项目 1项
+            Vue.set(vm.validate_field, input_name, field);
+            Vue.set(vm.validate_required, input_name, required);
 
             // 事件监听器
             function handle(e) {
-                var input_val = el.value; // 表单值
-                var input_type = el.type; // 表单类型
-                var rule = vm.validate_rule[field]; // 获取该验证项目的规则
-
-                if (input_type == "radio" || input_type == "checkbox") {
-                    if (required && !el.checked) {
-                        vm.validate_boolean[input_name] = 1;
-                    } else {
-                        vm.validate_boolean[input_name] = 0;
-                    }
-                    return;
-                }
-
-                // 先判断是否符合必须输入
-                if (required) { // 必填项
-                    if (input_val == "") {
-                        vm.validate_boolean[input_name] = 1;
-                        return;
-                    } else {
-                        vm.validate_boolean[input_name] = 0;
-                    }
-                } else { // 非必填项
-                    if (input_val == "") {
-                        vm.validate_boolean[input_name] = 0; // 对于非必填项来说 , 空着就是正确;
-                        return
-                    }
-                }
-
-                if (!rule) { // 有些除了required之外没有别的了
-                    return
-                }
-
-                // 判断是否符合正则
-                if (!!rule.reg) {
-                    var reg_result = !!input_val.match(rule.reg);
-                    if (!reg_result) {
-                        vm.validate_boolean[input_name] = 2;
-                        return;
-                    } else {
-                        vm.validate_boolean[input_name] = 0;
-                    }
-                }
-
-                // 最后判断ajax
-                if (!!rule.ajax) {
-                    $.ajax({
-                        url: rule.ajax,
-                        async: true,
-                        success: function(result) {
-                            if (!result) {
-                                Vue.set(vm.validate_boolean, input_name, 3);
-                            } else {
-                                Vue.set(vm.validate_boolean, input_name, 0);
-                            }
-                        },
-                        error: function(XMLHttpRequest, textStatus, errorThrown) {
-                            console.error(XMLHttpRequest);
-                            console.error(textStatus);
-                            console.error(errorThrown);
-                        }
-                    });
-                }
+                reallyHandle(el, vm);
             }
 
             // 添加事件监听器
             if (vm.validata_immediate) {
                 handle();
             }
-            el.removeEventListener("blur", handle);
             el.addEventListener("blur", handle, false);
-            el.removeEventListener("change", handle);
             el.addEventListener("change", handle, false);
         }
     });

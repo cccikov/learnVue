@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>vue 插件</title>
-    <script type="text/javascript" src="https://cccikov.github.io/cccgit/test/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript" src="vue.js"></script>
     <script type="text/javascript" src="js/vue-cc-validate.js"></script>
 </head>
 
 <body>
     <div id="app">
-        {{validate_boolean}}
+        {{validate_error}}
         <!-- v-validata 里面填的是rule 是规则 -->
         <!-- error,group,focusErrorEl填的是表单元素的name -->
         <p>
@@ -63,7 +63,12 @@
 
     setTimeout(function() {
         vm.tel = 15920789456;
-    });
+
+        setTimeout(function(){
+            vm.manual("phone","email"); // 由于可能刚改变值 , 还没有完全绑定到元素中 , 稍加延迟
+        });
+
+    },1000);
     </script>
 </body>
 
