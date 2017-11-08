@@ -21,7 +21,7 @@
             <span v-if="error('phone') == 3">ajax错误 号码重复</span>
         </p>
         <p>
-            <input type="" name="email" v-validata="'mail'"> {{error('email')}}
+            <input type="" name="email" v-validata="'required|mail'"> {{error('email')}}
         </p>
         <p>
             <button v-show="group('phone|email')">表单正确才出现 , 提交</button>
@@ -40,7 +40,9 @@
                 ajax: "https://cccikov.github.io/remoteData/array.json"
             },
             mail: {
-                reg: /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/
+                reg: /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/,
+                minLength:10,
+                maxLength:20
             }
         }
     })

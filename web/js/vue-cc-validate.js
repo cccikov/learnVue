@@ -39,7 +39,7 @@ function reallyHandle(el, vm) {
 
     var required = vm.validate_required[input_name];
     var field = vm.validate_field[input_name];
-    var rule = vm.validate_rule[field]; // 获取该验证项目的规则
+    var rule = vm.validate_rule[field]; // 获取 该验证项目的规则
 
     // 勾选表单操作 , 就只会有是否必选
     if (input_type == "radio" || input_type == "checkbox") {
@@ -70,6 +70,47 @@ function reallyHandle(el, vm) {
     if (!rule) { // 有些除了required之外没有别的了
         return
     }
+
+    // 验证长度
+    if (!!rule.len) {
+        var lenArr = rule.len.split("-"); // 长度限定
+        if (lenArr.length == 1) { // 只有一个数字的时候 , 就表示只能是这个长度
+            var mustLen = lenArr[0];
+            if (input_val.length == mustLen) {
+                vm.validate_error[input_name] = 0;
+            } else {
+                vm.validate_error[input_name] = 4;
+                return
+            }
+        } else if (lenArr.length == 2) { // 只有一个数字的时候 , 就表示只能是这个长度
+            var maxLen = Math.max(lenArr[0], lenArr[1]);
+            var minLen = Math.min(lenArr[0], lenArr[1]);
+            if (input_val.length >= minLen && input_val.length <= maxLen) {
+                vm.validate_error[input_name] = 0;
+            } else {
+                vm.validate_error[input_name] = 4;
+                return
+            }
+        }
+    }
+    if(!!rule.minLength){
+        if(input_val.length<rule.minLength){
+            vm.validate_error[input_name] = 4;
+            return
+        }else{
+            vm.validate_error[input_name] = 0;
+        }
+    }
+    if(!!rule.maxLength){
+        if(input_val.length>rule.maxLength){
+            vm.validate_error[input_name] = 4;
+            return
+        }else{
+            vm.validate_error[input_name] = 0;
+        }
+    }
+
+
 
     // 判断是否符合正则
     if (!!rule.reg) {
@@ -207,7 +248,7 @@ validate.install = function(Vue, options) {
                 validata_immediate: options.immediate || false, // 立即检验一次 , 适合修改 , 新增的时候一般为false ; 而且true的时候必须
                 validate_error: {}, // 记录错误 , 以input_name作为属性名
                 validate_el: {}, // 记录元素 , 以input_name作为属性名
-                validate_field: {}, // 记录验证项目 , 以input_name作为属性名
+                validate_field: {}, // 记录验证项目名 , 以input_name作为属性名
                 validate_required: {}, // 记录是否必填 , 以input_name作为属性名
             }
         }
@@ -265,7 +306,9 @@ validate.install = function(Vue, options) {
 
 // validate_rule 总验证规则 结构
 var validate_rule = {
+    // 验证项目 field是项目名
     "field": {
+        // 验证项目 里面的规则
         reg: "/^0?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/",
     },
     mail: {
