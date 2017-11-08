@@ -16,6 +16,7 @@
         <!-- error,group,focusErrorEl填的是表单元素的name -->
         <p>
             <input type="text" name="phone" v-validata="'required|phone'" v-model="tel"> {{error('phone')}}
+            <span v-show="!group('phone')">输入电话号码</span>
             <span v-if="error('phone') == 1">空值错误 必须填写</span>
             <span v-if="error('phone') == 2">正则错误 号码格式不对</span>
             <span v-if="error('phone') == 3">ajax错误 号码重复</span>
@@ -33,7 +34,7 @@
     </div>
     <script type="text/javascript">
     Vue.use(validate, {
-        immediate: true,
+        // immediate: true,
         rules: {
             phone: {
                 reg: /^0?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/,
@@ -67,7 +68,7 @@
         vm.tel = 15920789456;
 
         setTimeout(function(){
-            vm.manual("phone","email"); // 由于可能刚改变值 , 还没有完全绑定到元素中 , 稍加延迟
+            // vm.manual("phone","email"); // 由于可能刚改变值 , 还没有完全绑定到元素中 , 稍加延迟
         });
 
     },1000);
