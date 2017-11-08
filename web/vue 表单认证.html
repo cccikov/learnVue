@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 表单认证 使用自己写的插件</title>
+    <script type="text/javascript" src="vue.js"></script>
+    <script type="text/javascript" src="js/vue-cc-validate.js"></script>
+</head>
+
+<body>
+
+
+    <div id="app">
+        <!-- v-validata 里面填的是rule 是规则 -->
+        <!-- error,group,focusErrorEl填的是表单元素的name -->
+        <p>
+            <strong>填写电话号码(必填)</strong>
+            <input type="text" name="phone" v-validata="'required|phone'" v-model="tel"> {{error('phone')}}
+            <span v-if="error('phone') == 0">没有错误</span>
+            <span v-if="error('phone') == 1">空值错误 必须填写</span>
+            <span v-if="error('phone') == 2">正则错误 号码格式不对</span>
+            <span v-if="error('phone') == 3">ajax错误 号码重复</span>
+        </p>
+        <p>
+            <strong>填写邮箱地址(可选)</strong>
+            <input type="" name="email" v-validata="'mail'"> {{error('email')}}
+        </p>
+        <p>
+            <input type="checkbox" name="read" v-validata="'required'">已经阅读条例 {{error('read')}}
+        </p>
+
+        <p>
+            <button v-show="group('phone|email')">表单正确才出现 , 提交</button>
+            <button v-show="group('phone','email')">表单正确才出现 , 提交</button>
+            <button v-show="group(['phone','email'])">表单正确才出现 , 提交</button>
+        </p>
+        <button @click="submit">先聚焦错误元素,再提交</button>
+
+
+    </div>
+
+
+
+
+    <script type="text/javascript">
+        /* 使用插件 */
+        Vue.use(validate, {
+            rules: {
+                phone: {
+                    reg: /^0?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/,
+                },
+                mail: {
+                    reg: /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/
+                }
+            }
+        })
+
+        /* vue实例 */
+        var vm = new Vue({
+            el: "#app",
+            data:{
+                tel:""
+            },
+            methods: {
+                submit: function(e) {
+                    e.preventDefault();
+                    vm.focusErrorEl(['phone', 'email']);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
