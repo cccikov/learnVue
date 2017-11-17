@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>模板替换小坑</title>
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app1">
+        <p v-if="msg.somg.flag">这里装的是默认数据{{msg.name}} , 有新数据会自动替换</p>
+        <a href="javascript:void(0)">a1</a>
+        <a href="###">a2</a>
+        <a>a3</a>
+    </div>
+
+    <div id="app2">
+        <p v-if="msg.somg.flag">这里装的是获取的数据{{msg.name}} , 没有默认数据</p>
+
+        <a href="javascript:void(0)">a1</a>
+        <a href="###">a2</a>
+        <a>a3</a>
+    </div>
+
+
+
+    <script>
+        var vm1 = new Vue({
+            el: "#app1",
+            data: {
+                msg: {
+                    "name": "ccc",
+                    "age": 18,
+                    "somg": {
+                        "flag": true
+                    }
+                }
+            }
+        });
+
+        var vm2 = new Vue({
+            // el: "#app2", // 如果这里不注释 , 就会报错 , 因为数据不全
+            data: {
+                msg: {}
+            }
+        });
+        // ajax数据
+        setTimeout(() => {
+            vm2.msg = {
+                "name": "ccc",
+                "age": 18,
+                "somg": {
+                    "flag": true
+                }
+            }
+            vm2.$mount("#app2");
+        }, 1000);
+    </script>
+
+
+
+    <script>
+        $("a").on("click", function () {
+            console.log("我是a标签");
+        });
+    </script>
+
+    <p><strong>可以看出 , 第二里面的a全部不可以点击 , 因为里面的dom都被替换了 , 通过这种方式<code>vm2.$mount("#app2");</code>指定模板标签 , 会好大程度将里面的dom替换 , 与在参数中填写el值情况不一样</strong></p>
+</body>
+
+
+</html>
