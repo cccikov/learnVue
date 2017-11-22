@@ -229,7 +229,9 @@ validate.install = function(Vue, options) {
         var vm = this;
         arr.forEach(function(val) {
             var thisEle = vm.validate_el[val];
-            reallyHandle(thisEle, vm);
+            if(!!thisEle){ // 有才执行 , 因为有时候name没有对应任何元素
+                reallyHandle(thisEle, vm);
+            }
         });
     }
 

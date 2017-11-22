@@ -6,3 +6,4 @@
 
 * vuex
 * vue-router
+* keep-alive
