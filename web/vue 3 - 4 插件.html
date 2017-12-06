@@ -20,58 +20,70 @@
             <span v-if="error('phone') == 1">空值错误 必须填写</span>
             <span v-if="error('phone') == 2">正则错误 号码格式不对</span>
             <span v-if="error('phone') == 3">ajax错误 号码重复</span>
+            <span v-if="error('phone') == 4">长度错误</span>
         </p>
         <p>
             <input type="" name="email" v-validata="'required|mail'"> {{error('email')}}
+            <span v-if="error('email') == 4">长度错误(10-20字)</span>
+        </p>
+        <p>
+            <label>
+                <input type="checkbox" name="read" v-validata="'required'">已阅读
+            </label>
+            {{error('read')}}
         </p>
         <p>
             <button v-show="group('phone|email')">表单正确才出现 , 提交</button>
             <button v-show="group('phone','email')">表单正确才出现 , 提交</button>
             <button v-show="group(['phone','email'])">表单正确才出现 , 提交</button>
         </p>
-        <input type="checkbox" name="read" v-validata="'required'">{{error('read')}}
         <button @click="sublime">先聚焦错误元素,再提交</button>
+        <button @click="clear">清空错误信息</button>
     </div>
     <script type="text/javascript">
-    Vue.use(validate, {
-        // immediate: true,
-        rules: {
-            phone: {
-                reg: /^0?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/,
-                ajax: "https://cccikov.github.io/remoteData/array.json"
-            },
-            mail: {
-                reg: /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/,
-                minLength:10,
-                maxLength:20
+        Vue.use(validate, {
+            // immediate: true,
+            rules: {
+                phone: {
+                    reg: /^0?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/,
+                    ajax: "https://cccikov.github.io/remoteData/array.json"
+                },
+                mail: {
+                    reg: /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/,
+                    minLength: 10,
+                    maxLength: 20
+                }
             }
-        }
-    })
-    var vm = new Vue({
-        el: "#app",
-        data: {
-            msg: "haha",
-            obj: {
-                name: "ccc"
+        })
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                msg: "haha",
+                obj: {
+                    name: "ccc"
+                },
+                tel: ""
             },
-            tel: ""
-        },
-        methods: {
-            sublime: function(e) {
-                e.preventDefault();
-                vm.focusErrorEl(['phone', 'email']);
+            methods: {
+                sublime: function (e) {
+                    e.preventDefault();
+                    var flag = vm.focusErrorEl(['phone', 'email']);
+                    if (flag) {
+                        alert("提交成功");
+                    }
+                },
+                clear: function () {
+                    vm.clearerror();
+                }
             }
-        }
-    });
-
-    setTimeout(function() {
-        vm.tel = 15920789456;
-
-        setTimeout(function(){
-            // vm.manual("phone","email"); // 由于可能刚改变值 , 还没有完全绑定到元素中 , 稍加延迟
         });
 
-    },1000);
+        setTimeout(function () { // ajax更新数据
+            vm.tel = 15920789456;
+            setTimeout(function () {
+                vm.manual("phone", "email"); // 由于可能刚改变值 , 还没有完全绑定到元素中 , 稍加延迟
+            });
+        }, 1000);
     </script>
 </body>
 
