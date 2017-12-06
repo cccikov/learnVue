@@ -185,6 +185,15 @@ validate.install = function(Vue, options) {
     }
 
     /**
+     * 清除全部错误信息
+     */
+    Vue.prototype.clearerror = function(){
+        for (var i in this.validate_error) {
+            this.validate_error[i] = null;
+        }
+    }
+
+    /**
      * 组合全正确
      * @param  ['phone','email'] 或者 'phone|email' 或者 "phone","email" 三种形式选一的参数     需要验证的表单组合
      * @return {boolean}                      组合是否全验证正确
