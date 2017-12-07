@@ -115,6 +115,8 @@
         <div v-bind:class="[isActive ? 'active' : '', errorClass,'static']"></div>
         <!-- 等同于 -->
         <div v-bind:class="[{active:isActive}, errorClass,'static']"></div>
+        <!-- 等同于 -->
+        <div v-bind:class="classArr"></div>
         <!-- 渲染结果: <div class="text-danger static"></div> -->
     </div>
     <script>
@@ -122,8 +124,9 @@
             el: "#app5",
             data: {
                 isActive: false,
-                activeClass: "active", // 其实就是对应绑定数组里面的变量
-                errorClass: "text-danger"
+                activeClass: "active",
+                errorClass: "text-danger",
+                classArr:['text-danger','static'] // 其实class就是数组的值
             }
         });
     </script>
