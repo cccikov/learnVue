@@ -16,7 +16,11 @@
         <!-- error,group,focusErrorEl填的是表单元素的name -->
         <p>
             <input type="text" name="phone" v-validata="'required|phone'" v-model="tel"> {{error('phone')}}
-            <span v-show="!group('phone')">输入电话号码</span>
+            <span v-show="!!error('phone')">未做任何填写的时候是不会出来的(null) 没有错误的时候也是不会出来的(0)</span>
+            <span v-show="!group('phone')">输入电话号码 本来group就是判断是否等于0</span>
+            <span v-show="error('phone') != 0">输入电话号码</span>
+            {{ (error('phone') != 0) == (!group('phone'))}}
+
             <span v-if="error('phone') == 1">空值错误 必须填写</span>
             <span v-if="error('phone') == 2">正则错误 号码格式不对</span>
             <span v-if="error('phone') == 3">ajax错误 号码重复</span>
@@ -24,7 +28,9 @@
         </p>
         <p>
             <input type="" name="email" v-validata="'required|mail'"> {{error('email')}}
+            <span v-if="!!error('email')">除了0和null , 代表一定有错误</span>
             <span v-if="error('email') == 4">长度错误(10-20字)</span>
+
         </p>
         <p>
             <label>
@@ -98,7 +104,7 @@
         setTimeout(function() {
             vm.manual("phone", "email"); // 由于可能刚改变值 , 还没有完全绑定到元素中 , 稍加延迟
         });
-    }, 1000);
+    }, 10000);
     </script>
 </body>
 
