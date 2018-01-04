@@ -337,14 +337,17 @@ var validate_rule = {
         minLength: 10,
         maxLength: 20,
         len: "10-20",
-        ajax:{
-            url:"https://cccikov.github.io/remoteData/array.json",
-            data:{
-                name:function(){
+        ajax: {
+            url: "https://cccikov.github.io/remoteData/array.json",
+            data: {
+                name: function() {
                     return $("#name").val;
                 },
-                id:function(){
+                id: function() {
                     return 211
+                },
+                msg: function(vm) {
+                    return vm.msg;
                 }
             }
         }
