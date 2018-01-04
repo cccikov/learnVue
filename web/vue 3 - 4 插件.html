@@ -16,7 +16,7 @@
         <!-- error,group,focusErrorEl填的是表单元素的name -->
         <p>
             <input type="text" name="phone" v-validata="'required|phone'" v-model="tel"> {{error('phone')}}
-            <span v-show="!!error('phone')">未做任何填写的时候是不会出来的(null) 没有错误的时候也是不会出来的(0)</span>
+            <span v-show="!!error('phone')">未做任何填写的时候是不会出来的(null) 没有错误的时候也是不会出来的(0) error('phone')是true就代表有错,是false的时候代表未判断或者是正确</span>
             <span v-show="!group('phone')">输入电话号码 本来group就是判断是否等于0</span>
             <span v-show="error('phone') != 0">输入电话号码</span>
             {{ (error('phone') != 0) == (!group('phone'))}}
