@@ -130,7 +130,7 @@ function reallyHandle(el, vm) {
             var keys = Object.keys(rule.ajax.data);
             for (var i = 0, len = keys.length; i < len; i++) {
                 var key = keys[i];
-                ajaxData[key] = rule.ajax.data[key]();
+                ajaxData[key] = rule.ajax.data[key](vm);
             }
         }
         $.ajax({
