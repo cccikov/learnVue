@@ -37,53 +37,65 @@
             <button v-show="group('phone','email')">表单正确才出现 , 提交</button>
             <button v-show="group(['phone','email'])">表单正确才出现 , 提交</button>
         </p>
-        <button @click="sublime">先聚焦错误元素,再提交</button>
+        <button @click="submit">先聚焦错误元素,再提交</button>
         <button @click="clear">清空错误信息</button>
     </div>
     <script type="text/javascript">
-        Vue.use(validate, {
-            // immediate: true,
-            rules: {
-                phone: {
-                    reg: /^0?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/,
-                    ajax: "https://cccikov.github.io/remoteData/array.json"
-                },
-                mail: {
-                    reg: /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/,
-                    minLength: 10,
-                    maxLength: 20
-                }
-            }
-        })
-        var vm = new Vue({
-            el: "#app",
-            data: {
-                msg: "haha",
-                obj: {
-                    name: "ccc"
-                },
-                tel: ""
-            },
-            methods: {
-                sublime: function (e) {
-                    e.preventDefault();
-                    var flag = vm.focusErrorEl(['phone', 'email']);
-                    if (flag) {
-                        alert("提交成功");
+    Vue.use(validate, {
+        // immediate: true,
+        rules: {
+            phone: {
+                reg: /^0?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/,
+                len:"11",
+                ajax: {
+                    url: "https://cccikov.github.io/remoteData/array.json",
+                    data: {
+                        name: function() { // 不能直接是值 , 由于这个data可能会实时变化 , 整个rules属性只会在初始化的时候传过去一次 , 所以只能做成函数 , 每次读取data里面的属性 , 就执行一次函数
+                            return "meme";
+                        },
+                        id: function() {
+                            return 211
+                        }
                     }
-                },
-                clear: function () {
-                    vm.clearerror();
                 }
+            },
+            mail: {
+                reg: /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/,
+                minLength: 10,
+                maxLength: 20
             }
-        });
+        }
+    })
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            msg: "haha",
+            obj: {
+                name: "ccc"
+            },
+            tel: ""
+        },
+        methods: {
+            submit: function(e) {
+                e.preventDefault();
+                console.log(this.group('phone|email') , vm.group('phone|email'));
+                var flag = vm.focusErrorEl(['phone', 'email']);
+                if (flag) {
+                    alert("提交成功");
+                }
+            },
+            clear: function() {
+                vm.clearerror();
+            }
+        }
+    });
 
-        setTimeout(function () { // ajax更新数据
-            vm.tel = 15920789456;
-            setTimeout(function () {
-                vm.manual("phone", "email"); // 由于可能刚改变值 , 还没有完全绑定到元素中 , 稍加延迟
-            });
-        }, 1000);
+    setTimeout(function() { // ajax更新数据
+        vm.tel = 15920789456;
+        setTimeout(function() {
+            vm.manual("phone", "email"); // 由于可能刚改变值 , 还没有完全绑定到元素中 , 稍加延迟
+        });
+    }, 1000);
     </script>
 </body>
 
