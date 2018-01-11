@@ -46,6 +46,7 @@
                     this.counter += 1
                     this.$emit('increment', data); // 只是触发事件 increment , 可以传参所以就可以传递数据
                     // 子组件里面也不用特意去定义事件 increment
+                    // 值得注意的是 , 这里面事件的名称如果是多个单词只能使用 短横线隔开式 。 ps:props只能使用驼峰式是因为是作为对象的属性去使用，定义上（js中定义）与使用上（html标签使用）存在冲突，才导致props在js中只能用驼峰式，在HTML使用时只能用短横线隔开式 ； 而这里事件的名称是要用在标签的属性上 , 而且在js层面上只是一个字符串 , 所以用短横线隔开式也无妨，所以可能vue.js因此而取消"自定义事件"事件名称驼峰式转为短横线隔开式.
                 }
             },
         });
@@ -217,7 +218,7 @@
         <!--
             要让组件的 v-model 生效
 
-            接受一个 value 属性 (代码 v-bind:value="something4") 
+            接受一个 value 属性 (代码 v-bind:value="something4")
             在有新的值时触发 input 事件 (代码 this.$emit('input', e.target.value);)
          -->
     </div>
@@ -256,7 +257,7 @@
     <script>
         Vue.component("checkbox-input", {
             template: "<input :checked='checkedval' type='checkbox' v-on:change='sonListener'>", // 由于复选框触发的 change事件 , 所以这里要监听的原生的change事件
-            // 可能vue做了改动 , input标签的:checked是控制是否选上的 , 而不是控制是否默认选上 
+            // 可能vue做了改动 , input标签的:checked是控制是否选上的 , 而不是控制是否默认选上
             // 可能是因为checked标签属性只要一出现(无论任何值,或者有无值)就是默认选上的意思 , 所以vue做了改动 checked变成控制是否控制
             model: {
                 prop: "checkedval",
