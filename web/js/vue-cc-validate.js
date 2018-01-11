@@ -321,8 +321,12 @@ validate.install = function(Vue, options) {
             if (vm.validata_immediate) {
                 handle();
             }
-            el.addEventListener("blur", handle, false);
-            el.addEventListener("change", handle, false);
+
+            if (el.type == "radio" || el.type == "checkbox") {
+                el.addEventListener("change", handle, false);
+            }else{
+                el.addEventListener("blur", handle, false);
+            }
         }
     });
 }

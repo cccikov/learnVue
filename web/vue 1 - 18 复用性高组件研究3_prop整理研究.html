@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>复用性高组件研究3_prop整理</title>
+    <script type="text/javascript" src="vue.js"></script>
+    <style>
+    .slot {
+        box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 20px 0px;
+        color: blue;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- 组件 -->
+    <script>
+    Vue.component("tpl", {
+        // 组件模板
+        template: `
+            <div>
+                <p>静态数据: {{static}} 名字：{{staticName}}</p>
+                <p>动态数据: {{live}} 名字：{{live.name}}</p>
+            </div>
+            `,
+        // VueToComponent 表示数据是由vue传到component(组件)
+        props: ["live"],
+        data: function() {
+            var _this = this;
+            return {
+                static: _this.live,
+                staticName: _this.live.name
+                    // 其实先将prop整理的话 , 条理更加清晰 , 不然直接将prop写在模板上 , 会有点混乱 ,
+                    // 但是这种写法 , vue实例数据更新 , 这些数据不会更新 , 要实时随着vue实例数据更新而更新 , 只可以使用props
+            }
+        }
+    });
+    </script>
+    <!-- 实例 -->
+    <div id="app">
+        <input type="text" v-model="msg.name">
+        <tpl :live="msg"></tpl>
+    </div>
+    <script type="text/javascript">
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            msg: {
+                name: "ccc",
+                age: 27
+            }
+        },
+        methods: {
+            newObject: function() {
+                this.msg = {
+                    name: "爱茄",
+                    age: 18
+                };
+            }
+        }
+    });
+
+    var msg = vm.msg; // 存储起初始内存指针
+    </script>
+    <ul>
+        <li>之前不是说先整理prop的数据是不会随着vue实例数据更新, 怎么静态数据里面的name也会随着input的值而变化</li>
+        <li>那只是因为, static的值等于live, 而live的值刚好是一个对象(广义上的对象, 指的是引用类型; 狭义上的对象, 一切都是对象, 连字符串都是对象), 所以两个属性指向同一个对象(即指向于同一个内存位置, 值仅仅只是一个引用), 所以其中一个属性(live)改变自身属性(name), 势必会将另一个属性(static)的自身属性(name)也改变</li>
+        <li>名字是最好的例子, 因为字符串的值是直接保存在变量中的, 所以staticName只是保存了live.name初始的值, 所以后面live.name变化并没有再度改变staticName, 证明了"先将prop整理, 储存这些整理好数据的属性不会随着vue实例数据更新而更新"</li>
+        <li>那你可能会说, 我直接存储的是对象就可以了, 反正操作对象就是操作引用, 但是实际情况, 数据的变化, 实际有可能整个对象被替换, 所以这种方式也会出现问题, <a onclick="vm.newObject();" href="javascript:void(0)">整个对象被替换</a></li>
+        <li>是吧, 点击上面【整个对象被替换】, 动态数据变化了, 而静态没有变化, 这时无论在input中输入什么, 静态数据都不会在变化了, 因为live已经指向了新的内存位置</li>
+        <li>再次<a onclick="!function(){msg.name='哈哈'}();" href="javascript:void(0)">操作之前的引用, 即旧的内存位置</a>, 你就会发现静态数据中的name会实时被变成"哈哈"</li>
+    </ul>
+</body>
+
+</html>

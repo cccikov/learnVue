@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>复用性高组件研究3_prop整理</title>
+    <script type="text/javascript" src="vue.js"></script>
+    <style>
+    .slot {
+        box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 20px 0px;
+        color: blue;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- 组件 -->
+    <script>
+    Vue.component("tpl", {
+        // 组件模板
+        template: `
+            <div>
+                <p>静态数据: {{sortData}} {{name}}</p>
+                <p>动态数据: {{live}}</p>
+            </div>
+            `,
+        // VueToComponent 表示数据是由vue传到component(组件)
+        props: ["live"],
+
+        computed: {
+            sortData: function() {
+                return this.live // 整理好的数据做成函数 , 这样每次都是最新的
+            },
+            name: function() {
+                return this.live.name;
+            }
+        }
+    });
+    </script>
+    <!-- 实例 -->
+    <div id="app">
+        <input type="text" v-model="msg.name">
+        <tpl :live="msg"></tpl>
+    </div>
+    <script type="text/javascript">
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            msg: {
+                name: "ccc",
+                age: 27
+            }
+        },
+        methods: {
+            newObject: function() {
+                this.msg = {
+                    name: "爱茄",
+                    age: 18
+                };
+            }
+        }
+    });
+
+    var msg = vm.msg; // 存储起初始内存指针
+    </script>
+    <ul>
+        <li><a onclick="vm.newObject();" href="javascript:void(0)">整个对象被替换</a></li>
+        <li><a onclick="!function(){msg.name='哈哈'}();" href="javascript:void(0)">操作之前的引用, 即旧的内存位置</a></li>
+    </ul>
+</body>
+
+</html>
