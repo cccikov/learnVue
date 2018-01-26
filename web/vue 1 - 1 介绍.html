@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="zh">
 
 <head>
@@ -48,6 +48,8 @@
             以及绑定其他属性 , 自定义属性
         </div>
         <!-- 解释为: <div data-att1="新消息" data-att2="haha" readonly="readonly"> -->
+        <p>其实指令的值就是js语句 , 上面的message就是变量(因为没有引号 , 在js里面也是变量的意思) , 'haha' 就是字符串</p>
+        <p :style="{height:'100px',background:'url('+src+')'}"></p>
     </div>
 
     <script type="text/javascript">
@@ -55,6 +57,7 @@
             el: '#app-2',
             data: { // 你看到的 v-bind 属性被称为指令 这个v-bind绑定的是元素属性title 元素的属性不能使用 {{}} 双大括号绑定数据 , 要用v-bind
                 message: '页面加载于 ' + new Date().toLocaleString(),
+                src:"img/key01.png"
             }
         });
         // data里面的属性都可以在该Vue实例里面直接读取
