@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>load好了</title>
+    <script type="text/javascript" src="vue.min.js"></script>
+</head>
+
+<body>
+    <div id="wrap">
+        <button id="btn">按钮</button>
+        <p id="content">内容:{{content}}</p>
+    </div>
+    <script type="text/javascript">
+    btn_before = document.getElementById("btn");
+    content_before = document.getElementById("content");
+
+    var onloadFlag = 0;
+
+    window.onload = function() {
+        btn_after = document.getElementById("btn");
+        content_after = document.getElementById("content");
+
+        console.log(btn_before, btn_after);
+        console.log(content_before, content_after);
+
+        console.log("window.onload");
+        onloadFlag++;
+        if (onloadFlag == 2) {
+            loaded();
+        }
+    }
+
+    new Vue({
+        el: "#wrap",
+        data: {
+            content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti sequi aliquam est, neque modi tenetur itaque magnam dolore sunt! Aspernatur nostrum illum atque nesciunt voluptatem laboriosam eveniet labore quisquam aperiam."
+        },
+        mounted: function() {
+            this.$nextTick(function() {
+                btn_mounted = document.getElementById("btn");
+                content_mounted = document.getElementById("content");
+
+                console.log(btn_mounted);
+                console.log(content_mounted);
+
+
+                console.log("Vue mounted");
+                onloadFlag++;
+                if (onloadFlag == 2) {
+                    loaded();
+                }
+            });
+        }
+    });
+
+
+    function loaded() {
+        console.log("load好了")
+        console.log(btn_before, btn_after, btn_mounted);
+    }
+    </script>
+
+</body>
+
+</html>
