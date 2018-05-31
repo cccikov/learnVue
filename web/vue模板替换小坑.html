@@ -48,7 +48,7 @@
                 msg: {}
             }
         });
-        // ajax数据
+        // 模拟ajax数据
         setTimeout(() => {
             vm2.msg = {
                 "name": "ccc",
@@ -57,7 +57,14 @@
                     "flag": true
                 }
             }
-            vm2.$mount("#app2");
+            // 请求数据成功
+
+            if (!vm2.$el) { // 最好先判断一下有无挂载元素
+                vm2.$mount("#app2");
+            };
+            // 页面进去是先要获取数据，在实例化vue
+            // 这时候就可以不指定el属性
+            // 等获取数据后，再通过vm.$mount方法挂载到对应的元素
         }, 1000);
     </script>
 
