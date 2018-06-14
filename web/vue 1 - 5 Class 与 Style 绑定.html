@@ -267,6 +267,25 @@
     </script>
 
 
+
+
+
+    <div id="app10">
+        <p :style="'background-image:url('+imgUrl+')'">Lorem, ipsum dolor.</p>
+        <p :style="{'background-image':'url('+imgUrl+')'}">Lorem, ipsum dolor.</p>
+        <p :style="{background:'url('+imgUrl+')'}">Lorem, ipsum dolor.</p>
+        <!-- 由于background-image不符合变量命名规则，所以作为对象属性名的时候，一定要加上引号 -->
+    </div>
+    <script>
+    new Vue({
+        el: "#app10",
+        data: {
+            imgUrl: "http://cccikov.github.io/ccc/%E5%B7%A8%E6%9E%AA%E4%B9%8C%E8%B4%BCvs%E6%8A%B9%E9%A6%99%E9%B2%B8.jpg"
+        }
+    });
+    </script>
+
+
     <!-- v-bind:style 若是直接绑定字符串 , 则相当于直接在标签上写样式那样 -->
     <!-- v-bind:class 若是直接绑定字符串 , 则相当于直接在标签上添加className -->
 
