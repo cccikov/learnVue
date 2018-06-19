@@ -155,6 +155,18 @@ function reallyHandle(el, vm) {
 }
 
 
+/**
+ * 当使用插件的时候，Vue.use(validate,...) 执行以下操作（也算是插件运行流程）
+ *
+ * 添加实例属性，方法；即添加但凡是Vue的实例都可以使用的方法。  Vue.prototype....
+ *
+ * 全局混合，这里主要让，使用了这个插件的页面，里面的vue实例都会自动添加初始数据（其实是空，就是添加了属性而已，主要用于后续存放数据进去）
+ *
+ * 自定义指令，即对绑定 v-validate 指令的元素进行的操作；这里主要用于记录表单元素的name，需要验证的内容，以及添加change事件(或者blur)监听器
+ *
+ * 触发change时，真正操作的函数是reallyHandle
+ *
+ */
 var validate = {};
 validate.install = function(Vue, options) {
     options = options || {}; // 里面会用到options.XXX属性 , 要是没有options 会报错
@@ -331,6 +343,25 @@ validate.install = function(Vue, options) {
     });
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////
+// 例子 //
+////////
 
 // validate_rule 总验证规则 结构
 var validate_rule = {
