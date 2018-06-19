@@ -52,6 +52,7 @@
             <label>
                 {{obj}}
                 <input type="text" v-model="obj.name">
+                <input type="text" v-model="obj.age">
             </label>
         </p>
         <p>
@@ -92,6 +93,9 @@
                 change5: function() {
                     this.obj.name = "单个修改";
                     this.obj.age = "28";
+                    // 有些时候会发现，直接点这个单个修改，就算原先没有age，但是这样运行之后，视图（html）与age有关的元素也会相应变化。
+                    // 那是因为，原先的对象就有name属性，然后name变化的时候检测出来了，检测出这个对象发生变化，更新视图的时候，就更新这个对象，由于这时这个对象有age属性，所以也更新上视图了。
+                    // 所以实质，只要vue可以检测到变化，就会将最新的值反映到视图（html）
                 },
                 change6: function() {
                     this.obj = {
