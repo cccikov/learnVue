@@ -12,10 +12,10 @@
 <body>
     <div id="app">
         {{validate_error}}
-        <!-- v-validata 里面填的是rule 是规则 -->
+        <!-- v-validate 里面填的是rule 是规则 -->
         <!-- error,group,focusErrorEl填的是表单元素的name -->
         <p>
-            <input type="text" name="phone" v-validata="'required|phone_rule'" v-model="tel"> {{error('phone')}}
+            <input type="text" name="phone" v-validate="'required|phone_rule'" v-model="tel"> {{error('phone')}}
             <span v-show="!!error('phone')">未做任何填写的时候是不会出来的(null) 没有错误的时候也是不会出来的(0) error('phone')是true就代表有错,是false的时候代表未判断或者是正确</span>
             <span v-show="!group('phone')">输入电话号码 本来group就是判断是否等于0</span>
             <span v-show="error('phone') != 0">输入电话号码</span>
@@ -27,14 +27,14 @@
             <span v-if="error('phone') == 4">长度错误</span>
         </p>
         <p>
-            <input type="" name="email" v-validata="'required|mail_rule'"> {{error('email')}}
+            <input type="" name="email" v-validate="'required|mail_rule'"> {{error('email')}}
             <span v-if="!!error('email')">除了0和null , 代表一定有错误</span>
             <span v-if="error('email') == 4">长度错误(10-20字)</span>
 
         </p>
         <p>
             <label>
-                <input type="checkbox" name="read" v-validata="'required'">已阅读
+                <input type="checkbox" name="read" v-validate="'required'">已阅读
             </label>
             {{error('read')}}
         </p>

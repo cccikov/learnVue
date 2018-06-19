@@ -12,11 +12,11 @@
 
 
     <div id="app">
-        <!-- v-validata 里面填的是rule 是规则 -->
+        <!-- v-validate 里面填的是rule 是规则 -->
         <!-- error,group,focusErrorEl填的是表单元素的name -->
         <p>
             <strong>填写电话号码(必填)</strong>
-            <input type="text" name="phone" v-validata="'required|phone'" v-model="tel"> {{error('phone')}}
+            <input type="text" name="phone" v-validate="'required|phone'" v-model="tel"> {{error('phone')}}
             <span v-if="error('phone') == 0">没有错误</span>
             <span v-if="error('phone') == 1">空值错误 必须填写</span>
             <span v-if="error('phone') == 2">正则错误 号码格式不对</span>
@@ -24,10 +24,10 @@
         </p>
         <p>
             <strong>填写邮箱地址(可选)</strong>
-            <input type="" name="email" v-validata="'mail|required'"> {{error('email')}}
+            <input type="" name="email" v-validate="'mail|required'"> {{error('email')}}
         </p>
         <p>
-            <input type="checkbox" name="read" v-validata="'required'">已经阅读条例 {{error('read')}}
+            <input type="checkbox" name="read" v-validate="'required'">已经阅读条例 {{error('read')}}
         </p>
 
         <p>

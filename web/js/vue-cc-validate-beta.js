@@ -287,7 +287,7 @@ validate.install = function(Vue, options) {
         data: function() {
             return {
                 validate_rule: options.rules || {}, // 记录全部验证规则
-                validata_immediate: options.immediate || false, // 立即检验一次 , 适合修改 , 新增的时候一般为false ; 而且true的时候必须
+                validate_immediate: options.immediate || false, // 立即检验一次 , 适合修改 , 新增的时候一般为false ; 而且true的时候必须
                 validate_error: {}, // 记录错误 , 以input_name作为属性名
                 validate_el: {}, // 记录元素 , 以input_name作为属性名
                 validate_field: {}, // 记录验证项目名 , 以input_name作为属性名
@@ -304,7 +304,7 @@ validate.install = function(Vue, options) {
     /**
      * 自定义指令
      */
-    Vue.directive("validata", {
+    Vue.directive("validate", {
         bind: function(_el, _binding, _vnode) {
             // 获取变量
             var el = _el; // 当前元素
@@ -336,11 +336,11 @@ validate.install = function(Vue, options) {
             }
 
             // 添加事件监听器
-            if (vm.validata_immediate) {
+            if (vm.validate_immediate) {
                 handle();
             }
 
-            if (el.type == "radio" || el.type == "checkbox") {
+            if (el.type == "radio" || el.type == "checkbox" || el.type == "file") {
                 el.addEventListener("change", handle, false);
             }else{
                 el.addEventListener("blur", handle, false);
