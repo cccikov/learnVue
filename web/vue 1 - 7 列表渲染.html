@@ -13,6 +13,7 @@
         <!-- key这个属性是vue里面的特殊特性 , 是不会渲染出来的 , 是为了避免复用渲染 -->
         <li v-for="(item,index) in arr" :key="item.id"> {{index}} --- {{item.message}}</li>
         <li v-for="(a,b) in arr" :key="a.id"> {{b}} --- {{a.message}}</li>
+        <!-- 可以采用of 代替 in ，js两种遍历for...in for...of （vue用of和in都一样，不同于原生js的in和of是不同的；只是为了让前端觉得语法友好）-->
         <li v-for="(item,index) of arr" :key="item.id"> {{index}} --- {{item.message}}</li>
 
 
