@@ -15,50 +15,39 @@
         <li v-for="(a,b) in arr" :key="a.id"> {{b}} --- {{a.message}}</li>
         <!-- 可以采用of 代替 in ，js两种遍历for...in for...of （vue用of和in都一样，不同于原生js的in和of是不同的；只是为了让前端觉得语法友好）-->
         <li v-for="(item,index) of arr" :key="item.id"> {{index}} --- {{item.message}}</li>
-
-
-
-
         <li v-for="val in obj" :key="val"> {{val}}</li>
         <li v-for="(val,key) of obj" :key="key">{{key}} ------ {{val}}</li>
         <li v-for="(val,key,index) of obj" :key="key">{{index}}-----{{key}} ------ {{val}}</li>
         <!-- index可能会因为不同的js引擎读取对象属性顺序而不同 , 要有明确顺序只能使用数组-->
-
-
         <!-- key属性的值一定要是唯一的有效的 , 如果数据里面有id最好就用id , 没有的话 , 数组型数据可以用index , 对象型属性可以用属性名 -->
     </ul>
     <script>
-        var vm1 = new Vue({
-            el: "#app1",
-            data: {
-                arr: [{
-                    message: 'Foo',
-                    id: 0
-                }, {
-                    message: 'Bar',
-                    id: 1
-                }],
-                obj: {
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    age: 30
-                }
+    var vm1 = new Vue({
+        el: "#app1",
+        data: {
+            arr: [{
+                message: 'Foo',
+                id: 0
+            }, {
+                message: 'Bar',
+                id: 1
+            }],
+            obj: {
+                firstName: 'John',
+                lastName: 'Doe',
+                age: 30
             }
-        });
+        }
+    });
     </script>
-
-
-
     <!-- vue不能检测某些变动 -->
     <div id="app2">
         <p>{{arr}}</p>
         <p>
-            <button @click="change1">按钮1</button>
-            <button @click="change2">按钮2</button>
-            <button @click="change3">按钮3</button>
+            <button @click="change1">单个替换</button>
+            <button @click="change2">整体替换</button>
+            <button @click="change3">splice方法替换</button>
         </p>
-
-
         <p>
             <label>
                 {{obj}}
@@ -66,11 +55,12 @@
             </label>
         </p>
         <p>
-            <button @click="change4">按钮4</button>
-            <button @click="change5">按钮5</button>
-            <button @click="change6">按钮6</button>
-            <button @click="change7">按钮7</button>
-            <button @click="change8">按钮8</button>
+            <button @click="change4">直接等于空对象</button>
+            <button @click="change5">单个修改</button>
+            <button @click="change6">整体修改</button>
+            <button @click="change7">assign合并</button>
+            <button @click="change8">删除name属性</button>
+            <button @click="change9">Vue.set</button>
         </p>
     </div>
     <script>
@@ -84,44 +74,53 @@
             },
             methods: {
                 // vue不能检测利用索引值设置一个项的时候
-                change1: function () {
+                change1: function() {
                     this.arr[2] = "单个替换";
                 },
-                change2: function () {
+                change2: function() {
                     this.arr = [0, 1, "整体替换", 3, 4, 5, 6, 7, 8, 9]
                 },
-                change3: function () {
+                change3: function() {
                     this.arr.splice(2, 1, "splice方法替换");
                 },
 
+
                 // Vue 不能检测对象属性的添加或删除
-                change4: function () {
+                change4: function() {
                     this.obj = {};
                 },
-                change5: function () {
+                change5: function() {
                     this.obj.name = "单个修改";
                     this.obj.age = "28";
                 },
-                change6: function () {
+                change6: function() {
                     this.obj = {
                         name: "整体修改",
                         age: 27
                     }
                 },
-                change7: function () {
+                change7: function() {
                     this.obj = Object.assign({}, this.obj, {
                         gender: "male",
                         height: 175
                     });
+                    // 操作上相当于下面，这个，但是由于下面这个就是直接增加属性，所以是无效的
+                    /*Object.assign(this.obj, {
+                        gender: "male",
+                        height: 175
+                    });*/
                 },
-                change8:function(){
+                change8: function() {
                     delete this.obj.name;
+                },
+                change9: function() {
+                    Vue.set(this.obj, 'age', 27);
+                    // 可以使用 vm.$set 实例方法，它只是全局 Vue.set 的别名：
+                    this.$set(this.obj, 'job', "web");
                 }
             }
         });
-
     </script>
-
 </body>
 
 </html>
