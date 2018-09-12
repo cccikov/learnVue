@@ -17,7 +17,9 @@ export default {
 };
 </script>
 
+
 <style lang='less'>
+  @import './css/reset.less';
   html{
     #app {
       font-family: "Avenir", Helvetica, Arial, sans-serif;
