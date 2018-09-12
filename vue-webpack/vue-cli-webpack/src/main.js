@@ -16,4 +16,8 @@ new Vue({
   /* render:function(createElement){
     return createElement(App);
   } */
+
+  // vue1.0写法
+  // components: { App },// 相当于 {"App":App}
+  // template: '<App/>'
 })
