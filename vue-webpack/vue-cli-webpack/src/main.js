@@ -10,6 +10,10 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: { App },// 相当于 {"App":App}
-  template: '<App/>'
+  render: x => x(App)
+  // render: (x) => x(App)
+  // render: (x) => {return x(App)}
+  /* render:function(createElement){
+    return createElement(App);
+  } */
 })
