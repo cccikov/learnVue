@@ -3,8 +3,8 @@
   <div id="app">
     {{name}}
     <template v-if="name">
-        <p>haha</p>
-        <p>haha</p>
+      <p>haha</p>
+      <p>haha</p>
     </template>
     <img src="./assets/logo.png">
     <router-view/>
@@ -18,19 +18,23 @@
 // 以下就是除render和template的其他选项
 import hello from "./components/HelloWorld";
 import hi from "./components/hi";
-import {a} from "../static/test.js"
-import {b} from "../static/test2.js"
-import {c} from "../static/test3.js"
+import { a } from "../static/test.js";
+import { b } from "../static/test2.js";
+import { c } from "../static/test3.js";
 console.log(a);
 console.log(b);
 console.log(c);
 
-console.log(import("../static/test.js"))
-console.log(()=>import("../static/test.js"))
-console.log(import("../static/test.js").then((value)=>{console.log("promise里面",value.a)}))
+console.log(import("../static/test.js"));
+console.log(() => import("../static/test.js"));
+console.log(
+  import("../static/test.js").then(value => {
+    console.log("promise里面", value.a);
+  })
+);
 
-console.log(1)
-console.log(()=>1)
+console.log(1);
+console.log(() => 1);
 
 export default {
   name: "App",
