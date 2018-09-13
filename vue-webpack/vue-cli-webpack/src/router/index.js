@@ -9,7 +9,16 @@ export default new Router({
     routes: [{
         path: '/',
         name: 'HelloWorld',
-        component: () =>
-            import ('@/components/HelloWorld.vue')
+
+        // component: HelloWorld,
+
+        // component: () => import ('@/components/HelloWorld.vue')
+
+        // components: {
+        //     default: () =>
+        //         import ('@/components/HelloWorld.vue')
+        // }
+
+        component: resolve => require(['@/components/HelloWorld.vue'], resolve) // 懒加载
     }]
 })
