@@ -12,13 +12,13 @@ export default new Router({
 
         // component: HelloWorld,
 
-        // component: () => import ('@/components/HelloWorld.vue')
+        // component: () => import ('@/components/HelloWorld.vue') // 官方懒加载写法
 
         // components: {
         //     default: () =>
         //         import ('@/components/HelloWorld.vue')
         // }
 
-        component: resolve => require(['@/components/HelloWorld.vue'], resolve) // 懒加载
+        component: resolve => require(['@/components/HelloWorld.vue'], resolve) // 懒加载 应该是和webpack require.ensure()有关
     }]
 })
