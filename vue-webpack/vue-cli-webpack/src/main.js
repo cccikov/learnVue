@@ -8,16 +8,16 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  render: x => x(App)
-  // render: (x) => x(App)
-  // render: (x) => {return x(App)}
-  /* render:function(createElement){
-    return createElement(App);
-  } */
+    el: '#app',
+    router,
+    render: x => x(App)
+        // render: (x) => x(App)
+        // render: (x) => {return x(App)}
+        /* render:function(createElement){
+          return createElement(App);
+        } */
 
-  // vue1.0写法
-  // components: { App },// 相当于 {"App":App}
-  // template: '<App/>'
+    // vue1.0写法
+    // components: { App },// 相当于 {"App":App}
+    // template: '<App/>'
 })
