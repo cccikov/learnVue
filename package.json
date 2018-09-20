@@ -4,7 +4,8 @@
   "description": "this is a project for learning vue",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+	"test": "echo \"Error: no test specified\" && exit 1",
+	"start":"browser-sync start --server --files \"web/**/*.html,web/**/*.css,web/**/*.js\" --startPath \"web\" --index \"index.html\""
   },
   "author": "",
   "license": "ISC",
