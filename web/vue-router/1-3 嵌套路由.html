@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>vue 路由</title>
+	<style>
+		.router {
+			padding: 10px;
+			margin: 10px 0;
+			box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+		}
+	</style>
+</head>
+
+<body>
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+	<div id="app">
+		<div>
+			<div>
+				<router-link to="/user/123123">/user/123123</router-link>
+			</div>
+			<div>
+				<router-link to="/user/123123/child">/user/123123/child</router-link>
+			</div>
+			<div>
+				<router-link to="/page/page/page/page">/page/page/page/page</router-link>
+			</div>
+		</div>
+		<div class="router">
+			<!-- 顶层路由匹配到的组件将渲染在这里 -->
+			<router-view></router-view>
+		</div>
+	</div>
+
+
+	<script>
+		/*
+		// 路由基本结构
+		route = {
+			path:...,
+			component:...
+		}
+
+		// 嵌套路由结构
+		route = {
+			path:...,
+			component:...
+			children:[
+				route,....
+			]
+		}
+		 */
+
+		let component = {
+			template: '<div> <p>page</p> <div class="router"> <router-view></router-view> </div> </div>'
+		};
+
+		let route = {
+			path: "page",
+			component: component,
+			children: []
+		}
+
+		// route.children[0] = route;
+
+		let router = new VueRouter({
+			routes: [
+				{
+					path: '/user/:id',
+					component: {
+						template: `<div>
+							<p>User {{ $route.params.id }}</p>
+							<div class="router">
+								<!-- 二级路由匹配到的组件将渲染在这里 -->
+								<router-view></router-view>
+							</div>
+						</div>`
+					},
+					children: [
+						{
+							path: "child",
+							component: {
+								template: `<div>
+									<p>User {{ $route.params.id }}</p>
+									<div class="router">
+										<!-- 三级路由匹配到的组件将渲染在这里 -->
+										<router-view></router-view>
+									</div>
+								</div>`
+							}
+						}
+					]
+				},
+				route
+			]
+		});
+
+
+
+		let app = new Vue({
+			"router": router
+		}).$mount('#app');
+
+	</script>
+</body>
+
+</html>
