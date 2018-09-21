@@ -7,7 +7,7 @@
     <script type="text/javascript" src="vue.js"></script>
     <style>
     .slot {
-        box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 20px 0px;
+        box-shadow: rgba(0, 0, 0, 0.28) 0px 0px 20px 0px;·
         color: blue;
     }
     </style>
@@ -20,20 +20,22 @@
         // 组件模板
         template: `
             <div>
-                <p>静态数据: {{sortData}} {{name}}</p>
-                <p>动态数据: {{live}}</p>
+                <p>整理数据: {{sortData}}</p >
+                <p>动态数据: {{live}}</p >
+                <p>整理数据: {{msg2}}</p >
             </div>
             `,
         // VueToComponent 表示数据是由vue传到component(组件)
-        props: ["live"],
-
+        props: ["live"],//live是每次都根据父组件msg变化而重新赋值。
+        data: function() {
+            return {
+                msg2: this.live // 当父组件的msg等于一个新对象的时候，msg2还是指向原来的msg，因为这个传值只有在创建组件的时候赋了值，后面就是指向最初的那个对象了。
+            }
+        },
         computed: {
             sortData: function() {
-                return this.live // 整理好的数据做成函数 , 这样每次都是最新的
+                return this.live // 整理好的数据做成函数 , 这样每次都是最新的。每次父组件的msg变化，live也会重新赋值，这个函数就会再次调用，所以sortData永远都等于父组件的msg值
             },
-            name: function() {
-                return this.live.name;
-            }
         }
     });
     </script>
@@ -64,8 +66,8 @@
     var msg = vm.msg; // 存储起初始内存指针
     </script>
     <ul>
-        <li><a onclick="vm.newObject();" href="javascript:void(0)">整个对象被替换</a></li>
-        <li><a onclick="!function(){msg.name='哈哈'}();" href="javascript:void(0)">操作之前的引用, 即旧的内存位置</a></li>
+        <li><a onclick="vm.newObject();" href=" ">整个对象被替换</ a></li>
+        <li><a onclick="!function(){msg.name='哈哈'}();" href="javascript:void(0)">操作之前的引用, 即旧的内存位置</ a></li>
     </ul>
 </body>
 
