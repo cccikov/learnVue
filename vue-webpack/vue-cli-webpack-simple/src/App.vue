@@ -18,19 +18,23 @@
     </ul>
   </div>
 </template>
-
 <script>
 export default {
   name: 'app',
-  data () {
+  data() {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
   }
 }
-</script>
 
-<style>
+</script>
+<style lang="less">
+html{
+  div{
+    background: #f00;
+  }
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -40,7 +44,8 @@ export default {
   margin-top: 60px;
 }
 
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
 
@@ -57,4 +62,5 @@ li {
 a {
   color: #42b983;
 }
+
 </style>
