@@ -25,6 +25,9 @@ console.log(a);
 console.log(b);
 console.log(c);
 
+import $ from "jquery";
+console.log($);
+
 console.log(import("../static/test.js"));
 console.log(() => import("../static/test.js"));
 console.log(
