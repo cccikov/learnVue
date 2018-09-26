@@ -4,6 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+// 全局暴露，未必需要;
+window.$ = $;
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
