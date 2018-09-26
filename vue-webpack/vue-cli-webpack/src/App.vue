@@ -25,6 +25,7 @@ console.log(a);
 console.log(b);
 console.log(c);
 
+// 当前模块
 import $ from "jquery";
 console.log($);
 
