@@ -18,7 +18,7 @@ module.exports = {
     app: './src/main.js'
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin('common.js'),
+    // new webpack.optimize.CommonsChunkPlugin('common.js'), // 全局引用jq不需要这段
     // 全部模块都可以使用，不是全局，在window中是没有的。
     new webpack.ProvidePlugin({
       jQuery: "jquery",
