@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 介绍</title>
+    <script type="text/javascript" src="vue.js"></script>
+    <style>
+        pre {
+            font-family: "微软雅黑";
+        }
+        img{
+            width: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <pre>
+            指令
+                指令 (Directives) 是带有 v- 前缀的特殊特性。指令特性的值预期是单个 JavaScript 表达式 (v-for 是例外情况，稍后我们再讨论)。指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 DOM。
+
+
+            参数
+                一些指令能够接收一个“参数”，在指令名称之后以冒号表示。例如，v-bind 指令可以用于响应式地更新 HTML 特性：
+
+
+                v-bind:href="url" 在这里 href 是参数，告知 v-bind 指令将该元素的 href 特性与表达式 url 的值绑定。
+
+                另一个例子是 v-on 指令，v-on:click="doSomething" click 是参数， 它用于监听 DOM 事件：
+
+
+            修饰符
+                修饰符 (Modifiers) 是以半角句号 . 指明的特殊后缀，用于指出一个指令应该以特殊方式绑定。例如，.prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault()：
+
+                v-on:submit.prevent="onSubmit
+
+
+            缩写
+        </pre>
+        <p> Vue.js 为 v-bind 和 v-on 这两个最常用的指令，提供了特定简写</p>
+        <p> v-bind 的简写为 :</p>
+        <p>v-on 的简写为 @</p>
+    </div>
+
+
+    <div id="app">
+        <!-- 绑定一个属性 -->
+        <img v-bind:src="imageSrc">
+        <!-- 渲染结果: <img src="img/ccc.jpg"> -->
+
+        <!-- 缩写 -->
+        <img :src="imageSrc">
+        <!-- 渲染结果: <img src="img/ccc.jpg"> -->
+
+        <!-- 内联字符串拼接 -->
+        <img :src="'img/' + fileName">
+        <!-- 渲染结果: <img src="img/ccc.jpg"> -->
+
+        <!-- class 绑定 -->
+        <div :class="{ red: isRed }"></div>
+        <!-- 渲染结果: <div class="red"></div> -->
+        <div :class="[classA, classB]"></div>
+        <!-- 渲染结果: <div class="class-a class-b"></div> -->
+        <div :class="['classA', classA , { classB: isB, classC: isC }]"></div>
+        <!-- 渲染结果: <div class="classA class-a classB classC"></div> -->
+
+        <!-- style 绑定 -->
+        <div :style="{ fontSize: size + 'px' }"></div>
+        <!-- 渲染结果:  -->
+        <div :style="[styleObjectA, styleObjectB]"></div>
+        <!-- 渲染结果:  -->
+
+        <!-- 绑定一个有属性的对象 -->
+        <div v-bind="{ id: someProp, 'other-attr': otherProp }"></div>
+        <!-- 渲染结果:  -->
+
+        <!-- 通过 prop 修饰符绑定 DOM 属性 (其实就是这个dom对象的js属性（Properties），不是标签属性（Attributes）) 下面例子就是修改innerHTML属性-->
+        <div v-bind:inner-html.prop="text"></div>
+        <!-- 渲染结果:  -->
+
+        <!-- prop 绑定。“prop”必须在 my-component 中声明。-->
+        <!-- <my-component :prop="someThing"></my-component> -->
+    </div>
+
+
+    <script type="text/javascript">
+        new Vue({
+            el:"#app",
+            data:{
+                imageSrc:"img/ccc.jpg",
+                fileName:"ccc.jpg",
+                isRed:true,
+                classA:"class-a",
+                classB:"class-b",
+                isB:true,
+                isC:true,
+                size:30,
+                styleObjectA:{
+                    color:"red",
+                    padding:"20px 0 20px"
+                },
+                styleObjectB:{
+                    color:"blue",
+                    margin:"20px 0 20px"
+                },
+                someProp:"#wrap",
+                otherProp:"other",
+                text:"hahameme"
+            }
+        })
+    </script>
+</body>
+
+</html>
