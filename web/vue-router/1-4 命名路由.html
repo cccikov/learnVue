@@ -5,12 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>1-4 命名·路由</title>
+    <title>1-4 命名路由</title>
     <style>
     .router {
         padding: 10px;
         margin: 10px 0;
         box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+    }
+    .list>div{
+        margin: 12px 0;
+    }
+    .list p{
+        margin: 6px 12px;
     }
     </style>
 </head>
@@ -19,32 +25,37 @@
     <script src="../vue.min.js"></script>
     <script src="../vue-router.js"></script>
     <div id="app">
-        <div>
-            <p>
+        <div class="list">
+            <div>
                 <router-link to="/">/</router-link>
-            </p>
-            <p>
+            </div>
+            <div>
                 <router-link to="/user/123">/user/123</router-link>
-            </p>
+            </div>
             <!-- 使用 v-bind 的 JS 表达式 -->
-            <p>
+            <div>
                 <router-link :to="'/user/1234'">:to="'/user/1234'"</router-link>
-            </p>
-            <p>
+            </div>
+            <div>
                 <router-link :to="{path:'/user/12345'}">:to="{path:'/user/12345'}"</router-link>
-            </p>
-            <p>
+            </div>
+            <div>
                 <router-link :to="{path:'/user/123',query:{name:'ccc',age:18}}">:to="{path:'/user/123',query:{name:'ccc',age:18}}"</router-link>
-            </p>
-            <p>
+                <p>使用的是path路径来切换路由的时候，不可以传params，params只能直接写在路径上</p>
+            </div>
+            <div>
                 <router-link :to="{path:'/user',params:{id: 123},query: { plan: 'private' }}">:to="{path:'/user',params:{id: 123},query: { plan: 'private' }}"</router-link>
-            </p>
-            <p>
+            </div>
+            <div>
+                <router-link :to="{path:'user'}">:to="{path:'user'}"</router-link>
+            </div>
+            <div>
                 <router-link :to="{name:'user'}">:to="{name:'user'}"</router-link>
-            </p>
-            <p>
+                <p>使用的命名路由的时候，如果该路由需要params，就一定要传params；不传params，也可以成功跳转，但是会报警告</p>
+            </div>
+            <div>
                 <router-link :to="{name:'user',params:{id: 123}}">:to="{name:'user',params:{id: 123}}"</router-link>
-            </p>
+            </div>
         </div>
         <div class="router">
             <!-- 顶层路由匹配到的组件将渲染在这里 -->
@@ -52,21 +63,6 @@
         </div>
     </div>
     <script>
-    // 路由基本结构
-    /**
-     * route = {
-     *     path: ...,
-     *     component: ...
-     * }
-     * // 嵌套路由结构
-     * route = {
-     *     path: ...,
-     *     component: ...
-     *         children: [
-     *             route, ....
-     *         ]
-     * }
-     */
 
     //////////////////////////////////////////////////
     // 由于 vue 中 component 包含比较多东西，一般非单文件组件就用个变量存储起来 //
@@ -103,11 +99,15 @@
         </div>`
     };
 
+
     let router = new VueRouter({
         "routes": [{
             path: '/user/:id',
             component: userComponent,
-            name: "user",
+            ///////////////////////////////////////////////////////////////////////////
+            // 有时候，通过一个名称来标识一个路由显得更方便一些，特别是在链接一个路由，或者是执行一些跳转的时候。你可以在创建 Router 实例的时候， //
+            ///////////////////////////////////////////////////////////////////////////
+            name: "user", // 命名路由
             children: [{
                 path: "child",
                 component: userChildComponent,

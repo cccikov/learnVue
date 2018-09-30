@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>1-5 编程式的导航(跳转)</title>
+    <style>
+    .router {
+        padding: 10px;
+        margin: 10px 0;
+        box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+    }
+    .list>div{
+        margin: 12px 0;
+    }
+    .list p{
+        margin: 6px 12px;
+    }
+    </style>
+</head>
+
+<body>
+    <script src="../vue.min.js"></script>
+    <script src="../vue-router.js"></script>
+    <div id="app">
+        <div class="list">
+            <div>
+                <router-link to="/">/</router-link>
+            </div>
+            <!-- 声明式 <router-link :to="..."> -->
+            <!-- 编程式 router.push(...) -->
+            <div>
+                <p>
+                    <strong>声明式 &lt; router-link :to="..." &gt;</strong>
+                </p>
+                <p>
+                    <strong>编程式 router.push(...)</strong>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <router-link :to="'/user/123'">:to="'/user/123'"</router-link>
+                </p>
+                <p>
+                    <a href="javascript:void(0)" @click="router.push('/user/123')">router.push('/user/123')</a>
+                </p>
+            </div>
+
+            <div>
+                <p>
+                    <router-link :to="{path:'/user/abc'}">:to="{path:'/user/abc'}"</router-link>
+                </p>
+                <p>
+                    <a href="javascript:void(0)" @click="router.push({path:'/user/abc'})">router.push({path:'/user/abc'})</a>
+                </p>
+            </div>
+
+            <div>
+                <p>
+                    <router-link :to="{path:'/user/哈哈',query:{name:'ccc',age:18}}">:to="{path:'/user/哈哈',query:{name:'ccc',age:18}}"</router-link>
+                </p>
+                <p>
+                    <a href="javascript:void(0)" @click="router.push({path:'/user/哈哈',query:{name:'ccc',age:18}})">router.push({path:'/user/哈哈',query:{name:'ccc',age:18}})</a>
+                </p>
+            </div>
+
+            <div>
+                <p>
+                    <router-link :to="{name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}}">:to="{name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}}"</router-link>
+                </p>
+                <p>
+                    <a href="javascript:void(0)" @click="router.push({name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}})">router.push({name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}})</a>
+                </p>
+            </div>
+
+            <div>
+                <p>编程式可以添加回调函数，获取跳转情况</p>
+                <p>
+                    <a @click="router.push({ path: 'register', query: { plan: 'private' }},success,error)" href="javascript:void(0)">"router.push({ path: 'register', query: { plan: 'private' }},success,error)"</a>
+                </p>
+                <p>
+                    <a @click="router.push({ path: '/user/123/children', query: { plan: 'private' }},success,error)" href="javascript:void(0)">"router.push({ path: '/user/123/children', query: { plan: 'private' }},success,error)"</a>
+                </p>
+                <p>再methods里面使用push</p>
+                <p>
+                    <a @click="toMe" href="javascript:void(0)">"toMe"</a>
+                </p>
+            </div>
+
+        </div>
+        <div class="router">
+            <!-- 顶层路由匹配到的组件将渲染在这里 -->
+            <router-view></router-view>
+        </div>
+    </div>
+    <script>
+
+    /**
+     * router.push(location, onComplete?, onAbort?)
+     *
+     * 在 Vue 实例内部，你可以通过 $router 访问路由实例。因此你可以调用 this.$router.push
+     *
+     * 当你点击 <router-link> 时，这个方法会在内部调用，所以说，点击 <router-link :to="..."> 等同于调用 router.push(...)。
+     *
+     * 声明式 <router-link :to="...">
+     * 编程式 router.push(...)
+     */
+
+    //////////////////////////////////////////////////
+    // 由于 vue 中 component 包含比较多东西，一般非单文件组件就用个变量存储起来 //
+    //////////////////////////////////////////////////
+    let indexComponent = {
+        template: `<div>
+            <p>index {{ $route.params.any}}</p>
+        </div>`,
+        created() {
+            console.log(this.$route);
+        }
+    };
+
+    let userComponent = {
+        template: `<div>
+            <p>User {{ $route.params.id }}</p>
+            <div class="router">
+                <!-- 二级路由匹配到的组件将渲染在这里 -->
+                <router-view></router-view>
+            </div>
+        </div>`,
+        created() {
+            console.log(this.$route);
+        }
+    };
+
+    let userChildComponent = {
+        template: `<div>
+            <p>User 子路由 {{ $route.params.id }}</p>
+            <div class="router">
+                <!-- 三级路由匹配到的组件将渲染在这里 -->
+                <router-view></router-view>
+            </div>
+        </div>`
+    };
+
+
+    let router = new VueRouter({
+        "routes": [{
+            path: '/user/:id',
+            component: userComponent,
+            name: "user", // 命名路由
+            children: [{
+                path: "child",
+                component: userChildComponent,
+            }]
+        }, {
+            path: '/:any',
+            component: indexComponent,
+            name: "index",
+        }],
+        // mode:"history", // 依赖 HTML5 History API 和服务器配置，就是正常的改变url模式。
+        mode:"hash", // vue-router 默认使用模式，hash模式，使用 URL hash 值来作路由，就是路由的变化是在锚点处变化的
+
+    });
+
+    let app = new Vue({
+        "router": router,
+        methods:{
+            success(route){
+                console.log("成功跳转",route);
+            },
+            error(err){
+                console.log("跳转失败",err);
+            },
+            toMe(){
+                this.$router.push({
+                    path:"me",
+                    query:{
+                        "id":123123123,
+                        "keyword":"hehe",
+                        "cb":"callback"
+                    }
+                },this.success,this.error);
+            }
+        }
+    }).$mount('#app');
+    </script>
+</body>
+
+</html>
