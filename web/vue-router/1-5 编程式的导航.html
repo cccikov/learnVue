@@ -12,10 +12,12 @@
         margin: 10px 0;
         box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
     }
-    .list>div{
+
+    .list>div {
         margin: 12px 0;
     }
-    .list p{
+
+    .list p {
         margin: 6px 12px;
     }
     </style>
@@ -27,8 +29,20 @@
     <div id="app">
         <div class="list">
             <div>
+                <a @click="$router.go(-1)" href="javascript:void(0)">back</a>
+            </div>
+            <div>
                 <router-link to="/">/</router-link>
             </div>
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
             <!-- 声明式 <router-link :to="..."> -->
             <!-- 编程式 router.push(...) -->
             <div>
@@ -47,7 +61,6 @@
                     <a href="javascript:void(0)" @click="router.push('/user/123')">router.push('/user/123')</a>
                 </p>
             </div>
-
             <div>
                 <p>
                     <router-link :to="{path:'/user/abc'}">:to="{path:'/user/abc'}"</router-link>
@@ -56,7 +69,6 @@
                     <a href="javascript:void(0)" @click="router.push({path:'/user/abc'})">router.push({path:'/user/abc'})</a>
                 </p>
             </div>
-
             <div>
                 <p>
                     <router-link :to="{path:'/user/哈哈',query:{name:'ccc',age:18}}">:to="{path:'/user/哈哈',query:{name:'ccc',age:18}}"</router-link>
@@ -65,7 +77,6 @@
                     <a href="javascript:void(0)" @click="router.push({path:'/user/哈哈',query:{name:'ccc',age:18}})">router.push({path:'/user/哈哈',query:{name:'ccc',age:18}})</a>
                 </p>
             </div>
-
             <div>
                 <p>
                     <router-link :to="{name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}}">:to="{name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}}"</router-link>
@@ -74,7 +85,6 @@
                     <a href="javascript:void(0)" @click="router.push({name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}})">router.push({name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}})</a>
                 </p>
             </div>
-
             <div>
                 <p>编程式可以添加回调函数，获取跳转情况</p>
                 <p>
@@ -88,7 +98,93 @@
                     <a @click="toMe" href="javascript:void(0)">"toMe"</a>
                 </p>
             </div>
-
+            <hr>
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!--  -->
+            <!-- 声明式 <router-link :to="..." replace> -->
+            <!-- 编程式 router.replace(...) -->
+            <div>
+                <p>
+                    <strong>声明式 &lt; router-link :to="..." replace &gt;</strong>
+                </p>
+                <p>
+                    <strong>编程式 router.replace(...)</strong>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <router-link :to="'/user/123'" replace>:to="'/user/123'"</router-link>
+                </p>
+                <p>
+                    <a href="javascript:void(0)" @click="router.replace('/user/123')">router.replace('/user/123')</a>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <router-link :to="{path:'/user/abc'}" replace>:to="{path:'/user/abc'}"</router-link>
+                </p>
+                <p>
+                    <a href="javascript:void(0)" @click="router.replace({path:'/user/abc'})">router.replace({path:'/user/abc'})</a>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <router-link :to="{path:'/user/哈哈',query:{name:'ccc',age:18}}" replace>:to="{path:'/user/哈哈',query:{name:'ccc',age:18}}"</router-link>
+                </p>
+                <p>
+                    <a href="javascript:void(0)" @click="router.replace({path:'/user/哈哈',query:{name:'ccc',age:18}})">router.replace({path:'/user/哈哈',query:{name:'ccc',age:18}})</a>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <router-link :to="{name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}}" replace>:to="{name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}}"</router-link>
+                </p>
+                <p>
+                    <a href="javascript:void(0)" @click="router.replace({name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}})">router.replace({name:'user',params:{id:'memeda'},query:{name:'ccc',age:18}})</a>
+                </p>
+            </div>
+            <div>
+                <p>编程式可以添加回调函数，获取跳转情况</p>
+                <p>
+                    <a @click="router.replace({ path: 'register', query: { plan: 'private' }},success,error)" href="javascript:void(0)">"router.replace({ path: 'register', query: { plan: 'private' }},success,error)"</a>
+                </p>
+                <p>
+                    <a @click="router.replace({ path: '/user/123/children', query: { plan: 'private' }},success,error)" href="javascript:void(0)">"router.replace({ path: '/user/123/children', query: { plan: 'private' }},success,error)"</a>
+                </p>
+                <p>再methods里面使用push</p>
+                <p>
+                    <a @click="replaceMe" href="javascript:void(0)">"replaceMe"</a>
+                </p>
+            </div>
+        </div>
+        <hr>
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!--  -->
+        <!-- 编程式 router.go(n) -->
+        <div>
+            <p>
+                <strong>编程式 router.go(n)</strong>
+            </p>
+            <p>
+                <a @click="$router.go(-1)" href="javascript:void(0)">"$router.go(-1)"</a>
+            </p>
+            <p>
+                <a @click="$router.go(1)" href="javascript:void(0)">"$router.go(1)"</a>
+            </p>
         </div>
         <div class="router">
             <!-- 顶层路由匹配到的组件将渲染在这里 -->
@@ -96,6 +192,9 @@
         </div>
     </div>
     <script>
+    //////////////////////////////////////////////////
+    // router.push(location, onComplete?, onAbort?) //
+    //////////////////////////////////////////////////
 
     /**
      * router.push(location, onComplete?, onAbort?)
@@ -107,6 +206,38 @@
      * 声明式 <router-link :to="...">
      * 编程式 router.push(...)
      */
+
+
+
+
+    /////////////////////////////////////////////////////
+    // router.replace(location, onComplete?, onAbort?) //
+    /////////////////////////////////////////////////////
+
+    /**
+     * router.replace(location, onComplete?, onAbort?)
+     *
+     *  router.push 很像，唯一的不同就是，它不会向 history 添加新记录，而是跟它的方法名一样 —— 替换掉当前的 history 记录。
+     *
+     * 声明式 <router-link :to="..." replace>
+     * 编程式 router.replace(...)
+     */
+
+
+
+
+    //////////////////
+    // router.go(n) //
+    //////////////////
+
+    /**
+     * router.go(n)
+     *
+     * 这个方法的参数是一个整数，意思是在 history 记录中向前或者后退多少步，类似 window.history.go(n)。
+     */
+
+
+
 
     //////////////////////////////////////////////////
     // 由于 vue 中 component 包含比较多东西，一般非单文件组件就用个变量存储起来 //
@@ -143,7 +274,9 @@
         </div>`
     };
 
-
+    ////////
+    // 路由 //
+    ////////
     let router = new VueRouter({
         "routes": [{
             path: '/user/:id',
@@ -159,28 +292,44 @@
             name: "index",
         }],
         // mode:"history", // 依赖 HTML5 History API 和服务器配置，就是正常的改变url模式。
-        mode:"hash", // vue-router 默认使用模式，hash模式，使用 URL hash 值来作路由，就是路由的变化是在锚点处变化的
+        mode: "hash", // vue-router 默认使用模式，hash模式，使用 URL hash 值来作路由，就是路由的变化是在锚点处变化的
 
     });
 
+    ////////////
+    // vue 实例 //
+    ////////////
     let app = new Vue({
         "router": router,
-        methods:{
-            success(route){
-                console.log("成功跳转",route);
+        methods: {
+            success(route) {
+                console.log("成功跳转", route);
             },
-            error(err){
-                console.log("跳转失败",err);
+            error(err) {
+                console.log("跳转失败", err);
             },
-            toMe(){
+            toMe() {
                 this.$router.push({
-                    path:"me",
-                    query:{
-                        "id":123123123,
-                        "keyword":"hehe",
-                        "cb":"callback"
+                    path: "me",
+                    query: {
+                        "id": 123123123,
+                        "keyword": "hehe",
+                        "cb": "callback"
                     }
-                },this.success,this.error);
+                }, this.success, this.error);
+            },
+            replaceMe() {
+                this.$router.replace({
+                    path: "me",
+                    query: {
+                        "id": 123123123,
+                        "keyword": "hehe",
+                        "cb": "callback"
+                    }
+                }, this.success, this.error);
+            },
+            back() {
+                // this.$router.go(-1);
             }
         }
     }).$mount('#app');
