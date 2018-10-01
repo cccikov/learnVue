@@ -29,7 +29,10 @@
     <div id="app">
         <div class="list">
             <div>
-                <router-link to="/">/</router-link>
+                <router-link to="/haha">/haha</router-link>
+            </div>
+            <div>
+                <router-link to="/first">/first</router-link>
             </div>
         </div>
         <div class="router">
@@ -42,23 +45,61 @@
     //////////////////////////////////////////////////
     // 由于 vue 中 component 包含比较多东西，一般非单文件组件就用个变量存储起来 //
     //////////////////////////////////////////////////
-    let indexComponent = {
+    let index = {
         template: `<div>
             <p>index {{ $route.params.any}}</p>
         </div>`,
+        data() {
+            return {
+
+            }
+        },
         created() {
             console.log(this.$route);
         }
     };
 
+    let first_default = {
+        template: `<div>
+            <p>default view</p>
+        </div>`
+    };
+    let first_a = {
+        template: `<div>
+            <p>a view</p>
+        </div>`
+    };
+    let first_b = {
+        template: `<div>
+            <p>b view</p>
+        </div>`
+    };
+
+
+    ////////
+    // 路由 //
+    ////////
     let router = new VueRouter({
         "routes": [{
+            path: "/first",
+            components: {
+                default: index,
+                "view-a": first_a,
+                "view-b": first_b,
+            }
+        }, {
             path: '/:any',
-            component: indexComponent,
+            // component: index, //相当于下面components的写法
+            components: {
+                default: index, // 如果 router-view 没有设置名字，那么默认为 default。
+            },
             name: "index",
         }]
     });
 
+    ////////////
+    // vue 实例 //
+    ////////////
     let app = new Vue({
         "router": router
     }).$mount('#app');
