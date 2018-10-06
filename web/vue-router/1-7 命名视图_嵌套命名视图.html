@@ -36,41 +36,44 @@
     //////////////////////////////////////////////////
     // 由于 vue 中 component 包含比较多东西，一般非单文件组件就用个变量存储起来 //
     //////////////////////////////////////////////////
-    const firstNav = {
+    const indexNav = {
         template: `<div>
-            <router-link to="/settings/emails">emails</router-link>
+            <router-link to="/index/emails">邮件 emails</router-link>
             <br>
-            <router-link to="/settings/profile">profile</router-link>
+            <router-link to="/index/profile">个人信息 profile</router-link>
         </div>`
     };
 
-    const first = {
+    const index = {
         template: `<div>
-            <h2>导航视图</h2>
-            <firstNav/>
+            <h2>导航</h2>
+            <indexNav/>
             <div class="router">
                 <router-view class ="us__content"/>
                 <router-view name="helper" class="us__content us__content--helper"/>
             </div>
         </div>`,
-        components: { firstNav }
+        components: { indexNav }
     };
 
+    // 邮件订阅
     const UserEmailsSubscriptions = {
         template: `<div>
-            <h3>Email Subscriptions</h3>
+            <h3>邮件订阅 Email Subscriptions</h3>
         </div>`
     };
 
+    // 编辑个人信息
     const UserProfile = {
         template: `<div>
-            <h3>Edit your profile</h3>
+            <h3>编辑个人信息 Edit your profile</h3>
         </div>`
     };
 
+    // 显示个人信息
     const UserProfilePreview = {
         template: `<div>
-            <h3>Preview of your profile</h3>
+            <h3>显示个人信息 Preview of your profile</h3>
         </div>`
     };
 
@@ -81,23 +84,23 @@
     const router = new VueRouter({
         // mode: 'history',
         routes: [{
-            path: '/settings',
+            path: '/index',
             // You could also have named views at tho top
-            component: first,
+            component: index,
             children: [{
                 path: 'emails',
                 component: UserEmailsSubscriptions
             }, {
                 path: 'profile',
                 components: {
-                    default: UserProfile,
-                    helper: UserProfilePreview
+                    default: UserProfile, // 在默认视图显示编辑个人
+                    helper: UserProfilePreview // 在helper视图显示个人信息
                 }
             }]
         }]
     });
 
-    router.push('/settings/emails')
+    router.push('/index/emails');
 
     ////////////
     // vue 实例 //
