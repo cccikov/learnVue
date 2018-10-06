@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>1-9 别名</title>
+    <style>
+    .router>div {
+        padding: 10px;
+        margin: 10px 0;
+        box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .list>div {
+        margin: 12px 0;
+    }
+
+    .list p {
+        margin: 6px 12px;
+    }
+    </style>
+    <script src="../vue.min.js"></script>
+    <script src="../vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <router-link to="/a">/a</router-link>
+        </div>
+        <div>
+            <router-link to="/b">/b</router-link>
+        </div><div>
+            <router-link to="/haha">/haha</router-link>
+        </div>
+        <div class="router">
+            <router-view></router-view>
+        </div>
+    </div>
+    <script>
+    //////////////////////////////////////////////////
+    // 由于 vue 中 component 包含比较多东西，一般非单文件组件就用个变量存储起来 //
+    //////////////////////////////////////////////////
+    const componentA = {
+        template: `<div>
+            <p>我是内容a</p>
+        </div>`
+    };
+
+    const componentB = {
+        template: `<div>
+            <p>我是内容b</p>
+        </div>`
+    };
+
+    ////////
+    // 路由 //
+    ////////
+    const router = new VueRouter({
+        // mode: 'history',
+        routes: [{
+                path: '/a',
+                component: componentA,
+                alias: '/b' // 别名为 /b ，即系返回/a 和 /b 实际都是访问/a ，与重定向不同的是，url都可以变成/a /b，实际都是访问/a
+            },
+            {
+                path: '/b',
+                component: componentB,
+                alias: "/haha", // 别名为 /haha , 但是由于访问/b的实际是访问/a，所以访问/haha实际实际也是访问/a
+            }
+        ]
+    });
+
+    ////////////
+    // vue 实例 //
+    ////////////
+    let app = new Vue({
+        "router": router
+    }).$mount('#app');
+    </script>
+</body>
+
+</html>
