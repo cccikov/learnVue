@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>computed</title>
+    <script type="text/javascript" src="vue.min.js"></script>
+</head>
+
+<body>
+    <div id="wrap">
+        {{compute_one}}
+        <input type="text" v-model="text">
+    </div>
+    <script type="text/javascript">
+        var vm = new Vue({
+            el: "#wrap",
+            data:{
+                text:"",
+            },
+            computed: {
+                compute_one(){
+                    console.log("compute_one");
+                    this.text
+                },
+                compute_two(){
+                    console.log("compute_one");
+                    this.text
+                },
+                compute_three(){
+                    console.log("compute_three");
+                    this.text
+                    // return this.text;
+                }
+            },
+            watch:{
+                compute_three(){
+                    // 因为compute_three没有返回值，所以都是undefined，所以永远不变，所以不会触发这个watch，但是由于用了compute_three，所以还是会触发compute_three 计算属性函数。
+                    console.log("watch","compute_three");
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
