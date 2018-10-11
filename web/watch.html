@@ -4,75 +4,96 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <script type="text/javascript" src="js/vue.min.js"></script>
+    <script type="text/javascript" src="vue.min.js"></script>
 </head>
 
 <body>
     <script type="text/javascript">
-    function haha() {
-        console.log("b变化外面");
-    }
-    var vm = new Vue({
-        data: {
-            a: 1,
-            b: 2,
-            c: 3,
-            d: 4,
-            e: {
-                f: {
-                    g: 5
-                }
-            },
-            h: {
-                name: "ccc"
-            }
-        },
-        methods: {
-            haha: function() {
-                console.log("b变化");
-            }
-        },
-        watch: {
-            a: function(val, oldVal) {
-                console.log('new: %s, old: %s', val, oldVal)
-            },
-            // 方法名
-            b: haha,
-            // 深度 watcher
-            c: {
-                handler: function(val, oldVal) {
-                    console.log("c变化");
-                },
-                deep: true
-            },
-            // 该回调将会在侦听开始之后被立即调用
-            d: {
-                handler: function(val, oldVal) {
-                    console.log("d变化")
-                },
-                immediate: true
-            },
-            e: [
-                function haha(val, oldVal) {
-                    console.log("e变化")
-                },
-                function handle2(val, oldVal) {
-                    console.log("e变化2")
-                }
-            ],
-            // watch vm.e.f's value: {g: 5}
-            'e.f': function(val, oldVal) {
-                console.log("e.f变化")
-            },
-            h: {
-                handler: function() {
-                    console.log("h属性变化")
-                },
-                deep: true
-            }
+        function haha() {
+            console.log("b变化外面");
         }
-    })
-    vm.a = 2 // => new: 2, old: 1
+        var vm = new Vue({
+            data: {
+                a: 1,
+                b: 2,
+                c: 3,
+                d: 4,
+                e: {
+                    f: {
+                        g: 5
+                    }
+                },
+                h: {
+                    name: "ccc"
+                },
+                g: {
+                    name: "ccc"
+                }
+            },
+            methods: {
+                haha: function () {
+                    console.log("b变化");
+                }
+            },
+            watch: {
+                a: function (val, oldVal) {
+                    console.log('new: %s, old: %s', val, oldVal)
+                },
+                // 方法名
+                b: haha,
+                // 深度 watcher
+                c: {
+                    handler: function (val, oldVal) {
+                        console.log("c变化");
+                    },
+                    deep: true
+                },
+                // 该回调将会在侦听开始之后被立即调用
+                d: {
+                    handler: function (val, oldVal) {
+                        console.log("d变化")
+                    },
+                    immediate: true
+                },
+                e: [
+                    function haha(val, oldVal) {
+                        console.log("e变化")
+                    },
+                    function handle2(val, oldVal) {
+                        console.log("e变化2")
+                    }
+                ],
+                // watch vm.e.f's value: {g: 5}
+                'e.f': function (val, oldVal) {
+                    console.log("e.f变化")
+                },
+                // 可以监控对象内部值变化
+                h: {
+                    handler: function (val, oldval) {
+                        console.log("h属性变化", val, oldval)
+                    },
+                    deep: true
+                },
+                // 没有deep只能监控到最外层（第一级）属性的变化
+                g: {
+                    handler: function () {
+                        console.log("g属性变化")
+                    }
+                }
+            }
+        })
+        vm.a = 2 // => new: 2, old: 1
+        vm.h.name = "haha";
+        vm.g.name = "haha";
+
+        setTimeout(() => {
+            vm.h = {
+                age: 123
+            };
+            vm.g = {
+                age: 123
+            };
+        }, 16.7);
     </script>
 </body>
 
