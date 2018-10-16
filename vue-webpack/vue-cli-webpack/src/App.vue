@@ -21,9 +21,12 @@ import hi from "./components/hi";
 import { a } from "../static/test.js";
 import { b } from "../static/test2.js";
 import { c } from "../static/test3.js";
+import storage from "../static/storage.js";
 console.log(a);
 console.log(b);
 console.log(c);
+console.log(storage);
+window.storage = storage;
 
 // 当前模块
 import $ from "jquery";
