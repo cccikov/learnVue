@@ -19,14 +19,30 @@
             <p>我是a里面的p元素</p>
             <div>我是div</div>
         </a>
+        <!-- 也可以传参 -->
         <a href="javascript:void(0)" @click='fn("哈哈哈",$event)'>
             <p>我是a里面的p元素</p>
             <div>我是div</div>
         </a>
+        <!-- 传数据作为参数 -->
+        <a style="display: block" href="javascript:void(0)" @click="showId(val.id)" v-for="(val,key) in arr">id:{{val.id}}</a>
     </div>
     <script>
         new Vue({
             el: "#app",
+            data:{
+                arr:[
+                    {
+                        id:'11231423'
+                    },{
+                        id:'12312325'
+                    },{
+                        id:'12356123'
+                    },{
+                        id:'12512312'
+                    },
+                ]
+            },
             methods: {
                 listener(e) {
                     console.log(e.target);
@@ -35,6 +51,9 @@
                 fn(str, e) {
                     console.log(e.target);
                     console.log(e.currentTarget);
+                },
+                showId(id){
+                    console.log(id);
                 }
             }
         })
