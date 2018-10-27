@@ -42,12 +42,21 @@
 
     <div id="app2">
         <tpl-a v-for="item in 'abcd'" :key='item' ref='tpl_a'></tpl-a>
+        <div ref="wrap">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo, harum.</p>
+        </div>
     </div>
     <script type="text/javascript">
         var vm2 = new Vue({
             el: "#app2",
+            mounted(){
+                this.$nextTick(()=>{
+                    console.log(this.$refs.wrap);
+                })
+            }
         });
         console.log(vm2.$refs, vm2.$refs.tpl_a)
+        console.log(vm2.$refs.wrap) // $refs也可以用作一种快速获取dom的方式之一
     </script>
     <!-- $refs 只在组件渲染完成后才填充，并且它是非响应式的。它仅仅作为一个直接访问子组件的应急方案——应当避免在模板或计算属性中使用 $refs。 -->
 
