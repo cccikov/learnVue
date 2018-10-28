@@ -41,6 +41,7 @@
             },
             created: function () {
                 console.log(this, this.componentSelf, this.VueToComponent);
+                this.$set(this.VueToComponent,"componentEditData","这是组件里面修改影响外部的数据，符合js引用类型的值只是一个指针，指向同一个对象的指针，只要其中一个改变了这个对象，其他指针也会随之改变");
             }
         });
     </script>
@@ -56,6 +57,7 @@
             <p>{{vueData}}</p>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis, fuga. Nostrum nemo eos, accusamus harum
                 quo ipsum exercitationem qui sint nulla doloremque consequuntur ut a nihil itaque expedita sapiente? Molestias!</p>
+            <p>{{componentData}}</p>
         </div>
         <div>
             <h4>这里面是Vue组件的内容</h4>
