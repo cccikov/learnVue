@@ -126,9 +126,11 @@
     <!-- .sync修饰符 -->
     <!-- 从 2.3.0 起我们重新引入了 .sync 修饰符，但是这次它只是作为一个编译时的语法糖存在。它会被扩展为一个自动更新父组件属性的 v-on 侦听器。 -->
     <div id="app3">
+        <h5>app3</h5>
         <comp :foo.sync="bar"></comp>
         <!-- 相当于 -->
-        <comp :foo="bar" @update:foo="val => bar = val"></comp>
+        <comp :foo="bar" @update:foo="(val) => {bar = val}"></comp>
+        <hr>
     </div>
     <script>
         Vue.component("comp", {
@@ -225,7 +227,7 @@
     <script>
         Vue.component("custom-input", {
             template: "<input v-on:input='change' :value='value'>",
-            props: ["value"], // 如果没有这个value prop , 组件v-mobel绑定的量就不能改变组件里面input的值  就是父组件的值改变不了子组件的值
+            props: ["value"], // 如果没有这个value prop , 组件v-model绑定的量就不能改变组件里面input的值  就是父组件的值改变不了子组件的值
             methods: {
                 change: function(e) {
                     this.$emit('input', e.target.value); //触发 input 事件( 这里的input是自定义事件)
@@ -249,7 +251,7 @@
     <div id="app6">
         <checkbox-input v-model="status" value="some value"></checkbox-input>{{status}}
         <!-- 等价于 -->
-        <checkbox-input :checkedval="status2" @self-input="val => {status2 = val}"></checkbox-input>{{status2}}
+        <checkbox-input :checkedval="status2" @self-input="(val) => {status2 = val}"></checkbox-input>{{status2}}
         <!-- 渲染结果: <input type="checkbox"> 是看不到checked属性的 可能vue做了改动 , input标签的:checked是控制是否选上的 , 而不是控制是否默认选上-->
 
         <input type="checkbox" checked>
@@ -293,6 +295,110 @@
         }, 200);
     </script>
 
+
+    <!-- v-modal 在非 input 标签中 -->
+    <script type="text/javascript">
+        // 组件
+        Vue.component("edit",{
+            template:`<div>
+                <button @click="changeValue">改变值</button>
+            </div>`,
+            methods:{
+                changeValue(){
+                    let ran = Math.random();
+                    this.$emit("input",ran);
+                }
+            }
+        })
+    </script>
+    <!--  -->
+    <div id="app9">
+        <h5>app9</h5>
+        <p>父组件的值：{{age}}</p>
+        <edit v-model="age" abc="haha"></edit>
+        <hr>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el:"#app9",
+            data:{
+                age:19
+            }
+        })
+    </script>
+
+
+
+    <!-- v-modal 在非 input 标签中 -->
+    <script type="text/javascript">
+        // 组件
+        Vue.component("edit",{
+            template:`<div>
+                <p>props:value => {{syncDate}}</p>
+                <button @click="changeValue">改变值</button>
+            </div>`,
+            model: {
+                prop: "syncDate", // 指定 组件v-model 的 prop
+                event: "syncEvent" // 指定 组件v-model 监听的事件
+            },
+            props:["syncDate"],
+            methods:{
+                changeValue(){
+                    let ran = Math.random();
+                    this.$emit("syncEvent",ran); // ***，关键，父组件变量的值（age）为触发的事件附加的参数
+                }
+            }
+        })
+    </script>
+    <!--  -->
+    <div id="app10">
+        <h5>app10</h5>
+        <p>父组件的值：{{age}}</p>
+        <edit v-model="age" abc="haha"></edit>
+        <hr>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el:"#app10",
+            data:{
+                age:19
+            }
+        })
+    </script>
+
+
+    <!-- v-modal 在非 input 标签中，自定义v-model 的 prop 和 event -->
+    <script type="text/javascript">
+        // 组件
+        Vue.component("edit",{
+            template:`<div>
+                <p>props:value => {{value}}</p>
+                <button @click="changeValue">改变值</button>
+            </div>`,
+            props:["value"], // 不定义props也是可以使用v-model的，但是组件内部就访问不到这个值而已
+            methods:{
+                changeValue(){
+                    let ran = Math.random();
+                    this.$emit("input",ran); // ***，关键，父组件变量的值（age）为触发的事件附加的参数
+                }
+            }
+        })
+    </script>
+    <!--  -->
+    <div id="app11">
+        <h5>app11</h5>
+        <p>父组件的值：{{age}}</p>
+        <edit v-model="age" abc="haha"></edit>
+        <hr>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el:"#app11",
+            data:{
+                age:19
+            }
+        })
+    </script>
 
 
 
