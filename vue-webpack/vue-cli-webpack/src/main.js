@@ -24,3 +24,8 @@ new Vue({
     // components: { App },// 相当于 {"App":App}
     // template: '<App/>'
 })
+
+// 发布，订阅模式
+Vue.prototype.bus = new Vue();
+// this.bus.$emit("change",data); // 发布
+// this.bus.$on("change",fn)

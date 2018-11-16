@@ -1,24 +1,43 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld.vue' // @代表 /src路径
+// import HelloWorld from '@/components/HelloWorld.vue' // @代表 /src路径
 // import HelloWorld from '../components/HelloWorld.vue'
 
 Vue.use(Router)
 
 export default new Router({
-    routes: [{
-        path: '/',
-        name: 'HelloWorld',
+  routes: [{
+      path: "/",
+      name: "index",
+      component: resolve => require(['@/components/index.vue'], resolve)
+    }, {
+      path: "/",
+      name: "test",
+      component: resolve => require(['@/components/test.vue'], resolve)
+    }, {
+      path: '/HelloWorld',
+      name: 'HelloWorld',
 
-        // component: HelloWorld,
+      // component: HelloWorld,
 
-        // component: () => import ('@/components/HelloWorld.vue') // 官方懒加载写法
+      // component: () => import ('@/components/HelloWorld.vue') // 官方懒加载写法
 
-        // components: {
-        //     default: () =>
-        //         import ('@/components/HelloWorld.vue')
-        // }
+      // components: {
+      //     default: () =>
+      //         import ('@/components/HelloWorld.vue')
+      // }
 
-        component: resolve => require(['@/components/HelloWorld.vue'], resolve) // 懒加载 应该是和webpack require.ensure()有关
-    }]
+      component: resolve => require(['@/components/HelloWorld.vue'], resolve) // 懒加载 应该是和webpack require.ensure()有关
+    },
+
+    {
+      path: "/publish",
+      name: "publish",
+      component: resolve => require(['@/components/observer/publish.vue'], resolve)
+    }, {
+      path: "/subscribe",
+      name: "subscribe",
+      component: resolve => require(['@/components/observer/subscribe.vue'], resolve)
+    }
+  ]
 })
