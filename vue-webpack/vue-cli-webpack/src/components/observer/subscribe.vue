@@ -10,30 +10,39 @@
 
 <script>
     export default {
+        data() {
+            return {
+                num: 0
+            };
+        },
         created() {
+            let _this = this;
             // 每次进来都会订阅一次
             this.bus.$on("login", function() {
-                console.log("login 操作1");
+                _this.num++;
+                console.log("login 操作1 " + _this.num);
             });
             // 每次进来都会订阅一次
             this.bus.$once("login", function() {
-                console.log("login 只是触发一次的操作");
+                _this.num++;
+                console.log("login 只是触发一次的操作 " + _this.num);
             });
             // 每次进来都会订阅一次(由于每次进来的this都和之前的this不一样了)
             this.bus.$on("login", this.loginHandle);
 
-
             // 每次进来只会订阅一次
-            console.log(this.$root.loginHandle);
-            let loginHandle = this.$root.loginHandle || (this.$root.loginHandle = function(){
-                console.log("全局定义的")
-            })
+            console.log(!!this.$root.loginHandle);
+            let loginHandle =
+                this.$root.loginHandle ||
+                (this.$root.loginHandle = function() {
+                    console.log("全局定义的");
+                });
             this.bus.$on("login", loginHandle);
-
         },
         methods: {
             loginHandle(data) {
-                console.log("login 操作2 可独立删除 " + data);
+                this.num++;
+                console.log("login 操作2 可独立删除 " + data + " " + this.num);
             },
             delLoginHandle() {
                 this.bus.$off("login", this.loginHandle);
