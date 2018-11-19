@@ -19,7 +19,7 @@
                 message: "hello world"
             },
             created: function() {
-                // this 指向 vm 实例
+                // this 指向 Vue实例（vm）
                 // 生命周期钩子的 this 上下文指向调用它的 Vue 实例。
                 // 实例创建的时候会触发 , 可以在这里写一个获取数据的代码
                 console.log("创建vue实例", vm);
@@ -31,9 +31,9 @@
                 // this 指向 vm 实例
                 // 生命周期钩子的 this 上下文指向调用它的 Vue 实例。
                 var _this = this;
-                console.log("el 被新创建的 vm.$el 替换，并挂载到实例上", vm);
-                Vue.nextTick(function() {
-                    console.log("保证钩子函数中的 this.$el 在 document 中", "这是vm才可正式访问", vm);
+                console.log("el 被新创建的 vm.$el(元素) 替换，并挂载到实例上", vm);
+                this.$nextTick(function() { // 等价于 Vue.nextTick
+                    console.log("保证钩子函数中的 this.$el(元素) 在 document 中", "这时vm才可正式访问", vm);
                     console.log(_this === vm);
                 });
             },
