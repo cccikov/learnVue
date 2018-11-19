@@ -18,18 +18,31 @@
 <body>
     <!-- 数据绑定最常见的形式就是使用“Mustache”语法 (双大括号) 的文本插值，可以通过修改 delimiters 属性去使用别的符号来进行文本插值 -->
 
-    <!-- 双大括号 {{}} 里面实际填写的javascript语句，可以是变量，函数，运行函数，基本数据类型 -->
+    <!-- 双大括号 {{}} 里面实际填写的javascript语句，可以是变量，函数，运行函数，基本数据类型 ；可以访问的变量是当前Vue实例或当前Vue组件实例的属性（datamethod，computed），方法（methods），或者v-for定义的变量-->
 
     <!-- 双大括号{{}}会将数据解释为普通文本，而非 HTML 代码。为了输出真正的 HTML ，你需要使用 v-html 指令： -->
     <div id="app1">
         <p>{{message}}</p>
         <p v-html='message'></p>
+        <p>{{fn() + " world"}}</p>
+        <p>{{fn()}}</p>
+        <p>{{fn1('arg')}}</p>
+        <p>{{fn1(test)}}</p>
     </div>
     <script>
         new Vue({
             el: "#app1",
             data: {
-                message: '<span>hi</span>'
+                message: '<span>hi</span>',
+                test:"测试"
+            },
+            methods:{
+                fn(){
+                    return "haha"
+                },
+                fn1(arg){
+                    return arg
+                },
             }
         });
     </script>

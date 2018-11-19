@@ -31,6 +31,9 @@
                 另一个例子是 v-on 指令，v-on:click="doSomething" click 是参数， 它用于监听 DOM 事件：
 
 
+            值
+                其实指令的值就是js语句，同样可以是变量、函数（双引号括住的内容就是js语句,但是不要在末尾加;分号）;可以访问的变量是当前Vue实例或当前Vue组件实例的属性（datamethod，computed），方法（methods），或者v-for定义的变量
+
             修饰符
                 修饰符 (Modifiers) 是以半角句号 . 指明的特殊后缀，用于指出一个指令应该以特殊方式绑定。例如，.prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault()：
 
@@ -82,6 +85,17 @@
 
         <!-- prop 绑定。“prop”必须在 my-component 中声明。-->
         <!-- <my-component :prop="someThing"></my-component> -->
+
+        <div :data-class="fn()" :class="fn()" :data-class2="addClass(otherProp)+'lorem'"></div>
+        <!-- 渲染为<div data-class="abc test" data-class2="testotherlorem" class="abc test"></div> -->
+
+        <div v-for="(val,index) in [1,2,3,4]" :data-class2="addClass(index)"></div>
+        <!-- 渲染为
+            <div data-class2="test0"></div>
+            <div data-class2="test1"></div>
+            <div data-class2="test2 active"></div>
+            <div data-class2="test3"></div>
+         -->
     </div>
 
 
@@ -108,6 +122,23 @@
                 someProp:"#wrap",
                 otherProp:"other",
                 text:"hahameme"
+            },
+            methods:{
+                fn(){
+                    return "abc test"
+                },
+                addClass(index){
+                    let active = "";
+                    if(index == 2){
+                        active = "active"
+                    }
+                    return "test"+index+" "+active
+                }
+            },
+            computed:{
+                computer1(){
+                    return this.someProp + this.text
+                }
             }
         })
     </script>
