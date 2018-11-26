@@ -1,6 +1,6 @@
 <template>
   <!-- template标签相当于 render函数或者template属性 -->
-  <div id="app">
+  <div>
     {{name}}
     <template v-if="name">
       <p>haha</p>

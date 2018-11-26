@@ -46,6 +46,11 @@ export default new Router({
             path: "/lifecycle",
             name: "lifecycle",
             component: resolve => require(['@/components/lifecycle.vue'], resolve)
+        },{
+            path: "/vue-loader",
+            name: "vue-loader",
+            component: resolve => require(['@/components/vue-loader/parent.vue'], resolve)
+
         }
     ]
 })
