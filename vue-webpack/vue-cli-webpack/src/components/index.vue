@@ -12,11 +12,14 @@
         <p>
             <router-link to="/vue-loader"> /vue-loader 研究 </router-link>
         </p>
+        <p>
+            <router-link to="/componentInit"> /组件再次初始化 研究 </router-link>
+        </p>
     </div>
 </template>
 <script>
     export default {
-        name: "index"
+        name: "index",
     };
 </script>
 <style scoped lang='less'>
