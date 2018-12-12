@@ -13,13 +13,19 @@ export default {
     data() {
         return {
             num: 123,
-            arr: []
+            arr: [],
         };
     },
     methods: {
+        init() {
+            ///////////////
+            // 页面初始化 执行一些 ajax //
+            ///////////////
+            console.log("ajax 获取数据 并执行一些初始化操作")
+        },
         eventHandle(e) {
             console.log(e.target);
-        }
+        },
     },
     beforeCreate() {
         console.clear();
@@ -28,6 +34,8 @@ export default {
     created() {
         console.log("实例创建了", this);
         console.log("一般在这个钩子函数进行init的操作，比如请求数据");
+        this.init(); // 初始化
+
         setTimeout(() => {
             this.arr = [1, 2, 3, 4, 5, 6];
         }, 300);
