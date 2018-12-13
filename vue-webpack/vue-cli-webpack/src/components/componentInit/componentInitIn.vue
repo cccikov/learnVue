@@ -13,7 +13,7 @@
             }
         },
         created(){
-            console.log("组件初始化");
+            console.log("组件初始化\n\n");
         },
     };
 </script>
