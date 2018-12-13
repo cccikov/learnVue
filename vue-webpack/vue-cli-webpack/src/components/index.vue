@@ -15,6 +15,9 @@
         <p>
             <router-link to="/componentInit"> /组件再次初始化 研究 </router-link>
         </p>
+        <p>
+            <router-link to="/nextTick"> /nextTick 研究 </router-link>
+        </p>
     </div>
 </template>
 <script>

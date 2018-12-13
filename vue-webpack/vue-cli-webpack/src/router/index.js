@@ -51,10 +51,13 @@ export default new Router({
             name: "vue-loader",
             component: resolve => require(['@/components/vue-loader/parent.vue'], resolve)
         },{
-
             path: "/componentInit",
             name: "componentInit",
             component: resolve => require(['@/components/componentInit/componentInit.vue'], resolve)
+        },{
+            path: "/nextTick",
+            name: "nextTick",
+            component: resolve => require(['@/components/nextTick.vue'], resolve)
         }
     ]
 })
