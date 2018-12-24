@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>State</title>
+    <style>
+        [id*=app] {
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+    <script src="../vue.js"></script>
+    <script src="../vuex.js"></script>
+</head>
+
+<body>
+    使用全局 script 标签引用 Vuex 时，不需要Vue.use(Vuex)
+    <div id="app"></div>
+    <script>
+        {
+
+            /* vuex 仓库 */
+            const store = new Vuex.Store({
+                state: {
+                    count: 0
+                },
+                mutations: {
+                    increment(state) {
+                        state.count++
+                    }
+                }
+            })
+
+
+            /* vue 组件 */
+            const Counter = {
+                template: `<div>{{ count }}</div>`,
+                computed: {
+                    count() {
+                        console.log(this.$store == store); // 在vue实例 或者 组件里面可以通过 this.$store去访问 Vuex仓库
+                        // 通过在根实例中注册 store 选项，该 store 实例会注入到根组件下的所有子组件中，且子组件能通过 this.$store 访问到。
+                        // return store.state.count
+                        return this.$store.state.count
+                    }
+                }
+            }
+
+
+
+            /* vue实例 */
+            const vm = new Vue({
+                el: '#app',
+                // 把 store 对象提供给 “store” 选项，这可以把 store 的实例注入所有的子组件
+                store,
+                components: {
+                    Counter
+                },
+                template: `
+                <div id="app">
+                    <counter></counter>
+                </div>
+            `
+            });
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="app2">
+        <p>计算属性 count：{{count}}</p>
+        <p>非计算属性 $store.state.count：{{$store.state.count}}</p>
+        <p>其实不用计算属性也可以读出这个仓库的值，因为任何用可以通过vue实例读取(vm.
+            this.)的值，都可以显示在模板中；只是用了计算属性会规范点，因为模板读取值一般都是当前vue实例或者组件实例本身的值，通过计算属性就可以将$store,$router,$route这种全局的值转化为当前vue实例或者组件实例本身的值</p>
+    </div>
+    <script>
+        {
+            /* vuex 仓库 */
+            const store = new Vuex.Store({
+                state: {
+                    count: 0
+                },
+                mutations: {
+                    increment(state) {
+                        state.count++
+                    }
+                }
+            });
+
+
+
+
+            /* vue 实例 */
+            const vm = new Vue({
+                el: "#app2",
+                store,
+                computed: {
+                    count() {
+                        return this.$store.state.count;
+                    }
+                },
+            });
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 问题来了，这个组件（实例）需要用到好多 vuex state，那不是要写好多个计算属性；vuex为我们提供了 mapState 辅助函数帮助我们生成计算属性 -->
+    <div id="app3">
+        <p></p>
+        <p>count：{{count}}</p>
+        <p>name：{{name}}</p>
+        <p>age：{{age}}</p>
+        <p>cartNum：{{cartNum}}</p>
+        <p>userId：{{userId}}</p>
+    </div>
+    <script>
+        {
+            /* vuex 仓库 */
+            const store = new Vuex.Store({
+                state: {
+                    count: 0,
+                    name: "ccc",
+                    age: 18,
+                    cartNum: 0,
+                    userId: "123"
+                },
+                mutations: {
+                    increment(state) {
+                        state.count++
+                    }
+                }
+            });
+
+
+
+
+            /* vue 实例 */
+            const vm = new Vue({
+                el: "#app3",
+                store,
+
+                /* 问题来了，这个组件（实例）需要用到好多 vuex state，那不是要写好多个计算属性；vuex为我们提供了 mapState 辅助函数帮助我们生成计算属性 */
+                computed: Vuex.mapState({
+                    count: state => state.count, // 箭头函数，因为原本计算属性里面不可以用箭头函数，否则会this不是指向vue实例
+                    name: 'name', // 'name' 等同于 `state => state.name`。
+                    age: 'age', // 不能直接使用es6对象简写模式{name,age,cartNum}因为值是一个字符串，不是一个变量，除非这个变量定义了
+                    cartNum: 'cartNum',
+                    userId(state) { // 有计算时使用常规函数
+                        return state.userId + this.name
+                    }
+                }),
+                // 等价于 ==>
+                /* computed: {
+                    count() {
+                        return this.$store.state.count;
+                    },
+                    name() {
+                        return this.$store.state.name;
+                    },
+                    age() {
+                        return this.$store.state.age;
+                    },
+                    cartNum() {
+                        return this.$store.state.cartNum;
+                    },
+                    userId() {
+                        return this.$store.state.userId;
+                    },
+                }, */
+            });
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 当映射的计算属性的名称与 state 的子节点名称相同时，我们也可以给 mapState 传一个字符串数组 -->
+    <div id="app4">
+        <p></p>
+        <p>count：{{count}}</p>
+        <p>name：{{name}}</p>
+        <p>age：{{age}}</p>
+        <p>cartNum：{{cartNum}}</p>
+        <p>userId：{{userId}}</p>
+    </div>
+    <script>
+        {
+            /* vuex 仓库 */
+            const store = new Vuex.Store({
+                state: {
+                    count: 0,
+                    name: "ccc",
+                    age: 18,
+                    cartNum: 0,
+                    userId: "123"
+                },
+                mutations: {
+                    increment(state) {
+                        state.count++
+                    }
+                }
+            });
+
+
+
+
+            /* vue 实例 */
+            const vm = new Vue({
+                el: "#app4",
+                store,
+
+                /* 当映射的计算属性的名称与 state 的子节点名称相同时，我们也可以给 mapState 传一个字符串数组 */
+                computed: Vuex.mapState(["count", "age", "name", "cartNum", "userId"]),
+
+            });
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 如果计算属性里面除了 vuex里面state ， 我们可以通过扩展运算符对mapState进行处理 -->
+    <div id="app5">
+        <p></p>
+        <p>count：{{count}}</p>
+        <p>name：{{name}}</p>
+        <p>age：{{age}}</p>
+        <p>cartNum：{{cartNum}}</p>
+        <p>userId：{{userId}}</p>
+    </div>
+    <script>
+        {
+            /* vuex 仓库 */
+            const store = new Vuex.Store({
+                state: {
+                    count: 0,
+                    name: "ccc",
+                    age: 18,
+                    cartNum: 0,
+                    userId: "123"
+                },
+                mutations: {
+                    increment(state) {
+                        state.count++
+                    }
+                }
+            });
+
+
+
+
+            /* vue 实例 */
+            const vm = new Vue({
+                el: "#app5",
+                store,
+
+                /* 当映射的计算属性的名称与 state 的子节点名称相同时，我们也可以给 mapState 传一个字符串数组 */
+                computed: {
+                    some(){
+                        return 1
+                    },
+                    ...Vuex.mapState(["count", "age", "name", "cartNum", "userId"])
+                },
+            });
+        }
+    </script>
+
+
+
+
+</body>
+
+</html>
