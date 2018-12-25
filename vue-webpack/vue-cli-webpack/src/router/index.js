@@ -3,7 +3,7 @@ import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld.vue' // @代表 /src路径
 // import HelloWorld from '../components/HelloWorld.vue'
 
-Vue.use(Router)
+Vue.use(Router); // vue 安装 vue-router
 
 export default new Router({
     routes: [{
