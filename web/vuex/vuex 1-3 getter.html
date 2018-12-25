@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>getter</title>
+    <style>
+        [id*=app] {
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+    <script src="../vue.js"></script>
+    <script src="../vuex.js"></script>
+</head>
+
+<body>
+    <div id="app1">
+        <p>count：{{count}}</p>
+        <p>name：{{name}}</p>
+        <p>age：{{age}}</p>
+        <p>cartNum：{{cartNum}}</p>
+        <p>userId：{{userId}}</p>
+        <p>identity：{{identity}}</p>
+        <p>niceGirl：{{niceGirl}}</p>
+    </div>
+    <script>
+        {
+            /* vuex 仓库 */
+            const store = new Vuex.Store({
+                state: {
+                    count: 0,
+                    name: "ccc",
+                    age: 18,
+                    cartNum: 0,
+                    userId: "293472834",
+                    girls: [{
+                            name: "lili",
+                            age: 17,
+                            cup: "B"
+                        }, {
+                            name: "cici",
+                            age: 28,
+                            cup: "C"
+                        }, {
+                            name: "cc",
+                            age: 26,
+                            cup: "C"
+                        }, {
+                            name: "gini",
+                            age: 26,
+                            cup: "A"
+                        }, {
+                            name: "BIG MOM",
+                            age: 80,
+                            cup: "G"
+                        }
+
+                    ]
+                },
+                mutations: {
+                    increment(state) {
+                        state.count++
+                    }
+                }
+            });
+
+
+            /* vue 实例 */
+            const vm = new Vue({
+                el: "#app1",
+                store,
+                computed: {
+                    some() {
+                        return 1;
+                    },
+                    // 有些时候我们除了直接获取store之外，还需要对数据做一下处理
+                    identity() {
+                        return [this.$store.state.userId, this.$store.state.name, this.$store.state.age].join("-");
+                    },
+                    niceGirl() {
+                        let list = this.$store.state.girls.filter(val => {
+                            return val.age >= 18 && val.age <= 28 && val.cup != "A" && val.cup != "B";
+                        });
+                        return list.map(val => {
+                            return val.name
+                        });
+                    },
+                    ...Vuex.mapState(["count", "age", "name", "cartNum", "userId"])
+                },
+            });
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 我们也可以在store 中定义“getter”（可以认为是 store 的计算属性） -->
+    <!-- 就像计算属性一样，getter 的返回值会根据它的依赖被缓存起来，且只有当它的依赖值发生了改变才会被重新计算。 -->
+    <div id="app2">
+        <p>count：{{count}}</p>
+        <p>name：{{name}}</p>
+        <p>age：{{age}}</p>
+        <p>cartNum：{{cartNum}}</p>
+        <p>userId：{{userId}}</p>
+        <p>identity：{{identity}}</p>
+        <p>niceGirl：{{niceGirl}}</p>
+    </div>
+    <script>
+        {
+            /* vuex 仓库 */
+            const store = new Vuex.Store({
+                state: {
+                    count: 0,
+                    name: "ccc",
+                    age: 18,
+                    cartNum: 0,
+                    userId: "293472834",
+                    girls: [{
+                            name: "lili",
+                            age: 17,
+                            cup: "B"
+                        }, {
+                            name: "cici",
+                            age: 28,
+                            cup: "C"
+                        }, {
+                            name: "cc",
+                            age: 26,
+                            cup: "C"
+                        }, {
+                            name: "gini",
+                            age: 26,
+                            cup: "A"
+                        }, {
+                            name: "BIG MOM",
+                            age: 80,
+                            cup: "G"
+                        }
+
+                    ]
+                },
+                getters:{
+                    // 有些时候我们除了直接获取store之外，还需要对数据做一下处理
+                    identity(state) {
+                        return [state.userId, state.name, state.age].join("-");
+                    },
+                    niceGirl(state) {
+                        let list = state.girls.filter(val => {
+                            return val.age >= 18 && val.age <= 28 && val.cup != "A" && val.cup != "B";
+                        });
+                        return list.map(val => {
+                            return val.name
+                        });
+                    },
+                },
+                mutations: {
+                    increment(state) {
+                        state.count++
+                    }
+                }
+            });
+
+
+            /* vue 实例 */
+            const vm = new Vue({
+                el: "#app2",
+                store,
+                computed: {
+                    some() {
+                        return 1;
+                    },
+                    ...Vuex.mapState(["count", "age", "name", "cartNum", "userId"]),
+                    identity(){
+                        return this.$store.getters.identity;
+                    },
+                    ...Vuex.mapGetters(["niceGirl"])
+                },
+            });
+        }
+    </script>
+
+
+</body>
+
+</html>
