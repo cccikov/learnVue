@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Action</title>
+    <style>
+        [id*=app] {
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+    <script src="../vue.js"></script>
+    <script src="../vuex.js"></script>
+</head>
+
+<body>
+    <script>
+        {
+            const store = new Vuex.Store({
+                state: {
+                    count: 0
+                },
+                mutations: {
+                    increment(state) {
+                        state.count++;
+                    },
+                    incrementTo(state, val) {
+                        state.count = val.count;
+                    }
+                },
+
+                ////////////////////////////////////////
+                // Action 提交的是 mutation，而不是直接变更状态。//
+                // Action 可以包含任意异步操作。                //
+                ///////////////////////////////////////
+                actions: {
+                    increment(context) {
+                        // Action 函数接受一个与 store 实例具有相同方法和属性的 context 对象，但是不是同一个对象
+                        context.commit('increment');
+                    },
+                    incrementTo({ commit }, val) {
+                        return new Promise(function(resolve){
+                            setTimeout(() => {
+                                commit('incrementTo', val);
+                                resolve();
+                            }, 100);
+                        })
+                    },
+                    add({ commit }) {
+                        // 可以利用 ES6 的 参数解构 来简化代码
+                        commit('increment');
+                    }
+                }
+            });
+
+            // Action 通过 store.dispatch 方法触发
+            store.dispatch('increment');
+            console.log("第一次分发(dispatch)", store.state.count);
+
+
+            // 以载荷形式分发
+            store.dispatch('incrementTo', {
+                count: 200
+            }).then(()=>{
+                console.log("第二次分发(dispatch)", store.state.count);
+            });
+
+
+            // 以对象形式分发
+            store.dispatch({
+                type: 'incrementTo',
+                count: 2000
+            }).then(()=>{
+                console.log("第三次分发(dispatch)", store.state.count);
+            });
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="app">
+        <p>{{count}}</p>
+        <button @click="incrementBy(10)">incrementBy(10)</button>
+        <button @click="incrementAction">increment</button>
+        <button @click="incrementToAction({count:200})">incrementTo({count:200})</button>
+        <button @click="add">add</button>
+    </div>
+    <script>
+        {
+            const store = new Vuex.Store({
+                state: {
+                    count: 0
+                },
+                mutations: {
+                    increment(state) {
+                        state.count++;
+                    },
+                    incrementTo(state, {count}) {
+                        state.count = count;
+                    }
+                },
+                actions: {
+                    incrementAction(context) {
+                        context.commit('increment');
+                    },
+                    incrementToAction({ commit }, val) {
+                        setTimeout(() => {
+                            commit('incrementTo', val);
+                        }, 100);
+                    }
+                }
+            });
+
+
+
+            new Vue({
+                el:"#app",
+                store,
+                computed: {
+                    ...Vuex.mapState(["count"])
+                },
+                methods:{
+                    incrementBy(val){
+                        this.$store.dispatch("incrementToAction",{count:val})
+                    },
+                    ...Vuex.mapActions([
+                        "incrementAction", // 将 `this.increment()` 映射为 `this.$store.dispatch('increment')`
+                        "incrementToAction" // 将 `this.incrementTo(val)` 映射为 `this.$store.dispatch('incrementTo',val)`
+                    ]),
+                    ...Vuex.mapActions({
+                        add:"incrementAction"
+                    })
+                }
+            });
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="app1">
+        <p>{{count}}</p>
+        <p>{{num}}</p>
+
+        <button @click="actionA">actionA</button>
+        <button @click="actionB({count:100})">actionB({count:100})</button>
+        <button @click="actionB_async({count:321})">actionB_async({count:321})</button>
+    </div>
+    <script>
+        {
+            const store = new Vuex.Store({
+                state: {
+                    count: 0,
+                    num:0
+                },
+                //////////////////////////
+                // mutations 可以改变多个 state //
+                //////////////////////////
+                mutations: {
+                    increment(state) {
+                        state.count++;
+                        state.num++;
+                    },
+                    incrementTo(state, {count}) {
+                        state.count = count;
+                        state.num += count;
+                    }
+                },
+                //////////////////////////
+                // actions 可以分发多个 mutations //
+                //////////////////////////
+                actions: {
+                    actionA({ commit }) {
+                        return new Promise(function(resolve){
+                            setTimeout(() => {
+                                commit('increment');
+                                resolve();
+                            }, 1000);
+                        });
+                    },
+                    actionB({ commit,dispatch }, val){
+                        return dispatch("actionA").then(()=>{
+                            commit("incrementTo",val)
+                        });
+                    },
+                    async  actionB_async ({ commit,dispatch }, val){ // 改写为 async / await
+                        await dispatch("actionA");
+                        commit("incrementTo",val);
+                    },
+
+                }
+            });
+
+
+
+            new Vue({
+                el:"#app1",
+                store,
+                computed: {
+                    ...Vuex.mapState(["count","num"])
+                },
+                methods:{
+                    ...Vuex.mapActions([
+                        "actionA",
+                        "actionB",
+                        "actionB_async"
+                    ]),
+
+                }
+            });
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
