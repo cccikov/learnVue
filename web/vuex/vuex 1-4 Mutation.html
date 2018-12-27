@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mutation</title>
+    <style>
+        [id*=app] {
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+    <script src="../vue.js"></script>
+    <script src="../vuex.js"></script>
+</head>
+
+<body>
+    <script>
+        {
+            /* vuex 仓库 */
+            const store = new Vuex.Store({
+                state: {
+                    count: 0,
+                },
+                mutations: {
+                    // 变更状态
+                    // 每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。
+                    increment(state) {
+                        state.count++
+                    },
+                    incrementTo(state, val) { // val为载荷
+                        state.count = val
+                    },
+                    incrementPayload(state, payload) { // 由于当使用对象风格的提交方式，整个对象都作为载荷传给 mutation 函数；荷应该是一个对象，并且这样可以包含多个字段
+                        state.count = payload.count
+                    }
+                }
+            });
+
+            /////////////////////////////////////////////////////
+            // 改变 store 中的状态的唯一途径就是显式地提交 (commit) mutation //
+            /////////////////////////////////////////////////////
+            store.commit("increment");
+            console.log("第一次commit increment", store.state.count);
+
+
+            // 你可以向 store.commit 传入额外的参数，即 mutation 的 载荷（payload）：
+            store.commit("incrementTo", 100);
+            console.log("第二次commit incrementTo", store.state.count);
+
+
+            // 对象风格的提交方式 提交 mutation 的另一种方式是直接使用包含 type 属性的对象
+            // 当使用对象风格的提交方式，整个对象都作为载荷传给 mutation 函数
+            store.commit({
+                type: 'incrementTo',
+                count: 10
+            });
+            console.log("第三次commit incrementTo", store.state.count);
+
+
+            store.commit({
+                type: 'incrementPayload',
+                count: 10
+            });
+            console.log("第四次commit incrementPayload", store.state.count);
+
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        //！！！ Mutation 必须是同步函数，因为 vue devtools 调试工具，都需要捕捉到前一状态和后一状态的快照。//
+        ////////////////////////////////////////////////////////////////////////////////////
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="app">
+        <p>{{count}}</p>
+        <button @click="incrementTo(10)">incrementTo(10)</button>
+        <button @click="increment">increment</button>
+        <button @click="incrementPayload({count:100})">incrementPayload({count:100})</button>
+        <button @click="add">add</button>
+    </div>
+    <script>
+        {
+            /* vuex 仓库 */
+            const store = new Vuex.Store({
+                state: {
+                    count: 0,
+                },
+                mutations: {
+                    // 变更状态
+                    // 每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。
+                    increment(state) {
+                        state.count++
+                    },
+                    incrementTo(state, val) { // val为载荷
+                        state.count = val
+                    },
+                    incrementPayload(state, payload) { // 由于当使用对象风格的提交方式，整个对象都作为载荷传给 mutation 函数；荷应该是一个对象，并且这样可以包含多个字段
+                        state.count = payload.count
+                    }
+                }
+            });
+
+
+
+            /* vue实例 */
+            new Vue({
+                el:"#app",
+                store:store,
+                computed: {
+                    ...Vuex.mapState(["count"])
+                },
+                methods:{
+                    incrementTo(val){ // 提交 (commit) mutation 写在vue methods里面
+                        this.$store.commit("incrementTo",val);
+                    },
+                    ...Vuex.mapMutations([
+                        "increment", // 将 `this.increment()` 映射为 `this.$store.commit('increment')
+                        "incrementPayload" // 将 `this.incrementPayload(payload)` 映射为 `this.$store.commit('incrementPayload',payload)
+                    ]),
+                    ...Vuex.mapMutations({
+                        "add":"increment" // 将 `this.add()` 映射为 `this.$store.commit('increment')`
+                    })
+                }
+            });
+        }
+    </script>
+
+
+
+</body>
+
+</html>
