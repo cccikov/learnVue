@@ -155,6 +155,7 @@
         <p>userId：{{userId}}</p>
         <p>identity：{{identity}}</p>
         <p>niceGirl：{{niceGirl}}</p>
+        <p>查找gini:{{findGirl("gini")}}</p>
     </div>
     <script>
         {
@@ -187,7 +188,6 @@
                             age: 80,
                             cup: "G"
                         }
-
                     ]
                 },
                 getters:{
@@ -203,6 +203,7 @@
                             return val.name
                         });
                     },
+                    findGirl:(state) => (name) => state.girls.find(girl => girl.name == name) // 也可以通过让 getter 返回一个函数，来实现给 getter 传参。在你对 store 里的数组进行查询时非常有用。
                 },
                 mutations: {
                     increment(state) {
@@ -226,6 +227,11 @@
                     },
                     ...Vuex.mapGetters(["niceGirl"])
                 },
+                methods:{
+                    findGirl(name){
+                        return this.$store.getters.findGirl(name)
+                    }
+                }
             });
         }
     </script>
