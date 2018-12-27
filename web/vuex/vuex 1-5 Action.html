@@ -208,6 +208,8 @@
                 mutations: {
                     increment(state) {
                         state.count++;
+                    },
+                    incrementNum(state) {
                         state.num++;
                     },
                     incrementTo(state, {count}) {
@@ -223,6 +225,7 @@
                         return new Promise(function(resolve){
                             setTimeout(() => {
                                 commit('increment');
+                                commit('incrementNum');
                                 resolve();
                             }, 1000);
                         });
