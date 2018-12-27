@@ -235,7 +235,7 @@
                             commit("incrementTo",val)
                         });
                     },
-                    async  actionB_async ({ commit,dispatch }, val){ // 改写为 async / await
+                    async actionB_async ({ commit,dispatch }, val){ // 改写为 async / await
                         await dispatch("actionA");
                         commit("incrementTo",val);
                     },
@@ -261,6 +261,10 @@
                 }
             });
         }
+
+        ////////////////////////////////////////////////////////////////////////
+        // 其实 action 就是一个普通函数，里面可以异步/同步、改写为 async/await，里面主要执行业务逻辑 //
+        ////////////////////////////////////////////////////////////////////////
     </script>
 
 
