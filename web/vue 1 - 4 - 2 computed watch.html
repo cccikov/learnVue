@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue 计算属性和观察者</title>
+    <script type="text/javascript" src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>如果computed、watch同时对同一个data进行响应时，computed先执行；watch执行时还可以获取computed计算好的属性</p>
+        <button @click="fn">改变msg</button>
+    </div>
+    <script type="text/javascript">
+    new Vue({
+        el: "#app",
+        data: {
+            msg: "haha",
+            str: "初始化"
+        },
+        computed: {
+            reallyMsg() {
+                console.log("computed执行");
+                console.log(this.str);
+                return "hello " + this.msg;
+            }
+        },
+        watch: {
+            msg(val) {
+                console.log("watch执行");
+                console.log(this.reallyMsg); // 可以获取computed 计算好的属性
+                this.str = "hi " + this.msg;
+            }
+        },
+        methods: {
+            fn() {
+                this.msg += " he"
+            }
+        }
+    });
+    </script>
+</body>
+
+</html>
