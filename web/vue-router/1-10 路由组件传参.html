@@ -12,6 +12,15 @@
             margin: 10px 0;
             box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
         }
+
+        .strong {
+            font-weight: 700;
+            margin: 10px 8px;
+        }
+
+        p {
+            margin: 5px 35px;
+        }
     </style>
     <script src="../vue.min.js"></script>
     <script src="../vue-router.js"></script>
@@ -25,14 +34,42 @@
         <div>
             <a href="javascript:void(0)" @click="router.push({name:'a2',params:{id:'013'}})">router.push({name:'a2',params:{id:'013'}})</a>
         </div>
+
+
         <div>
-            <a href="javascript:void(0)" @click="router.push({name:'b',params:{id:'id456'}})">router.push({name:'b',params:{id:'id456'}})</a>
+            <a href="javascript:void(0)" @click="router.push({name:'b',params:{id:'id456',arr:[1,2,3],obj:{name:'ccc',age:19}}})">布尔模式
+                router.push({name:'b',params:{id:'id456',arr:[1,2,3],obj:{name:'ccc',age:19}}})</a>
         </div>
         <div>
-            <a href="javascript:void(0)" @click="router.push({name:'b2',params:{id:'id789'}})">router.push({name:'b2',params:{id:'id789'}})</a>
+            <a href="javascript:void(0)" @click="router.push({name:'b2',params:{id:'id789',arr:[1,2,3],obj:{name:'ccc',age:19}}})">布尔模式
+                router.push({name:'b2',params:{id:'id789',arr:[1,2,3],obj:{name:'ccc',age:19}}})</a>
         </div>
 
-        <component-b id="普通组件id123"></component-b>
+
+        <div>
+            <a href="javascript:void(0)" @click="router.push({name:'c',params:{id:'abc'}})">对象模式
+                router.push({name:'c',params:{id:'abc'}})</a>
+        </div>
+        <div>
+            <a href="javascript:void(0)" @click="router.push({name:'c2',params:{id:'abc'}})">对象模式
+                router.push({name:'c2',params:{id:'abc'}})</a>
+        </div>
+
+
+        <div>
+            <a href="javascript:void(0)" @click="router.push({name:'d',params:{id:'id197491827397'}})">函数模式
+                router.push({name:'d',params:{id:'id197491827397'}})</a>
+        </div>
+        <div>
+            <a href="javascript:void(0)" @click="router.push({name:'d2'})">函数模式
+                router.push({name:'d2'})</a>
+        </div>
+        <div>
+            <a href="javascript:void(0)" @click="router.push({name:'d2',params:{id:'id197491827397'}})">函数模式
+                router.push({name:'d2',params:{id:'id197491827397'}})</a>
+        </div>
+
+        <component-b id="普通组件id123" arr="[3,4,5]" obj="{name:'tomato',age:18}"></component-b>
 
         <!-- 路由视图 -->
         <div class="router">
@@ -54,12 +91,34 @@
             template: `<div>
                 <p>我是内容b</p>
                 <p>props id {{id}}</p>
-                <p>使用props就可以与路由解耦，不需要在指定路由中使用（不需要在页面中故意通过$route获取数据），如果专门用个$route来获取数据，只能用来作为路由组件；</p>
-                <p>像正常的组件一样，直接通过props，来传数据，那么这个组件不仅可以作为路由组件使用，也可以作为普通组件使用</p>
+                <p>props arr {{arr}}</p>
+                <p>props obj {{obj}}</p>
+                <p class="strong">使用props就可以与路由解耦，不需要在指定路由中使用（不需要在页面中故意通过$route获取数据），如果专门用个$route来获取数据，只能用来作为路由组件；</p>
+                <p class="strong">像正常的组件一样，直接通过props，来传数据，那么这个组件不仅可以作为路由组件使用，也可以作为普通组件使用</p>
                 <p>router id {{$route.params.id}}</p>
+                <p>router arr {{$route.params.arr}}</p>
+                <p>router obj {{$route.params.obj}}</p>
             </div>`,
-            props: ["id"]
+            props: ["id", "arr", "obj"]
         };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         ////////
         // 路由 //
@@ -67,34 +126,142 @@
         const router = new VueRouter({
             // mode: 'history',
             routes: [{
-                path: '/a/:id',// 路径可以做成动态路由，优点是刷新后，由于url匹配，所以会自动填 路径参数 params
-                name: "a",
-                component: componentA,
-            },
-            {
-                path: '/a2/',// 路径可以不做成动态路由，缺点是刷新后就没了数据
-                name: "a2",
-                component: componentA,
-            },
-            {
-                path: '/b/:id',
-                name: "b",
-                component: componentB,
-                props: true
-            },{
-                path: '/b2/',
-                name: "b2",
-                component: componentB,
-                props: true
-            }]
+                    path: '/a/:id', // 路径可以做成动态路由，优点是刷新后，由于url匹配，所以会自动填 路径参数 params（当匹配到一个路由时，参数值会被设置到 this.$route.params）
+                    name: "a",
+                    component: componentA,
+                },
+                {
+                    path: '/a2/', // 路径可以不做成动态路由，缺点是刷新后就没了数据
+                    name: "a2",
+                    component: componentA,
+                },
+
+
+                /////////////////////////////////////////////////////
+                //                          布尔模式                          //
+                // 如果 props 被设置为 true，route.params 将会被设置为组件属性。 //
+                /////////////////////////////////////////////////////
+                {
+                    path: '/b/:id',
+                    name: "b",
+                    component: componentB,
+                    props: true
+                },
+                {
+                    path: '/b2/',
+                    name: "b2",
+                    component: componentB,
+                    props: true
+                },
+
+
+                ///////////////////////////////////////////////////////////////////
+                //                                对象模式                                   //
+                // 如果 props 是一个对象，它会被按原样设置为组件属性。当 props 是静态的时候有用。 //
+                ///////////////////////////////////////////////////////////////////
+                {
+                    path: '/c/:id',
+                    name: "c",
+                    component: componentB,
+                    props: {
+                        id: 123456,
+                        arr: ["a", "b", "c"],
+                        obj: {
+                            name: "haha",
+                            gender: "male",
+                            ps: "这是写死在路由配置中，写死的！！！由于写死，所以就算刷新还是会有"
+                        }
+                    }
+                },
+                {
+                    path: '/c2/',
+                    name: "c2",
+                    component: componentB,
+                    props: {
+                        id: 123456,
+                        arr: ["a", "b", "c"],
+                        obj: {
+                            name: "haha",
+                            gender: "male",
+                            ps: "这是写死在路由配置中，写死的！！！由于写死，所以就算刷新还是会有"
+                        }
+                    }
+                },
+
+
+                //////////////////////////////////////////////////////////////////////////
+                //                                       函数模式                                             //
+                // 你可以创建一个函数返回 props。这样你便可以将参数转换成另一种类型，将静态值与基于路由的值结合等等。 //
+                //////////////////////////////////////////////////////////////////////////
+                {
+                    path: '/d/:id',
+                    name: "d",
+                    component: componentB,
+                    props(route) {
+                        console.log(Object.keys(route.params)); // 这是 $route 对象
+                        if (Object.keys(route.params).length > 0) {
+                            return route.params;
+                        } else {
+                            return {
+                                id: 123456,
+                                arr: ["a", "b", "c"],
+                                obj: {
+                                    name: "haha",
+                                    gender: "male",
+                                    ps: "这是写死在路由配置中，写死的！！！由于写死，所以就算刷新还是会有"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    path: '/d2/',
+                    name: "d2",
+                    component: componentB,
+                    props(route) {
+                        console.log(Object.keys(route.params)); // 这是 $route 对象
+                        if (Object.keys(route.params).length > 0) {
+                            return route.params;
+                        } else {
+                            return {
+                                id: 123456,
+                                arr: ["a", "b", "c"],
+                                obj: {
+                                    name: "haha",
+                                    gender: "male",
+                                    ps: "这是写死在路由配置中，写死的！！！由于写死，所以就算刷新还是会有"
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+
+            ]
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         ////////////
         // vue 实例 //
         ////////////
         let app = new Vue({
             "router": router,
-            components:{
+            components: {
                 componentB
             }
         }).$mount('#app');
