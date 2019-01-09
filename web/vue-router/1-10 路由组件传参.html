@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>1-10 路由组件传参</title>
+    <style>
+        .router>div {
+            padding: 10px;
+            margin: 10px 0;
+            box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    <script src="../vue.min.js"></script>
+    <script src="../vue-router.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <a href="javascript:void(0)" @click="router.push({name:'a',params:{id:'id123'}})">router.push({name:'a',params:{id:'id123'}})</a>
+        </div>
+        <div>
+            <a href="javascript:void(0)" @click="router.push({name:'a2',params:{id:'013'}})">router.push({name:'a2',params:{id:'013'}})</a>
+        </div>
+        <div>
+            <a href="javascript:void(0)" @click="router.push({name:'b',params:{id:'id456'}})">router.push({name:'b',params:{id:'id456'}})</a>
+        </div>
+        <div>
+            <a href="javascript:void(0)" @click="router.push({name:'b2',params:{id:'id789'}})">router.push({name:'b2',params:{id:'id789'}})</a>
+        </div>
+
+        <component-b id="普通组件id123"></component-b>
+
+        <!-- 路由视图 -->
+        <div class="router">
+            <router-view></router-view>
+        </div>
+    </div>
+    <script>
+        //////////////////////////////////////////////////
+        // 由于 vue 中 component 包含比较多东西，一般非单文件组件就用个变量存储起来 //
+        //////////////////////////////////////////////////
+        const componentA = {
+            template: `<div>
+                <p>我是内容a</p>
+                <p>router id {{$route.params.id}}</p>
+            </div>`
+        };
+
+        const componentB = {
+            template: `<div>
+                <p>我是内容b</p>
+                <p>props id {{id}}</p>
+                <p>使用props就可以与路由解耦，不需要在指定路由中使用（不需要在页面中故意通过$route获取数据），如果专门用个$route来获取数据，只能用来作为路由组件；</p>
+                <p>像正常的组件一样，直接通过props，来传数据，那么这个组件不仅可以作为路由组件使用，也可以作为普通组件使用</p>
+                <p>router id {{$route.params.id}}</p>
+            </div>`,
+            props: ["id"]
+        };
+
+        ////////
+        // 路由 //
+        ////////
+        const router = new VueRouter({
+            // mode: 'history',
+            routes: [{
+                path: '/a/:id',// 路径可以做成动态路由，优点是刷新后，由于url匹配，所以会自动填 路径参数 params
+                name: "a",
+                component: componentA,
+            },
+            {
+                path: '/a2/',// 路径可以不做成动态路由，缺点是刷新后就没了数据
+                name: "a2",
+                component: componentA,
+            },
+            {
+                path: '/b/:id',
+                name: "b",
+                component: componentB,
+                props: true
+            },{
+                path: '/b2/',
+                name: "b2",
+                component: componentB,
+                props: true
+            }]
+        });
+
+        ////////////
+        // vue 实例 //
+        ////////////
+        let app = new Vue({
+            "router": router,
+            components:{
+                componentB
+            }
+        }).$mount('#app');
+    </script>
+</body>
+
+</html>
