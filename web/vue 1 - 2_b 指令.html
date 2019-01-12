@@ -45,6 +45,7 @@
         <p> Vue.js 为 v-bind 和 v-on 这两个最常用的指令，提供了特定简写</p>
         <p> v-bind 的简写为 :</p>
         <p>v-on 的简写为 @</p>
+        <p>除了class style有特殊语法外，实际v-bind就是在值中运算的js返回的字符串</p>
     </div>
 
 
@@ -62,6 +63,14 @@
         <!-- 渲染结果: <img src="img/ccc.jpg"> -->
 
         <!-- class 绑定 -->
+        <div :class="isRed && 'red'"></div>
+        <!-- 渲染结果: <div class="red"></div> -->
+        <div :class="isRed?'red':'blue'"></div>
+        <!-- 渲染结果: <div class="red"></div> -->
+        <div :class="isRed?'':'blue'"></div>
+        <!-- 渲染结果: <div class></div> -->
+        <div :class="isRed && 'red'+' a b c'"></div>
+        <!-- 渲染结果: <div class="red a b c"></div> -->
         <div :class="{ red: isRed }"></div>
         <!-- 渲染结果: <div class="red"></div> -->
         <div :class="[classA, classB]"></div>

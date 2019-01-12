@@ -9,16 +9,19 @@
 
 <body>
     <!-- *********绑定class************ -->
-    <!-- =========对象语法========== -->
+    <!-- =========对象语法、字符串语法========== -->
 
     <!-- 我们可以传给 v-bind:class 一个对象，以动态地切换 class -->
     <div id="app1">
         <div v-bind:class="{ active: isActive }"></div>
         <!-- 等同于 -->
         <div v-bind:class="{ 'active': isActive }"></div>
-        <!-- 等同于 -->
+        <!-- 等同于 字符串语法，就是最普通的v-bind使用方式 -->
         <div v-bind:class="'active'"></div>
+        <!-- 字符串语法 三目运算符 -->
+        <div v-bind:class="isActive?'active':'inactive'"></div>
         <!-- 渲染结果: <div class="active"></div> -->
+
 
 
 
