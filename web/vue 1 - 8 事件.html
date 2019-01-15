@@ -14,6 +14,8 @@
 </head>
 
 <body>
+    <!-- 同一种事件只能通过v-on绑定一个监听器 -->
+    <!-- 有点类似dom0的事件绑定程序 -->
     <div id="app">
         <a href="javascript:void(0)" @click='listener'>
             <p>我是a里面的p元素</p>
@@ -26,6 +28,8 @@
         </a>
         <!-- 传数据作为参数 -->
         <a style="display: block" href="javascript:void(0)" @click="showId(val.id)" v-for="(val,key) in arr">id:{{val.id}}</a>
+
+        <button @click="click1" @click="click2">点击</button>
     </div>
     <script>
         new Vue({
@@ -54,7 +58,13 @@
                 },
                 showId(id){
                     console.log(id);
-                }
+                },
+                click1(){
+                    console.log("click1")
+                },
+                click2(){
+                    console.log("click2")
+                },
             }
         })
     </script>
