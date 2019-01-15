@@ -9,33 +9,71 @@
 
 <body>
     <div id="app">
-        <p>如果computed、watch同时对同一个data进行响应时，computed先执行；watch执行时还可以获取computed计算好的属性</p>
+        <p>如果computed、watch同时对同一个data进行响应时，computed先执行；watch执行时还可以获取computed计算好的属性；如果渲染有用到method，那么对于同一个data，data变化的时候，执行顺序为computed watch method</p>
+        <p>computed可以看成是data变化的时候立即变化</p>
+        <p>watch 是监听 反应比computed慢，因为是监听，不是立即</p>
+        <p>method（用于渲染的时候）是等到渲染的时候才执行，所以最慢</p>
+        <p>{{changeMsg()}} {{reallyMsg}} {{changeMsg2()}} 在dom 先渲染先执行</p>
         <button @click="fn">改变msg</button>
+        <input ref="input" type="text" v-ccc="haha" @input="vueEvent" v-model="text">
     </div>
     <script type="text/javascript">
+    Vue.directive("ccc", {
+        bind(_el, _binding, _vnode) {
+            _el.addEventListener("input", function() {
+                console.log("自定义组件");
+            }, false);
+        }
+    });
+
     new Vue({
         el: "#app",
         data: {
             msg: "haha",
-            str: "初始化"
+            str: "初始化的字符串",
+            haha: "haha",
+            text: ""
+        },
+        mounted() {
+            this.$nextTick(() => {
+                this.$refs.input.addEventListener("input", this.nativeEvent, false);
+                this.$refs.input.addEventListener("input", function() {
+                    console.log("原生 第二个监听器"); // 监听器的执行顺序 ， 和添加顺序一致 , 由于v-model是vue自带的，所以最早执行
+                }, false);
+            });
         },
         computed: {
             reallyMsg() {
-                console.log("computed执行");
-                console.log(this.str);
+                console.log("computed执行", this.str);
                 return "hello " + this.msg;
             }
         },
         watch: {
             msg(val) {
-                console.log("watch执行");
-                console.log(this.reallyMsg); // 可以获取computed 计算好的属性
+                console.log("watch执行", this.reallyMsg); // 可以获取computed 计算好的属性
                 this.str = "hi " + this.msg;
+            },
+            text(val) {
+                console.log("watch text");
             }
         },
         methods: {
             fn() {
                 this.msg += " he"
+            },
+            changeMsg() {
+                console.log("method changeMsg 执行");
+                return this.msg + " method"
+            },
+            changeMsg2() {
+                console.log("method changeMsg2 执行");
+                return this.msg + " method"
+            },
+            vueEvent() {
+                console.log("vue 监听器", this.text); // 虽然 text 是v-model绑定的值，是靠触发input事件修改的，但是由于表单v-model是vue自带的，所以可能添加的监听器更早。所以在这个监听器执行前触发
+            },
+            nativeEvent() {
+                console.log("原生 监听器", this.text); // 虽然 text 是v-model绑定的值，是靠触发input事件修改的，但是由于表单v-model是vue自带的，所以可能添加的监听器更早。所以在这个监听器执行前触发
             }
         }
     });
