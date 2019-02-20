@@ -18,6 +18,9 @@
         <p>
             <router-link to="/nextTick"> /nextTick 研究 </router-link>
         </p>
+        <p>
+            <router-link to="/page1"> /page1</router-link>
+        </p>
     </div>
 </template>
 <script>

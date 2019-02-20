@@ -5,10 +5,11 @@ import Router from 'vue-router'
 
 Vue.use(Router); // vue 安装 vue-router
 
-export default new Router({
+
+const router = new Router({
     routes: [{
             path: "/",
-            name: "index",
+            name: "home",
             component: resolve => require(['@/components/index.vue'], resolve)
         }, {
             path: "/index",
@@ -58,6 +59,29 @@ export default new Router({
             path: "/nextTick",
             name: "nextTick",
             component: resolve => require(['@/components/nextTick.vue'], resolve)
-        }
+        },
+        {
+            path: "/page1",
+            name: "page1",
+            component: resolve => require(['@/components/page1.vue'], resolve)
+        },
+        {
+            path: "/page2",
+            name: "page2",
+            component: resolve => require(['@/components/page2.vue'], resolve)
+        },
+        {
+            path: "/page3",
+            name: "page3",
+            component: resolve => require(['@/components/page3.vue'], resolve)
+        },
     ]
-})
+});
+
+
+router.afterEach(() => {
+    window.scrollTo(0, 0);
+});
+
+
+export default router;
