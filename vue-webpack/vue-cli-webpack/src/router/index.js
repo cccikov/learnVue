@@ -51,11 +51,11 @@ const router = new Router({
             path: "/vue-loader",
             name: "vue-loader",
             component: resolve => require(['@/components/vue-loader/parent.vue'], resolve)
-        },{
+        }, {
             path: "/componentInit",
             name: "componentInit",
             component: resolve => require(['@/components/componentInit/componentInit.vue'], resolve)
-        },{
+        }, {
             path: "/nextTick",
             name: "nextTick",
             component: resolve => require(['@/components/nextTick.vue'], resolve)
@@ -81,6 +81,20 @@ const router = new Router({
 
 router.afterEach(() => {
     window.scrollTo(0, 0);
+    let ua = navigator.userAgent.toLowerCase();
+    if((/ucbrowser/).test(ua)){
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 200);
+    }else if((/mqqbrowser/).test(ua)){
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 100);
+    }else if((/iPhone|iPad|iPod|iOS/i).test(ua)){
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 100);
+    }
 });
 
 

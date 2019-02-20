@@ -23,7 +23,18 @@ new Vue({
     // vue1.0写法
     // components: { App },// 相当于 {"App":App}
     // template: '<App/>'
-})
+});
+
+Vue.mixin({
+    data() {
+        return {
+            global: "全局信息",
+        }
+    },
+    created() {
+        window.__vm__ = this;
+    }
+});
 
 // 发布，订阅模式
 Vue.prototype.bus = new Vue();
