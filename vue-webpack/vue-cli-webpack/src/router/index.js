@@ -78,23 +78,32 @@ const router = new Router({
     ]
 });
 
+let body = document.body;
+let ua = navigator.userAgent.toLowerCase();
+
+router.beforeEach((from, to, next) => {
+    if ((/ucbrowser/).test(ua)) {
+        Object.assign(body.style, {
+            height: 0,
+            overflow: "hidden"
+        })
+    } else if ((/mqqbrowser/).test(ua)) {
+        Object.assign(body.style, {
+            height: 0,
+            overflow: "hidden"
+        })
+    } else if ((/iPhone|iPad|iPod|iOS/i).test(ua)) {
+        Object.assign(body.style, {
+            height: 0,
+            overflow: "hidden"
+        })
+    }
+    next();
+});
+
 
 router.afterEach(() => {
     window.scrollTo(0, 0);
-    let ua = navigator.userAgent.toLowerCase();
-    if((/ucbrowser/).test(ua)){
-        setTimeout(() => {
-            window.scrollTo(0, 0);
-        }, 200);
-    }else if((/mqqbrowser/).test(ua)){
-        setTimeout(() => {
-            window.scrollTo(0, 0);
-        }, 100);
-    }else if((/iPhone|iPad|iPod|iOS/i).test(ua)){
-        setTimeout(() => {
-            window.scrollTo(0, 0);
-        }, 100);
-    }
 });
 
 

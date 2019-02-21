@@ -5,6 +5,9 @@
         <p>
             <a href="javascript:void(0)" @click="$router.push({'name':'page2'})">to page2</a>
         </p>
+        <p>
+            <a href="javascript:void(0)" @click="$router.push({'name':'page3'})">to page3</a>
+        </p>
     </div>
 </template>
 <script>
