@@ -5,12 +5,23 @@ import Router from 'vue-router'
 
 Vue.use(Router); // vue 安装 vue-router
 
+let checkbox = [{
+        path: "/render-checkbox",
+        name: "render-checkbox",
+        component: resolve => require(['@/components/render-checkbox.vue'], resolve)
+    },
+    {
+        path: "/render-checkbox2",
+        name: "render-checkbox2",
+        component: resolve => require(['@/components/render-checkbox2.vue'], resolve)
+    }
+]
 
 const router = new Router({
     routes: [{
             path: "/",
-            redirect:{
-                name:"index"
+            redirect: {
+                name: "index"
             }
         }, {
             path: "/index",
@@ -76,6 +87,7 @@ const router = new Router({
             name: "page3",
             component: resolve => require(['@/components/page3.vue'], resolve)
         },
+        ...checkbox
     ]
 });
 

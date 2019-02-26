@@ -10,22 +10,25 @@
             <router-link to="/lifecycle">钩子函数</router-link>
         </p>
         <p>
-            <router-link to="/vue-loader"> /vue-loader 研究 </router-link>
+            <router-link to="/vue-loader">/vue-loader 研究</router-link>
         </p>
         <p>
-            <router-link to="/componentInit"> /组件再次初始化 研究 </router-link>
+            <router-link to="/componentInit">/组件再次初始化 研究</router-link>
         </p>
         <p>
-            <router-link to="/nextTick"> /nextTick 研究 </router-link>
+            <router-link to="/nextTick">/nextTick 研究</router-link>
         </p>
         <p>
-            <router-link to="/page1"> /page1</router-link>
+            <router-link to="/page1">/page1</router-link>
+        </p>
+        <p>
+            <router-link to="/render-checkbox">/render-checkbox</router-link>
         </p>
     </div>
 </template>
 <script>
     export default {
-        name: "index",
+        name: "index"
     };
 </script>
 <style scoped lang='less'>
