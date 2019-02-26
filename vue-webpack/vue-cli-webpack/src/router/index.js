@@ -9,8 +9,9 @@ Vue.use(Router); // vue 安装 vue-router
 const router = new Router({
     routes: [{
             path: "/",
-            name: "home",
-            component: resolve => require(['@/components/index.vue'], resolve)
+            redirect:{
+                name:"index"
+            }
         }, {
             path: "/index",
             name: "index",
