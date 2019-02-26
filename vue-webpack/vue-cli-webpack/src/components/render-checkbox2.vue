@@ -53,6 +53,7 @@
                     type: "checkbox"
                 },
                 domProps: {
+                    name: "checkboxAll",
                     value: "all",
                     checked: checked
                 },
@@ -83,6 +84,7 @@
                     type: "checkbox"
                 },
                 domProps: {
+                    name: name,
                     value: value,
                     checked
                 },
