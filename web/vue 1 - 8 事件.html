@@ -17,12 +17,16 @@
     <!-- 同一种事件只能通过v-on绑定一个监听器 -->
     <!-- 有点类似dom0的事件绑定程序 -->
     <div id="app">
+        <!-- 事件处理方法，回调函数中获得参数是事件对象 -->
         <a href="javascript:void(0)" @click='listener'>
+            <!-- 类似 dom.addEventListener("click", fn, false); -->
             <p>我是a里面的p元素</p>
             <div>我是div</div>
         </a>
         <!-- 也可以传参 -->
+        <!-- 内联处理器中的方法 回调函数中获得参数是我们传的对象（也可以包含事件对象$event）-->
         <a href="javascript:void(0)" @click='fn("哈哈哈",$event)'>
+            <!-- 类似 dom.addEventListener("click", function(e){fn("哈哈哈",e)}, false); -->
             <p>我是a里面的p元素</p>
             <div>我是div</div>
         </a>
@@ -32,6 +36,7 @@
         <button @click="click1" @click="click2">点击</button>
     </div>
     <script>
+
         new Vue({
             el: "#app",
             data:{
