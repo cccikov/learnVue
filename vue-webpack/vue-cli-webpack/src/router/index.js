@@ -91,26 +91,25 @@ const router = new Router({
     ]
 });
 
-let body = document.body;
 let ua = navigator.userAgent.toLowerCase();
 
 router.beforeEach((from, to, next) => {
-    if ((/ucbrowser/).test(ua)) {
-        Object.assign(body.style, {
-            height: 0,
-            overflow: "hidden"
-        })
-    } else if ((/mqqbrowser/).test(ua)) {
-        Object.assign(body.style, {
-            height: 0,
-            overflow: "hidden"
-        })
-    } else if ((/iPhone|iPad|iPod|iOS/i).test(ua)) {
-        Object.assign(body.style, {
-            height: 0,
-            overflow: "hidden"
-        })
+    if ((/ucbrowser/).test(ua) || (/mqqbrowser/).test(ua) || (/iPhone|iPad|iPod|iOS/i).test(ua)) {
+        /**
+         * qq uc
+         * ios 的浏览器，跳转时浏览器状态栏会遮住内容
+         */
+        window.onresize = function () {
+            window.scrollTo(0, 0);
+            window.onresize = null;
+            window.ontouchmove = null
+        }
+        window.ontouchmove = function () {
+            window.onresize = null;
+            window.ontouchmove = null
+        }
     }
+
     next();
 });
 

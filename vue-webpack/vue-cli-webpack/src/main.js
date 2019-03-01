@@ -34,41 +34,6 @@ Vue.mixin({
     created() {
         window.__vm__ = this;
     },
-    mounted() {
-        let ua = navigator.userAgent.toLowerCase();
-        if ((/ucbrowser/).test(ua)) {
-            this.$nextTick(() => {
-                setTimeout(() => {
-                    window.scrollTo(0, 0);
-                    Object.assign(document.body.style, {
-                        height: "auto",
-                        overflow: "visible"
-                    });
-                }, 1000 / 30);
-            });
-        } else if ((/mqqbrowser/).test(ua)) {
-            this.$nextTick(() => {
-                setTimeout(() => {
-                    window.scrollTo(0, 0);
-                    Object.assign(document.body.style, {
-                        height: "auto",
-                        overflow: "visible"
-                    });
-                }, 1000 / 30);
-            });
-        } else if ((/iPhone|iPad|iPod|iOS/i).test(ua)) {
-            this.$nextTick(() => {
-                setTimeout(() => {
-                    window.scrollTo(0, 0);
-                    Object.assign(document.body.style, {
-                        height: "auto",
-                        overflow: "visible"
-                    });
-                }, 1000 / 30);
-            });
-        }
-
-    },
 });
 
 // 发布，订阅模式
