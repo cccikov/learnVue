@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="wrap">
+        <div class="top">顶部</div>
         <p>page3</p>
         <p v-for="val in ranInt(10,20)">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor repellat inventore error porro earum enim. Delectus, provident eum ab necessitatibus id mollitia eos? Ea dolorum repudiandae minus! Voluptatum, officia nemo!</p>
         <p>
@@ -27,3 +28,18 @@
         }
     };
 </script>
+<style lang="less" scoped>
+    .wrap {
+        padding: 40-24px 0 0;
+    }
+    .top {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        background: #f00;
+        color: #fff;
+        line-height: 40px;
+    }
+</style>
