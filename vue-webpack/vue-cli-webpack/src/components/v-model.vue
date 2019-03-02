@@ -2,17 +2,18 @@
     <div class="wrap">
         <p>v-model 研究</p>
         <p>v-model 不仅可以用于表单元素的双向绑定，还是应用于自定义组件的双向绑定</p>
+        <p>v-model 绑定的属性可以是任何数据类型</p>
         <div>
-            <p>父组件的值：{{str1}}</p>
-            <vModelWidget v-model="str1"></vModelWidget>
+            <p>父组件的值：{{str}}</p>
+            <vModelWidget v-model="str"></vModelWidget>
         </div>
         <div>
-            <p>父组件的值：{{str2}}</p>
-            <vModelWidget2 v-model="str2"></vModelWidget2>
+            <p>父组件的值：{{obj}}</p>
+            <vModelWidget2 v-model="obj"></vModelWidget2>
         </div>
         <div>
-            <p>父组件的值：{{str3}}</p>
-            <vModelWidget3 v-model="str3"></vModelWidget3>
+            <p>父组件的值：{{num}}</p>
+            <vModelWidget3 v-model="num"></vModelWidget3>
         </div>
     </div>
 </template>
@@ -29,9 +30,12 @@
         },
         data() {
             return {
-                str1: "Lorem, ipsum dolor.",
-                str2: "memeda",
-                str3: "第三个用来研究v-model的变量"
+                str: "Lorem, ipsum dolor.",
+                obj: {
+                    name: "ccc",
+                    age: 18
+                },
+                num: 912873891273
             };
         }
     };
