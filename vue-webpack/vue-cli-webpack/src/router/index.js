@@ -15,6 +15,14 @@ let checkbox = [{
         name: "render-checkbox2",
         component: resolve => require(['@/components/render-checkbox2.vue'], resolve)
     }
+];
+
+let vModel = [
+    {
+        path: "/v-model",
+        name: "v-model",
+        component: resolve => require(['@/components/v-model.vue'], resolve)
+    }
 ]
 
 const router = new Router({
@@ -87,7 +95,8 @@ const router = new Router({
             name: "page3",
             component: resolve => require(['@/components/page3.vue'], resolve)
         },
-        ...checkbox
+        ...checkbox,
+        ...vModel
     ]
 });
 

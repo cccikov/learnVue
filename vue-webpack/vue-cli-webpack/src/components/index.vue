@@ -24,6 +24,9 @@
         <p>
             <router-link to="/render-checkbox">/render-checkbox</router-link>
         </p>
+        <p>
+            <router-link to="/v-model">/v-model</router-link>
+        </p>
     </div>
 </template>
 <script>

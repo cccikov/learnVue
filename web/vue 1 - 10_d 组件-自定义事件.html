@@ -296,6 +296,9 @@
     </script>
 
 
+
+
+
     <!-- v-modal 在非 input 标签中 -->
     <script type="text/javascript">
         // 组件
@@ -311,7 +314,6 @@
             }
         })
     </script>
-    <!--  -->
     <div id="app9">
         <h5>app9</h5>
         <p>父组件的值：{{age}}</p>
@@ -329,7 +331,7 @@
 
 
 
-    <!-- v-modal 在非 input 标签中 -->
+    <!-- v-modal 在非 input 标签中,自定义v-model 的 prop 和 event  -->
     <script type="text/javascript">
         // 组件
         Vue.component("edit",{
@@ -350,7 +352,6 @@
             }
         })
     </script>
-    <!--  -->
     <div id="app10">
         <h5>app10</h5>
         <p>父组件的值：{{age}}</p>
@@ -367,7 +368,8 @@
     </script>
 
 
-    <!-- v-modal 在非 input 标签中，自定义v-model 的 prop 和 event -->
+
+    <!-- v-modal 在非 input 标签中 ， 默认情况下，一个组件上的 v-model 会把 value 用作 prop 且把 input 用作 event-->
     <script type="text/javascript">
         // 组件
         Vue.component("edit",{
@@ -375,7 +377,7 @@
                 <p>props:value => {{value}}</p>
                 <button @click="changeValue">改变值</button>
             </div>`,
-            props:["value"], // 不定义props也是可以使用v-model的，但是组件内部就访问不到这个值而已
+            props:["value"], // 不定义props也是可以使用v-model的，但是组件内部就访问不到这个值而已。 demo9就是这样
             methods:{
                 changeValue(){
                     let ran = Math.random();
@@ -384,7 +386,6 @@
             }
         })
     </script>
-    <!--  -->
     <div id="app11">
         <h5>app11</h5>
         <p>父组件的值：{{age}}</p>
