@@ -22,7 +22,12 @@ let vModel = [
         path: "/v-model",
         name: "v-model",
         component: resolve => require(['@/components/v-model.vue'], resolve)
-    }
+    },
+    {
+        path: "/sync",
+        name: "sync",
+        component: resolve => require(['@/components/.sync.vue'], resolve)
+    },
 ]
 
 const router = new Router({
