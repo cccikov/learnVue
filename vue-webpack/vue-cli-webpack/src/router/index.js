@@ -28,6 +28,11 @@ let vModel = [
         name: "sync",
         component: resolve => require(['@/components/.sync.vue'], resolve)
     },
+    {
+        path: "/sync&v-model",
+        name: "sync&v-model",
+        component: resolve => require(['@/components/sync&v-model.vue'], resolve)
+    },
 ]
 
 const router = new Router({

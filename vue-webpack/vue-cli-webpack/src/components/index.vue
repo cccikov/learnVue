@@ -27,6 +27,12 @@
         <p>
             <router-link to="/v-model">/v-model</router-link>
         </p>
+        <p>
+            <router-link to="/sync">/sync</router-link>
+        </p>
+        <p>
+            <router-link to="/sync&v-model">/sync&v-model</router-link>
+        </p>
     </div>
 </template>
 <script>
