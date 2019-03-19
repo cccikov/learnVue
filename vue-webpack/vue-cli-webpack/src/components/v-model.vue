@@ -9,7 +9,8 @@
         </div>
         <div>
             <p>父组件的值：{{obj}}</p>
-            <vModelWidget2 v-model="obj"></vModelWidget2>
+            <vModelWidget2 v-model="obj" @sync="syncEvent"></vModelWidget2>
+            <p>如果监听子组件触发的更新数据的event，会发现，事件触发会比v-model值改变更早</p>
         </div>
         <div>
             <p>父组件的值：{{num}}</p>
@@ -37,7 +38,20 @@
                 },
                 num: 912873891273
             };
-        }
+        },
+        watch:{
+            obj:{
+                handler(val){
+                    console.log("watch",val)
+                },
+                deep:true
+            }
+        },
+        methods: {
+            syncEvent(val){
+                console.log("event",val)
+            }
+        },
     };
 </script>
 

@@ -13,11 +13,12 @@
     export default {
         props: ["syncData", "name"],
         model: {
-            prop: "syncData", // 在 props 里面选择其中一个作为双向绑定的用的 prop
-            event: "sync" // 自定义一个作为双向绑定的用的 event
+            prop: "syncData", // 在 props 里面选择其中一个作为双向绑定的用的 prop ；在props中选择一个用来接收父组件v-model值的prop
+            event: "sync" // 自定义一个作为双向绑定的用的 event ；自定义一个用来更新父组件数据而触发的event
         },
         methods: {
             toSync(value) {
+                debugger;
                 this.$emit("sync", value); // 实现v-model子组件向父组件传播值
             },
             change() {
