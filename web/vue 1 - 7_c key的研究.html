@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        li {
+            margin: 20px;
+        }
+
+        label {
+            display: block;
+        }
+
+        label span {
+            width: 5em;
+            text-align: left;
+        }
+    </style>
+    <script type="text/javascript" src="./vue.min.js"></script>
+</head>
+
+<body>
+    <div id="wrap">
+        <ul>
+            <li :data-id="val.id" :key="val.id" v-for="(val,i) in arr">{{val.id}}</li>
+        </ul>
+        <ul>
+            <li :data-id="val.id" v-for="(val,i) in arr">{{val.id}}</li>
+        </ul>
+        <p>实际上只对123的元素改变了颜色，只是下面的例子，li没有加key，所以才一直都是第一个变了颜色；同样只对123的元素添加了click的事件监听器。所以加了key只，数据改变后，原来的dom元素还是之前的dom元素；没有加key，原来的dom元素只是保留着原来的位置，并改变一些别东西（如内容）
+        </p>
+        <p>涉及v-for 最好加上key，如果v-for有什么行为上的异常，优先考虑key是否设错（比如错用数组索引作为key）</p>
+
+        <hr>
+
+        <div>
+            <h6>无key</h6>
+            <label v-for="val in list">
+                <input type="checkbox" :value="val"><span>{{val}}</span>
+            </label>
+
+            <h6>有key</h6>
+            <label v-for="val in list" :key="val">
+                <input type="checkbox" :value="val"><span>{{val}}</span>
+            </label>
+
+            <p v-for="val in list" :key="'input'+val" :data-key="'input'+val">
+                <span>{{val}}</span> <input type="text">
+            </p>
+
+            <p>没有加key的话，选择其中一个后，改变数组后，同样位置的checkbox还是被选中；而加上key值后，改变位置后还是选原来的元素。（没有加上v-model的情况下）</p>
+
+            <p>文本框输入文本，改变数组</p>
+
+            <div>
+                <h6>错误key</h6>
+                <label v-for="(val,index) in list" :key="index">
+                    <input type="checkbox" :value="val"><span>{{val}}</span>
+                </label>
+
+                <h6>错误key 2</h6>
+                <label v-for="(val,index) in list" :key="indexList[index]" :data-key="indexList[index]">
+                    <input type="checkbox" :value="val"><span>value：{{val}} &nbsp;&nbsp;&nbsp;
+                        key：{{indexList[index]}}</span>
+                </label>
+                <p>
+                    对于错误key，会发现，改变位置是根据key来区别是否勾上，而不是value，所以key是否正确也是十分重要
+                </p>
+            </div>
+
+            <button @click="changeList">改变数组</button>
+
+        </div>
+
+
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el: "#wrap",
+            data: {
+                arr: [{
+                    id: 123
+                }],
+                list: [],
+                indexList: []
+            },
+            created() {
+                this.listInit();
+            },
+            mounted() {
+                this.$nextTick(function () {
+                    document.querySelectorAll("li").forEach(function (item, key) {
+                        var dataId = item.getAttribute("data-id");
+                        item.addEventListener("click", function () {
+                            console.log(
+                                dataId); // 这里形成了一个闭包，一直记录着dataId，不和实际的"data-id"相关
+                            console.dir(this);
+                        }, false);
+                        item.style.background = '#f00'
+                    });
+                    this.arr.unshift({
+                        id: 234
+                    });
+                })
+            },
+            methods: {
+                listInit() {
+                    let arr = new Array(10).fill("").map(() => ranInt(1, 10));
+                    this.list = removeDuplicate_single(arr);
+                    this.indexList = new Array(this.list.length).fill("").map((val, key) => key)
+                },
+                changeList() {
+                    this.list.sort(function () {
+                        return Math.random() > 0.5 ? -1 : 1;
+                    })
+                    this.indexList.sort(function () {
+                        return Math.random() > 0.5 ? -1 : 1;
+                    })
+                },
+
+            },
+        });
+
+
+
+
+
+        function ranInt(max, min) {
+            if (min > max) {
+                var mid = max;
+                max = min;
+                min = mid;
+            }
+            return parseInt(Math.random() * (max - min + 1) + min)
+        }
+
+        function removeDuplicate_single(arr) {
+            arr = arr.slice(0);
+            var newList = [];
+            arr.forEach(val => {
+                if (!newList.includes(val)) { // 有重复
+                    newList.push(val);
+                }
+            });
+            return newList;
+        }
+    </script>
+</body>
+
+</html>
