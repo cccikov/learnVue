@@ -93,7 +93,7 @@ const router = new Router({
         {
             path: "/page1",
             name: "page1",
-            component: resolve => require(['@/components/page1.vue'], resolve)
+            component: resolve => require(['@/components/page2.vue'], resolve)
         },
         {
             path: "/page2",
@@ -106,7 +106,17 @@ const router = new Router({
             component: resolve => require(['@/components/page3.vue'], resolve)
         },
         ...checkbox,
-        ...vModel
+        ...vModel,
+        {
+            path: "/page*",
+            name: "page-all",
+            component: resolve => require(['@/components/page1.vue'], resolve)
+        },
+        {
+            path: "*",
+            name: "404",
+            component: resolve => require(['@/components/404.vue'], resolve)
+        },
     ]
 });
 

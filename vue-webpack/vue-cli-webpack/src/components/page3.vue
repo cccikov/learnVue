@@ -12,6 +12,12 @@
         <p>
             <a href="javascript:void(0)" @click="$router.push({'name':'page2'})">to page2</a>
         </p>
+        <p>
+            <a href="javascript:void(0)" @click="$router.push('/page4')">to page4</a>
+        </p>
+        <p>
+            <a href="javascript:void(0)" @click="$router.push('/page5')">to page5</a>
+        </p>
     </div>
 </template>
 <script>
