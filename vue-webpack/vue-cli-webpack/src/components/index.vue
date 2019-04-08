@@ -33,6 +33,12 @@
         <p>
             <router-link to="/sync&v-model">/sync&v-model</router-link>
         </p>
+        <p>
+            <router-link to="/mixin_demo1">/mixin_demo1</router-link>
+        </p>
+        <p>
+            <router-link to="/mixin_demo2">/mixin_demo2</router-link>
+        </p>
     </div>
 </template>
 <script>

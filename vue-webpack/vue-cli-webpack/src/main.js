@@ -37,6 +37,15 @@ Vue.mixin({
 });
 
 // 发布，订阅模式
-Vue.prototype.bus = new Vue();
+Vue.prototype.bus = new Vue(); // 发布-订阅总线 EventBus
 // this.bus.$emit("change",data); // 发布
 // this.bus.$on("change",fn)
+
+
+/**
+ * vue 实现全局数据传输，共用的方式
+ * 1. vuex
+ * 2. Vue.mixin 全局混合
+ * 3. vue.prototype.xx 注意xx不是响应式数据，所以最好存储的是常量
+ * 4. vue.prototype.bus 发布-订阅总线 EventBus
+ */
