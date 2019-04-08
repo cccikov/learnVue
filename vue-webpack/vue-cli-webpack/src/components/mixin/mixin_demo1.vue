@@ -61,6 +61,9 @@
         <button @click="foo_10">10</button>
         <button @click="foo_11">{{11|addZero}}</button>
         <button @click="foo_12">{{12|addZero}}</button>
+        <p>
+            <input type="text" v-model="num" @blur="blur">
+        </p>
     </div>
 </template>
 <script>
@@ -71,7 +74,8 @@
     export default {
         data() {
             return {
-                str: "我是字符串"
+                str: "我是字符串",
+                num: "0"
             };
         },
         mixins: [mixin1, mixin2],
@@ -80,7 +84,13 @@
         },
         methods: {
             init() {
+                this.num = this.addZero(this.num);
                 console.log("init");
+            },
+            blur(e) {
+                if (Number(e.target.value) != 0) {
+                    this.num = this.addZero(e.target.value);
+                }
             },
             // 这里已经写了好多方法，方法太多，难以管理
             fn01() {
