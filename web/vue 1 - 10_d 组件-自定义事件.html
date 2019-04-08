@@ -390,6 +390,8 @@
         <h5>app11</h5>
         <p>父组件的值：{{age}}</p>
         <edit v-model="age" abc="haha"></edit>
+        <!-- 相当于 -->
+        <edit :value="age" @input="val => { age = val }" abc="haha"></edit>
         <hr>
     </div>
     <script type="text/javascript">
