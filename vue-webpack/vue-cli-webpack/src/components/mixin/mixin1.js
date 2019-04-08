@@ -19,13 +19,13 @@ export default {
             console.log("5")
         },
         foo_6() {
-            console.log(this.addZero("6"))
+            this.addZero("6");
         },
         foo_7() {
             console.log("7")
         },
         foo_8() {
-            console.log(this.addZero("8"))
+            this.addZero("8");
         },
         foo_9() {
             console.log("9")
@@ -34,10 +34,10 @@ export default {
             console.log("10")
         },
         foo_11() {
-            console.log(this.addZero("11"))
+            this.addZero("11");
         },
         foo_12() {
-            console.log(this.addZero("12"))
+            this.addZero("12");
         },
     },
     filters: {
@@ -46,5 +46,11 @@ export default {
 }
 
 function addZero(num) {
-    return "0" + num
+    num = String(num);
+    var len = num.length;
+    if (len < 3) {
+        return new Array(3 - len).fill("0").join("") + num;
+    } else {
+        return num;
+    }
 }
