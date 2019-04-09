@@ -38,12 +38,22 @@ let vModel = [
 const mixin = [{
     path: "/mixin_demo1",
     name: "mixin_demo1",
-    component: resolve => require(['../components/mixin/mixin_demo1.vue'], resolve)
+    component: resolve => require(['@/components/mixin/mixin_demo1.vue'], resolve)
 },{
     path: "/mixin_demo2",
     name: "mixin_demo2",
-    component: resolve => require(['../components/mixin/mixin_demo2.vue'], resolve)
+    component: resolve => require(['@/components/mixin/mixin_demo2.vue'], resolve)
 }]
+
+// 各种坑
+const warning = [
+    {
+        path: "/warning",
+        name: "warning",
+        component: resolve => require(['@/components/warning/warning.vue'], resolve)
+    }
+]
+
 
 const router = new Router({
     routes: [{
@@ -118,6 +128,7 @@ const router = new Router({
     ...checkbox,
     ...vModel,
     ...mixin,
+    ...warning,
     {
         path: "/page*",
         name: "page-all",
