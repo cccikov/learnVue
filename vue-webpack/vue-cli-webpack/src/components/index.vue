@@ -40,6 +40,9 @@
             <router-link to="/mixin_demo2">/mixin_demo2</router-link>
         </p>
         <p>
+            <router-link to="/compile">Vue.compile</router-link>
+        </p>
+        <p>
             <router-link to="/warning">各种坑</router-link>
         </p>
     </div>

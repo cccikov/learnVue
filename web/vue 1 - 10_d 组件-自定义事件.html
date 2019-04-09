@@ -29,7 +29,7 @@
     <script>
         Vue.component('button-counter', {
             template: '<button v-on:click="incrementCounter">{{ counter }}</button>',
-            data: function() {
+            data: function () {
                 return {
                     counter: 0,
                     name: "ccc",
@@ -37,7 +37,7 @@
                 }
             },
             methods: {
-                incrementCounter: function() {
+                incrementCounter: function () {
                     var data = {
                         counter: this.counter,
                         name: this.name,
@@ -57,7 +57,7 @@
                 total: 0
             },
             methods: {
-                incrementTotal: function(data) { // 事件 increment的监听器
+                incrementTotal: function (data) { // 事件 increment的监听器
                     console.log(data); // 子组件传过来的数据
                     this.total += 1
                 }
@@ -82,12 +82,12 @@
         Vue.component("tpl-b", {
             template: "<button v-bind:autoGoFn = 'fn1()'>按钮</button>",
             methods: {
-                fn1: function() {
+                fn1: function () {
                     console.log("组件生成,自动执行函数执行");
                     var that = this;
                     var n = 10;
                     var m = 0;
-                    var timer = setInterval(function() {
+                    var timer = setInterval(function () {
                         m++;
                         if (m >= n) {
                             clearInterval(timer);
@@ -102,10 +102,10 @@
         new Vue({
             el: "#app2",
             methods: {
-                listener1: function() {
+                listener1: function () {
                     console.log("触发自定义事件click");
                 },
-                listener2: function() {
+                listener2: function () {
                     console.log("触发原生click");
                 }
             }
@@ -137,7 +137,7 @@
             props: ["foo"],
             template: "<p @click='listener1()'>{{foo}}</p>",
             methods: {
-                listener1: function() {
+                listener1: function () {
                     var newValue = "world";
                     this.$emit('update:foo', newValue); // 这个是语法糖
                 }
@@ -150,7 +150,7 @@
                 bar: "hello"
             },
             watch: {
-                bar: function(newVal) {
+                bar: function (newVal) {
                     console.log("bar的值改变了 , 变成" + newVal);
                 }
             }
@@ -166,7 +166,7 @@
             props: ["foo"],
             template: "<p @click='sonListener()'>{{foo}}</p>",
             methods: {
-                sonListener: function() {
+                sonListener: function () {
                     var newValue = "world";
                     this.$emit('update', newValue);
                 }
@@ -179,12 +179,12 @@
                 bar: "hello"
             },
             methods: {
-                parentListener: function(data) {
+                parentListener: function (data) {
                     this.bar = data;
                 }
             },
             watch: {
-                bar: function(newVal) {
+                bar: function (newVal) {
                     console.log("bar的值改变了 , 变成" + newVal);
                 }
             }
@@ -206,17 +206,26 @@
 
     <!-- 使用自定义事件的表单输入组件 -->
     <div id="app5">
-        <!-- 先看看Vue提供的v-model -->
-        <input v-model="something1"> {{something1}}
-        <!-- 实际 v-model 是个语法糖 等同于-->
-        <input v-bind:value="something2" v-on:input="something2 = $event.target.value"> {{something2}}
+        <h5>app5</h5>
+        <p>
+             <!-- 先看看Vue提供的v-model -->
+            <input v-model="something1"> {{something1}}
+            <!-- 实际 v-model 是个语法糖 等同于-->
+            <input v-bind:value="something2" v-on:input="something2 = $event.target.value"> {{something2}}
+            <!-- 相当于 函数写法 -->
+            <input v-bind:value="something3" v-on:input="event => { something3 = event.target.value }"> {{something3}}
+        </p>
 
 
 
-        <custom-input v-model="something3"></custom-input>{{something3}}
-        <!-- 所以在组件中使用时，它相当于下面的简写： -->
-        <custom-input v-bind:value="something4" v-on:input="something4 = arguments[0]">
-        </custom-input>{{something4}}
+        <p>
+            <custom-input v-model="something4"></custom-input>{{something4}}
+            <!-- 所以在组件中使用时，它相当于下面的简写： -->
+            <custom-input v-bind:value="something5" v-on:input="something5 = arguments[0]"></custom-input>{{something5}}
+            <!-- 相当于 官方写法 -->
+            <custom-input v-bind:value="something6" v-on:input="val => { something6 = val }"></custom-input>{{something6}}
+        </p>
+
         <!--
             要让组件的 v-model 生效
 
@@ -229,7 +238,7 @@
             template: "<input v-on:input='change' :value='value'>",
             props: ["value"], // 如果没有这个value prop , 组件v-model绑定的量就不能改变组件里面input的值  就是父组件的值改变不了子组件的值
             methods: {
-                change: function(e) {
+                change: function (e) {
                     this.$emit('input', e.target.value); //触发 input 事件( 这里的input是自定义事件)
                 }
             }
@@ -239,8 +248,10 @@
             data: {
                 something1: "",
                 something2: "",
-                something3: "hi",
-                something4: "hi"
+                something3: "",
+                something4: "hi",
+                something5: "hi",
+                something6: "hi"
             }
         });
     </script>
@@ -269,7 +280,7 @@
                 checkedval: Boolean,
             },
             methods: {
-                sonListener: function(e) {
+                sonListener: function (e) {
                     console.log(e.target === this.$el); // true 所以在某些情况下需要获取dom节点 , 可以用this.$el
                     this.$emit('self-input', e.target.checked); //触发 self-input 事件 ; 由于是复选框,这里传过去的值不再是input的value , 而是checked(这个checked属性是表单原生js的checked,表示是否选中;不是默认选上的那个标签checked属性)
                 }
@@ -286,7 +297,7 @@
 
         let max = 5;
         let n = 0;
-        let timer = setInterval(function() {
+        let timer = setInterval(function () {
             if (n > max) {
                 clearInterval(timer);
             }
@@ -302,14 +313,14 @@
     <!-- v-modal 在非 input 标签中 -->
     <script type="text/javascript">
         // 组件
-        Vue.component("edit",{
-            template:`<div>
+        Vue.component("edit", {
+            template: `<div>
                 <button @click="changeValue">改变值</button>
             </div>`,
-            methods:{
-                changeValue(){
+            methods: {
+                changeValue() {
                     let ran = Math.random();
-                    this.$emit("input",ran);
+                    this.$emit("input", ran);
                 }
             }
         })
@@ -322,9 +333,9 @@
     </div>
     <script type="text/javascript">
         new Vue({
-            el:"#app9",
-            data:{
-                age:19
+            el: "#app9",
+            data: {
+                age: 19
             }
         })
     </script>
@@ -334,8 +345,8 @@
     <!-- v-modal 在非 input 标签中,自定义v-model 的 prop 和 event  -->
     <script type="text/javascript">
         // 组件
-        Vue.component("edit",{
-            template:`<div>
+        Vue.component("edit", {
+            template: `<div>
                 <p>props:value => {{syncDate}}</p>
                 <button @click="changeValue">改变值</button>
             </div>`,
@@ -343,11 +354,11 @@
                 prop: "syncDate", // 指定 组件v-model 的 prop
                 event: "syncEvent" // 指定 组件v-model 监听的事件
             },
-            props:["syncDate"],
-            methods:{
-                changeValue(){
+            props: ["syncDate"],
+            methods: {
+                changeValue() {
                     let ran = Math.random();
-                    this.$emit("syncEvent",ran); // ***，关键，父组件变量的值（age）为触发的事件附加的参数
+                    this.$emit("syncEvent", ran); // ***，关键，父组件变量的值（age）为触发的事件附加的参数
                 }
             }
         })
@@ -360,9 +371,9 @@
     </div>
     <script type="text/javascript">
         new Vue({
-            el:"#app10",
-            data:{
-                age:19
+            el: "#app10",
+            data: {
+                age: 19
             }
         })
     </script>
@@ -372,16 +383,16 @@
     <!-- v-modal 在非 input 标签中 ， 默认情况下，一个组件上的 v-model 会把 value 用作 prop 且把 input 用作 event-->
     <script type="text/javascript">
         // 组件
-        Vue.component("edit",{
-            template:`<div>
+        Vue.component("edit", {
+            template: `<div>
                 <p>props:value => {{value}}</p>
                 <button @click="changeValue">改变值</button>
             </div>`,
-            props:["value"], // 不定义props也是可以使用v-model的，但是组件内部就访问不到这个值而已。 demo9就是这样
-            methods:{
-                changeValue(){
+            props: ["value"], // 不定义props也是可以使用v-model的，但是组件内部就访问不到这个值而已。 demo9就是这样
+            methods: {
+                changeValue() {
                     let ran = Math.random();
-                    this.$emit("input",ran); // ***，关键，父组件变量的值（age）为触发的事件附加的参数
+                    this.$emit("input", ran); // ***，关键，父组件变量的值（age）为触发的事件附加的参数
                 }
             }
         })
@@ -396,9 +407,9 @@
     </div>
     <script type="text/javascript">
         new Vue({
-            el:"#app11",
-            data:{
-                age:19
+            el: "#app11",
+            data: {
+                age: 19
             }
         })
     </script>
@@ -425,7 +436,7 @@
         new Vue({
             el: "#app7",
             methods: {
-                btnclick: function() {
+                btnclick: function () {
                     var data = Math.random();
                     middleVue.$emit('somethindchange', data);
                 }
@@ -440,14 +451,14 @@
                 data: "暂时没有数据"
             },
             methods: {
-                outside: function(data) {
+                outside: function (data) {
                     console.log("从外面获取的数据", data);
                     this.data = data;
                     // this.times++ // 一般来说应该在这里面进行times的递加 , 但是为了体现中央事件总线就在外面的 somethindchange事件侦听器里面操作
                 }
             }
         });
-        middleVue.$on('somethindchange', function(data) { // 在app8里面用v-on去监听somethindchange是没有用的 , 因为somethindchange不是实例vm8的事件 , 是实例middle里面定义的事件
+        middleVue.$on('somethindchange', function (data) { // 在app8里面用v-on去监听somethindchange是没有用的 , 因为somethindchange不是实例vm8的事件 , 是实例middle里面定义的事件
             vm8.times++;
             vm8.outside(data);
         });
