@@ -174,3 +174,56 @@ router.afterEach(() => {
 
 
 export default router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function scrollBehavior(to, from, savedPosition) {
+    if (savedPosition && to.meta.keepAlive) {
+        window.requestAnimationFrame(() => {
+            window.scrollTo(savedPosition.x, savedPosition.y); // chrome 浏览器后退时，滚动位置由chrome控制
+        });
+    } else {
+        window.requestAnimationFrame(() => {
+            window.scrollTo(0, 0); // chrome 浏览器后退时，滚动位置由chrome控制
+        });
+        let ua = navigator.userAgent.toLowerCase();
+        /**
+         * qq uc
+         * ios 的浏览器，跳转时浏览器状态栏会遮住内容
+         */
+        if ((/(iPhone|iPad|iPod|iOS)/i).test(ua)) {
+            resizeToTop()
+        } else if ((/mqqbrowser/).test(ua)) {
+            resizeToTop(true);
+        }
+    }
+}
+
+function resizeToTop(again) {
+    window.onresize = function () {
+        window.scrollTo(0, 0);
+        if (again) {
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 1000 / 30);
+        }
+        window.onresize = null;
+        window.ontouchmove = null
+    }
+    window.ontouchmove = function () {
+        window.onresize = null;
+        window.ontouchmove = null
+    }
+}
