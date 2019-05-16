@@ -44,8 +44,8 @@
         </p>
         <button @click="insert">插入</button>
         <button @click="remove">移除</button>
-        <button @click="exchageUp">向上</button>
-        <button @click="exchageDown">向下</button>
+        <button @click="exchangeUp">向上</button>
+        <button @click="exchangeDown">向下</button>
         <p>
             <a href="javascript:void(0)" @click="$router.push({name:'mixin_demo2'})">去demo2</a>
         </p>

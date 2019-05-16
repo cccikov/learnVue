@@ -37,8 +37,8 @@
         </ul>
         <p>
             <button @click="remove">移除</button>
-            <button @click="exchageUp">向上</button>
-            <button @click="exchageDown">向下</button>
+            <button @click="exchangeUp">向上</button>
+            <button @click="exchangeDown">向下</button>
         </p>
 
         <p>

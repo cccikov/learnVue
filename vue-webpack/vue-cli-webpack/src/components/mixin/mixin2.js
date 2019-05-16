@@ -52,7 +52,7 @@ export default {
                 this.index = 0;
             }
         },
-        exchage(posi1, posi2) {
+        exchange(posi1, posi2) {
             if (this.arr.length - 1 < posi1 || this.arr.length - 1 < posi2 || posi1 == posi2 || posi1 < 0 || posi2 < 0) {
                 return false;
             }
@@ -61,13 +61,13 @@ export default {
             this.$set(this.arr, posi2, mid);
             return true
         },
-        exchageUp() {
-            if (this.exchage(this.index, this.index - 1)) {
+        exchangeUp() {
+            if (this.exchange(this.index, this.index - 1)) {
                 this.index--;
             }
         },
-        exchageDown() {
-            if (this.exchage(this.index, this.index + 1)) {
+        exchangeDown() {
+            if (this.exchange(this.index, this.index + 1)) {
                 this.index++;
             }
         },
