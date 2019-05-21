@@ -48,7 +48,6 @@ export default {
             if (this.arr.length > 0 && (this.arr.length - 1 < this.index)) {
                 this.index = this.arr.length - 1
             } else if (this.arr.length == 0) {
-                debugger;
                 this.index = 0;
             }
         },

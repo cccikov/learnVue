@@ -72,6 +72,10 @@ const router = new Router({
             name: "test",
             component: resolve => require(['@/components/test.vue'], resolve)
         }, {
+            path: "/demo",
+            name: "demo",
+            component: resolve => require(['@/components/demo.vue'], resolve)
+        }, {
             path: '/HelloWorld',
             name: 'HelloWorld',
 
@@ -115,7 +119,7 @@ const router = new Router({
         {
             path: "/page1",
             name: "page1",
-            component: resolve => require(['@/components/page2.vue'], resolve)
+            component: resolve => require(['@/components/page1.vue'], resolve)
         },
         {
             path: "/page2",
@@ -147,7 +151,9 @@ const router = new Router({
 
 let ua = navigator.userAgent.toLowerCase();
 
-router.beforeEach((from, to, next) => {
+router.beforeEach((to, from, next) => {
+    console.log("from", from.fullPath);
+    console.log("to", to.fullPath);
     if ((/ucbrowser/).test(ua) || (/mqqbrowser/).test(ua) || (/iPhone|iPad|iPod|iOS/i).test(ua)) {
         /**
          * qq uc
@@ -164,7 +170,25 @@ router.beforeEach((from, to, next) => {
         }
     }
 
-    next();
+    if (to.name === "page1" && !("num" in to.query)) {
+        router.push({
+            name: "page1",
+            query: {
+                num: Math.random()
+            }
+        })
+    } else if (to.name === "page2" && !("num" in to.query)) {
+        router.push({
+            name: "page2",
+            query: {
+                num: Date.now()
+            }
+        });
+        next();
+    } else {
+        next();
+    }
+
 });
 
 
