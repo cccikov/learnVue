@@ -178,14 +178,20 @@ router.beforeEach((to, from, next) => {
             }
         })
     } else if (to.name === "page2" && !("num" in to.query)) {
+    var stackId = parseInt(Math.random() * 100000); // 当前调用桟ID，假装是ID而已
+    console.log("%c 进入beforeEach id:" + stackId, "color:red");
+    if (to.name === "page2" && !("num" in to.query)) {
+        console.log("%c 1 id:" + stackId, "color:red");
         router.push({
             name: "page2",
             query: {
                 num: Date.now()
             }
         });
+        console.log("%c 3 id:" + stackId, "color:red");
         next();
     } else {
+        console.log("%c 2 id:" + stackId, "color:red");
         next();
     }
 
