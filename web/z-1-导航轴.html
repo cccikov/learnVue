@@ -38,7 +38,7 @@
             content: "▼";
             display: inline-block;
             vertical-align: middle;
-            margin: -3px 0 0 5px;
+            margin: -5px 0 0 5px;
             font-size: 12px;
         }
 
@@ -84,13 +84,44 @@
             vertical-align: middle;
         }
 
+        .left .item:first-of-type h5::before {
+            content: "";
+            position: absolute;
+            top: 0px;
+            left: -2px;
+            width: 3px;
+            height: calc(10px + 12px);
+            background: #fff;
+        }
+
+        .left .item:last-of-type h5:not(.open)::before {
+            content: "";
+            position: absolute;
+            bottom: 0px;
+            left: -2px;
+            width: 3px;
+            height: calc(100% - 10px - 12px);
+            background: #fff;
+        }
+
+        .left .item:last-of-type ul li:last-of-type:before {
+            content: "";
+            position: absolute;
+            bottom: 0px;
+            left: -2px;
+            width: 3px;
+            height: calc(100% - 15px);
+            background: #fff;
+        }
+
+
         .left .item ul {
-            color: #666;
+            color: #808080;
         }
 
         .left .item ul li {
             position: relative;
-            padding: 0 0 0 20px;
+            padding: 0 0 0 30px;
             line-height: 30px;
             cursor: pointer;
         }
@@ -161,8 +192,7 @@
             el: "#app",
             data: {
                 id: "1",
-                list: [
-                    {
+                list: [{
                         name: "开始开始开始开始开始开始开始开",
                         id: "1",
                         children: []
@@ -170,8 +200,7 @@
                     {
                         name: "基础教学",
                         id: "2",
-                        children: [
-                            {
+                        children: [{
                                 name: "开机",
                                 id: "2-1"
                             },
@@ -196,8 +225,7 @@
                     {
                         name: "高级教学",
                         id: "3",
-                        children: [
-                            {
+                        children: [{
                                 name: "html入门",
                                 id: "3-1"
                             },
@@ -226,16 +254,14 @@
                     {
                         name: "关于我们",
                         id: "4",
-                        children: [
-                            {
-                                name: "关于我们",
-                                id: "4-1"
-                            }
-                        ]
+                        children: [{
+                            name: "关于我们",
+                            id: "4-1"
+                        }]
                     },
 
-                ],// 整理前
-                sortList: [],// 整理后的数据
+                ], // 整理前
+                sortList: [], // 整理后的数据
             },
             created() {
                 this.init();
