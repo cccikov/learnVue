@@ -45,6 +45,8 @@
             position: relative;
             font-size: 18px;
             padding: 10px 0;
+            cursor: pointer;
+            user-select: none;
         }
 
         .left h5:before {
@@ -74,6 +76,11 @@
             margin: 0 0 0 -10px;
         }
 
+        .left li {
+            cursor: pointer;
+            user-select: none;
+        }
+
         .left li:before {
             content: "";
             display: inline-block;
@@ -89,6 +96,19 @@
             flex: 1 1 auto;
             border-left: 1px solid #eee;
         }
+
+        .right p {
+            overflow: hidden;
+        }
+
+        .right p a:first-of-type {
+            float: left;
+        }
+
+        .right p a:last-of-type {
+            float: right;
+        }
+
 
         .active {
             color: #2196F3;
@@ -116,7 +136,8 @@
         <div class="left">
             <div class="item" v-for="item in list" :class="{canOpen:item.canOpen,open:item.open}">
                 <h5 @click="itemClick(item)" :class="{active:id==item.id || childrenHasActive(item)}">{{item.name}}
-                    <i></i></h5>
+                    <i></i>
+                </h5>
                 <ul v-show="item.open">
                     <li @click="liClick(li)" :class="{active:id==li.id}" v-for="li in item.children">{{li.name}}</li>
                 </ul>
@@ -124,6 +145,11 @@
         </div>
         <div class="right">
             {{id}}
+            <p>
+                <a v-show="id != sortList[0]" href="javascript:void(0)" @click="change(-1)">上一个</a>
+                <a v-show="id != sortList.slice(-1)[0]" href="javascript:void(0)" @click="change(1)">下一个</a>
+            </p>
+            {{index_list}}
         </div>
     </div>
     <script>
@@ -190,14 +216,29 @@
                         ]
                     },
                     {
-                        name: "结语",
+                        name: "关于我们",
                         id: "4",
+                        children: [
+                            {
+                                name: "关于我们",
+                                id: "4-1"
+                            }
+                        ]
                     },
-
-                ]
+                    {
+                        name: "结语",
+                        id: "5",
+                    },
+                ],// 整理前
+                sortList: [],// 整理后的数据
             },
             created() {
                 this.init();
+            },
+            computed: {
+                index_list() {
+                    return searchData_arr(this.list, this.id);
+                }
             },
             methods: {
                 init() {
@@ -208,7 +249,10 @@
                             this.$set(val, "open", false);
                         }
                     });
+
+                    this.sortList = flat(this.list);
                 },
+                // 展开，关闭
                 itemClick(item) {
                     if (item.children && item.children.length > 0) {
                         item.open = !item.open;
@@ -216,16 +260,66 @@
                         this.id = item.id;
                     }
                 },
+                // 选择
                 liClick(li) {
                     this.id = li.id;
                 },
+                // 判断子数组有无被选中
                 childrenHasActive(item) {
                     return item.children && item.children.some(val => {
                         return val.id == this.id;
                     });
+                },
+                // 上一个 下一个
+                change(arg) {
+                    var index = this.sortList.indexOf(this.id);
+                    if (arg == 1) {
+                        this.id = this.sortList[++index];
+                    } else if (arg == -1) {
+                        this.id = this.sortList[--index];
+                    }
+                    var item = this.list[this.index_list[0]];
+                    if (item.children && item.children.length > 0) {
+                        item.open = true;
+                    }
                 }
+
             }
         });
+
+        /**
+         * 递归获取索引链
+         */
+        function searchData_arr(arr, id) {
+            var index = -1;
+            arr.forEach((val, key) => {
+                if (val.id == id) {
+                    index = [key];
+                } else if (val.children && val.children.length > 0) {
+                    var result = searchData_arr(val.children, id);
+                    if (result != -1) {
+                        result.unshift(key);
+                        index = result
+                    }
+                }
+            });
+            return index;
+        }
+
+        /**
+         * 递归获取 扁平化数组
+         */
+        function flat(arr) {
+            let list = [];
+            arr.forEach(val => {
+                if (val.children && val.children.length > 0) {
+                    list = list.concat(flat(val.children));
+                } else {
+                    list.push(val.id);
+                }
+            });
+            return list;
+        }
     </script>
 </body>
 
