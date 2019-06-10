@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>全局按钮倒计时</title>
+    <script type="text/javascript" src="vue.js"></script>
+    <script type="text/javascript" src="https://cccikov.github.io/cccgit/test/js/ccc.js"></script>
+    <style>
+        .primary {
+            background: #2d8cf0;
+            color: #fff;
+        }
+
+        button {
+            line-height: 30px;
+            padding: 0 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            opacity: 1;
+            transition: opacity 300ms;
+        }
+
+        button.not {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        button:active {
+            opacity: 0.8;
+            transition: opacity 0s;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <p>即使用户刷新页面，倒计时也是继续保留的</p>
+        <button class="primary" :class="{not:limitTime!=0}" @click="fn1">
+            <span>按钮</span>
+            <span v-show="limitTime != 0">{{limitTime}}</span>
+        </button>
+    </div>
+    <script>
+        var limitTime = ccc.getSessionStorage("limitTime");
+        if (limitTime && limitTime - Date.now() > 0) {
+            limitTime = parseInt((limitTime - Date.now()) / 1000);
+        } else {
+            limitTime = 0;
+        }
+
+        new Vue({
+            el: "#app",
+            data: {
+                limitTime, // 倒计时，如果是全局，可以设在vuex中
+                limitTimer: null, // 定时器
+            },
+            created() {
+                if (limitTime > 0) {
+                    this.reduce();
+                }
+            },
+            methods: {
+                fn1() {
+                    this.limitTime = 60;
+                    ccc.setSessionStorage("limitTime", Date.now() + this.limitTime * 1000);
+                    this.reduce();
+                },
+                reduce() {
+                    this.timer = setInterval(() => {
+                        this.limitTime--;
+                        console.log(this.limitTime);
+                        if (this.limitTime === 0) {
+                            clearInterval(this.timer);
+                        }
+                    }, 1000);
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
