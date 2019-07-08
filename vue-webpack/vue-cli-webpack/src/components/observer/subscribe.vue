@@ -30,7 +30,7 @@
             // 每次进来都会订阅一次(由于每次进来的this都和之前的this不一样了)
             this.bus.$on("login", this.loginHandle);
 
-            // 每次进来只会订阅一次
+            // 每次进来只会订阅一次，因为监听器（函数是全局定义的，都是同一个）
             console.log(!!this.$root.loginHandle);
             let loginHandle =
                 this.$root.loginHandle ||
