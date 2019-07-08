@@ -49,6 +49,14 @@ const compile = [{
     name: "compile",
     component: resolve => require(['@/components/compile/compile.vue'], resolve)
 }]
+
+// 日期选择
+const datePicker = [{
+    path:"/datePicker",
+    name:"datePicker",
+    component:resolve => require(['@/components/datePicker/datePicker.vue'], resolve)
+}]
+
 // 各种坑
 const warning = [{
     path: "/warning",
@@ -135,6 +143,7 @@ const router = new Router({
         ...vModel,
         ...mixin,
         ...compile,
+        ...datePicker,
         ...warning,
         {
             path: "/page*",

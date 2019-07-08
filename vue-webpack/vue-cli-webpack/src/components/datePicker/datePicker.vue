@@ -4,11 +4,10 @@
             <!-- 年份/月份 流量查询-->
             <div class="monthHeader">
                 <!--绑定click事件，点击按钮；重新刷新当前日期-->
-                <button class="lf oprButton oprButton-bg ml5" @click="pickPre(currentYear, currentMonth)">❮上月</button>
+                <button class="lf oprButton oprButton-bg ml5" @click="pickPre(beginYear, beginMonth)">❮上月</button>
                 <span class="lf oprButton title-data">{{ nowFullYear }}/{{ nowMonth }}/{{ nowDay }}</span>
-                <button class="lf oprButton oprButton-bg" @click="pickNext(currentYear,currentMonth)">下月❯</button>
-                <button class="lf oprButton oprButton-bg ml5" @click="pickToday(currentYear,currentMonth)">今天</button>
-                <button class="rt oprButton oprButton-bg mr10">流量查询</button>
+                <button class="lf oprButton oprButton-bg" @click="pickNext(beginYear,beginMonth)">下月❯</button>
+                <button class="lf oprButton oprButton-bg ml5" @click="pickToday(beginYear,beginMonth)">今天</button>
             </div>
             <!-- 日历 -->
             <div class="calendar-list calendar-date">
@@ -25,32 +24,29 @@
                 <!-- 日期 -->
                 <ul class="calendar-days clearfix">
                     <!-- 核心 v-for循环 每一次循环用<li>标签创建一天 -->
-                    <li class="daysList" v-for="(dayobject,inedx) in days" :key="dayobject.id">
+                    <li class="daysList" v-for="(dayObj,inedx) in days" :key="dayObj.id">
                         <!--本月-->
                         <!--如果不是本月 改变类名加灰色-->
-                        <div class="daysList-cont daysList-invalid" v-if="dayobject.day.getMonth()+1 != currentMonth">
+                        <div class="daysList-cont daysList-invalid" v-if="dayObj.day.getMonth()+1 != beginMonth">
                             <div class="daysList-mid">
-                                <p class="daysList-item">{{ dayobject.day.getDate() }}</p>
-                                <p class="daysList-item">{{ dayobject.parccent}}</p>
+                                <p class="daysList-item">{{ dayObj.day.getDate() }}</p>
                             </div>
                         </div>
                         <!-- 如果是本月 判断是不是该月第一天-->
-                        <div class="daysList-cont daysList-normal" :class="{active:inedx==number}" v-else-if="dayobject.day.getFullYear() == currentYear && //当前年份
-                            ((dayobject.day.getMonth()+1 == currentMonth &&//本月且不是系统月份
-                            dayobject.day.getMonth() != new Date().getMonth())&&
-                            dayobject.day.getDate() == currentDay)||
-                            (dayobject.day.getMonth() == new Date().getMonth() &&//当前系统时间
-                            dayobject.day.getDate() ==new Date().getDate())" @click="pickDays(currentYear,currentMonth,dayobject.day.getDate(),inedx)">
+                        <div class="daysList-cont daysList-normal" :class="{active:inedx==number}" v-else-if="dayObj.day.getFullYear() == beginYear && //当前年份
+                            ((dayObj.day.getMonth()+1 == beginMonth &&//本月且不是系统月份
+                            dayObj.day.getMonth() != new Date().getMonth())&&
+                            dayObj.day.getDate() == beginDay)||
+                            (dayObj.day.getMonth() == new Date().getMonth() &&//当前系统时间
+                            dayObj.day.getDate() ==new Date().getDate())" @click="pickDays(beginYear,beginMonth,dayObj.day.getDate(),inedx)">
                             <div class="daysList-mid">
-                                <p class="daysList-item">{{ dayobject.day.getDate() }}</p>
-                                <p class="daysList-item">{{ dayobject.parccent}}</p>
+                                <p class="daysList-item">{{ dayObj.day.getDate() }}</p>
                             </div>
                         </div>
                         <!-- 如果是本月-->
-                        <div class="daysList-cont daysList-normal" v-else :class="{active:inedx==number}" @click="pickDays(currentYear,currentMonth,dayobject.day.getDate(),inedx)">
+                        <div class="daysList-cont daysList-normal" v-else :class="{active:inedx==number}" @click="pickDays(beginYear,beginMonth,dayObj.day.getDate(),inedx)">
                             <div class="daysList-mid">
-                                <p class="daysList-item">{{ dayobject.day.getDate() }}</p>
-                                <p class="daysList-item">{{ dayobject.parccent}}</p>
+                                <p class="daysList-item">{{ dayObj.day.getDate() }}</p>
                             </div>
                         </div>
                     </li>
@@ -67,10 +63,10 @@
         data() {
             return {
                 number: 0, //active样式索引
-                currentDay: 1, //当前日
-                currentMonth: 1, //当前月份
-                currentYear: 1970, //当前年份
-                currentWeek: 1, //前星期X
+                beginDay: 1, //这个月的1号
+                beginMonth: 1, //当前月份
+                beginYear: 1970, //当前年份
+                beginWeek: 1, //前星期X
                 nowFullYear: 1970, //中间显示当前年
                 nowMonth: 1, //中间显示当前月
                 nowDay: 1, //中间显示当前日
@@ -83,55 +79,72 @@
         },
         methods: {
             initData(cur) {
-                let date;
+                let begin; // 这个月1号
                 if (cur) {
-                    date = new Date(cur);
+                    begin = new Date(cur);
                 } else {
                     const now = new Date();
-                    const d = new Date(this.formatDate(now.getFullYear(), now.getMonth(), 1));
+                    const d = new Date(this.formatDate(now.getFullYear(), now.getMonth(), 1)); // 上个月的1号 getMonth() 从0开始
+                    console.log("d", d);
                     d.setDate(35);
-                    date = new Date(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                    begin = new Date(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1)); // 这个月的1号
                 }
-                // 初始化年月日
-                this.currentDay = date.getDate();
-                this.currentYear = date.getFullYear();
-                this.currentMonth = date.getMonth() + 1;
 
+                /* 这个月的年月日 */
+                this.beginYear = begin.getFullYear();
+                this.beginMonth = begin.getMonth() + 1;
+                this.beginDay = begin.getDate();
+                console.log(this.beginYear, this.beginMonth, this.beginDay);
+
+                /* 今天的年月日 */
+                this.nowFullYear = begin.getFullYear();
+                this.nowMonth = begin.getMonth() + 1;
                 this.nowDay = new Date().getDate();
-                this.nowFullYear = date.getFullYear();
-                this.nowMonth = date.getMonth() + 1;
+                console.log(this.nowFullYear, this.nowMonth, this.nowDay);
 
-                this.currentWeek = date.getDay(); //获取当前星期X(0-6,0代表星期天)
-                if (this.currentWeek == 0) {
-                    this.currentWeek = 7;
+                /* 这个月的1号是周几 */
+                this.beginWeek = begin.getDay(); //获取当前星期X(0-6,0代表星期天)
+                if (this.beginWeek == 0) {
+                    this.beginWeek = 7;
                 }
-                const str = this.formatDate(this.currentYear, this.currentMonth, this.currentDay);
-                this.days.length = 0;
+
+                const str = this.formatDate(this.beginYear, this.beginMonth, this.beginDay); // 这个月1号的字符串形式
+                console.log("str", str);
+                this.days.length = 0; // 清空数组
+
                 // 例今天是周五，放在第一行第5个位置，前面4个上个月的
                 //初始化本周
-                for (let i = this.currentWeek - 1; i >= 0; i--) {
+                for (let i = this.beginWeek - 1; i >= 0; i--) {
                     const d = new Date(str);
-                    d.setDate(d.getDate() - i);
-                    const dayobject = {}; //用一个对象包装Date对象 以便为以后预定功能添加属性
-                    dayobject.day = d;
-                    dayobject.parccent = "100%";
-                    this.days.push(dayobject); //将日期放入data 中的days数组 供页面渲染使用
+                    d.setDate(d.getDate() - i); // 将日期设定为上个的日期
+                    const dayObj = {}; //用一个对象包装Date对象 以便为以后预定功能添加属性
+                    dayObj.day = d;
+                    this.days.push(dayObj); //将日期放入data 中的days数组 供页面渲染使用
                 }
 
-                //this.nowDay-1（今天几号索引）this.currentWeek-1（当月第一天周几索引）
+                //this.nowDay-1（今天几号索引）this.beginWeek-1（当月第一天周几索引）
                 //得到今天的索引值 初始化active样式
-                this.number = this.nowDay + this.currentWeek - 2;
+                this.number = this.nowDay + this.beginWeek - 2;
 
                 //列表显示的天数6*7减去前星期X
-                for (let i = 1; i <= 42 - this.currentWeek; i++) {
+                let i = 1;
+                while (i <= 42 - this.beginWeek) {
+                    // 最大只能是42 - this.beginWeek
                     const d = new Date(str);
                     d.setDate(d.getDate() + i);
-                    const dayobject = {};
-                    dayobject.day = d;
-                    dayobject.parccent = "100%";
-                    this.days.push(dayobject);
+
+                    let month = d.getMonth() + 1;
+                    let weekDay = d.getDay();
+                    if (month !== this.beginMonth && weekDay === 1) { // 当日期是下个月且是周一的时候，表示当前月份的日历显示不需要这一行的日期了
+                        break;
+                    }
+
+                    const dayObj = {};
+                    dayObj.day = d;
+                    this.days.push(dayObj);
+                    i++;
                 }
-                //console.log(this.days)
+
             },
             //上个月
             pickPre(year, month) {
@@ -142,7 +155,7 @@
                 d.setDate(0);
                 this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
                 this.nowDay = 1;
-                this.number = this.currentWeek - 1; //active样式
+                this.number = this.beginWeek - 1; //active样式
             },
             //下个月
             pickNext(year, month) {
@@ -150,8 +163,8 @@
                 d.setDate(35);
                 this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
                 this.nowDay = 1;
-                // console.log(this.currentWeek)
-                this.number = this.currentWeek - 1; //active样式
+                // console.log(this.beginWeek)
+                this.number = this.beginWeek - 1; //active样式
                 // console.log(this.number)
                 //console.log(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
             },
@@ -159,7 +172,7 @@
             pickToday(year, month) {
                 const d = new Date();
                 this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
-                //this.number=this.currentWeek-1;//active样式
+                //this.number=this.beginWeek-1;//active样式
                 //console.log(this.formatDate(d.getFullYear(), d.getMonth()+1, d.getDate()))
             },
             pickYear(year, month) {
@@ -189,27 +202,30 @@
         }
     };
 </script>
-<style lang="scss" scoped>
-    @import "../../../common/css/common.scss";
-    //定义基本长度
-    $line10: 10px;
-    $lf: left;
-    $rt: right;
+<style lang="less" scoped>
+    .calendarTraffic {
+        background: #000;
+    }
 
-    $color-fff: #ffffff;
+    //定义基本长度
+    @line10: 10px;
+    @lf: left;
+    @rt: right;
+
+    @color-fff: #ffffff;
     //按钮背景颜色
-    $button-bg: #314d68;
+    @button-bg: #314d68;
     //正文颜色
-    $text-color: #b8c9da;
+    @text-color: #b8c9da;
     //hover蓝色
-    $table-deepBlue: #0c8ceb;
-    $table-blue: #289cf4;
+    @table-deepBlue: #0c8ceb;
+    @table-blue: #289cf4;
     //失效颜色
-    $invalid-color: #2f3f53;
-    $item-color: #b8c9da;
-    $item-invalid-color: #77899c;
+    @invalid-color: #2f3f53;
+    @item-color: #b8c9da;
+    @item-invalid-color: #77899c;
     //字体居中
-    $text-center: center;
+    @text-center: center;
     button {
         outline: none;
         border: none;
@@ -218,13 +234,13 @@
         list-style: none;
     }
     .lf {
-        float: $lf;
+        float: @lf;
     }
     .rt {
-        float: $rt;
+        float: @rt;
     }
     .topWrap {
-        height: $line10 * 33.5;
+        height: @line10 * 33.5;
     }
     //清楚浮动
     .clearfix {
@@ -245,93 +261,93 @@
     }
     //日历表头
     .monthHeader {
-        height: $line10 * 3.6;
-        padding-top: $line10 * 0.6;
+        height: @line10 * 3.6;
+        padding-top: @line10 * 0.6;
         //按钮样式
         .oprButton {
-            height: $line10 * 2.5;
-            padding: 0 $line10;
-            border-radius: $line10/2;
-            color: $color-fff;
-            line-height: $line10 * 2.5;
+            height: @line10 * 2.5;
+            padding: 0 @line10;
+            border-radius: @line10 / 2;
+            color: @color-fff;
+            line-height: @line10 * 2.5;
             cursor: pointer;
         }
         .oprButton-bg {
-            background-color: $button-bg;
+            background-color: @button-bg;
         }
         .title-data {
-            text-align: $text-center;
-            width: $line10 * 10;
+            text-align: @text-center;
+            width: @line10 * 10;
         }
         .ml5 {
-            margin-left: $line10/2;
+            margin-left: @line10 / 2;
         }
         .mr10 {
-            margin-right: $line10;
+            margin-right: @line10;
         }
     }
 
     //日历
     .calendar-list {
-        color: $text-color;
+        color: @text-color;
         //日历星期头
         .calendar-weekadys {
             width: 100%;
         }
         .calendar-weekadys .weekadys-item {
-            height: $line10 * 2.4;
-            line-height: $line10 * 2.4;
+            height: @line10 * 2.4;
+            line-height: @line10 * 2.4;
         }
         .calendar-weekadys .weekadys-item,
         .calendar-days .daysList {
             width: 14%;
-            float: $lf;
-            text-align: $text-center;
-            color: $text-color;
-            margin-right: $line10 * 0.1;
+            float: @lf;
+            text-align: @text-center;
+            color: @text-color;
+            margin-right: @line10 * 0.1;
         }
         .calendar-days .daysList {
             cursor: pointer;
-            height: $line10 * 4.5;
-            color: $item-color;
+            height: @line10 * 4.5;
+            color: @item-color;
             .daysList-cont {
                 width: 100%;
-                float: $lf;
+                float: @lf;
             }
         }
         .calendar-days .daysList-normal .daysList-item:nth-child(2n) {
-            color: $item-invalid-color;
+            color: @item-invalid-color;
         }
         .calendar-days .daysList-normal .daysList-item:nth-child(2n + 1) {
-            color: $item-color;
+            color: @item-color;
         }
         .calendar-days .daysList-mid {
-            height: $line10 * 3.4;
-            margin: $line10 * 0.4;
+            height: @line10 * 3.4;
+            margin: @line10 * 0.4;
         }
         .calendar-days .daysList-cont.daysList-normal:hover,
         .daysList-normal.active {
-            border-radius: $line10/2;
-            background-color: $table-deepBlue;
+            border-radius: @line10 / 2;
+            background-color: @table-deepBlue;
         }
         .calendar-days .daysList-cont.daysList-normal:hover .daysList-mid,
         .daysList-normal.active .daysList-mid {
-            background-color: $table-blue;
+            background-color: @table-blue;
         }
         .calendar-days .daysList-cont.daysList-normal:hover p,
         .daysList-normal.active p {
-            color: $color-fff !important;
+            color: @color-fff !important;
         }
         .daysList-item {
-            height: $line10 * 1.6;
+            height: @line10 * 1.6;
         }
         // 上个月或者下个月
         .daysList-invalid {
-            background-color: $invalid-color;
-            border-radius: $line10/2;
+            background-color: @invalid-color;
+            border-radius: @line10 / 2;
         }
         .daysList-invalid .daysList-item {
-            color: $item-invalid-color;
+            color: @item-invalid-color;
         }
     }
 </style>
