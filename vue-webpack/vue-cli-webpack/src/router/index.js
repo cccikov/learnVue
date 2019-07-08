@@ -55,7 +55,11 @@ const datePicker = [{
     path:"/datePicker",
     name:"datePicker",
     component:resolve => require(['@/components/datePicker/datePicker.vue'], resolve)
-}]
+},{
+    path:"/weekPicker",
+    name:"weekPicker",
+    component:resolve => require(['@/components/datePicker/weekPicker.vue'], resolve)
+},]
 
 // 各种坑
 const warning = [{
