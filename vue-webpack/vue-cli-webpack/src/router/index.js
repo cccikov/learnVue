@@ -52,14 +52,21 @@ const compile = [{
 
 // 日期选择
 const datePicker = [{
-    path:"/datePicker",
-    name:"datePicker",
-    component:resolve => require(['@/components/datePicker/datePicker.vue'], resolve)
-},{
-    path:"/weekPicker",
-    name:"weekPicker",
-    component:resolve => require(['@/components/datePicker/weekPicker.vue'], resolve)
-},]
+        path: "/datePicker",
+        name: "datePicker",
+        component: resolve => require(['@/components/datePicker/datePicker.vue'], resolve)
+    },
+    {
+        path: "/weekPicker",
+        name: "weekPicker",
+        component: resolve => require(['@/components/datePicker/weekPicker.vue'], resolve)
+    },
+    {
+        path: "/weekPickerInput",
+        name: "weekPickerInput",
+        component: resolve => require(['@/components/datePicker/weekPickerInput.vue'], resolve)
+    }
+]
 
 // 各种坑
 const warning = [{

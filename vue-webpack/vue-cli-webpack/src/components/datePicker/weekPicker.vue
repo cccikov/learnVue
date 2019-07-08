@@ -1,4 +1,5 @@
 <style lang="less" scoped>
+
     @width: 24;
     * {
         padding: 0;
@@ -10,8 +11,13 @@
         margin: 0;
         list-style: none;
     }
+    .week-picker{
+        position: relative;
+    }
     .calendarTraffic {
         position: absolute;
+        top: 0;
+        left: 0;
         box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
     }
     .header {
@@ -114,8 +120,8 @@
 </style>
 
 <template>
-    <div class>
-        <span class="lf oprButton title-data">{{ chosen.slice(0,1)[0] }}--{{chosen.slice(-1)[0]}}</span>
+    <div class='week-picker'>
+        <!-- <span>{{ chosen.slice(0,1)[0] }}--{{chosen.slice(-1)[0]}}</span> -->
         <div class="calendarTraffic" name="CalendarTraffic">
             <!-- 年份/月份 流量查询-->
             <div class="header">
@@ -176,6 +182,11 @@
 
 <script>
     export default {
+        props: ["syncData"],
+        model: {
+            prop: "syncData", // 在 props 里面选择其中一个作为双向绑定的用的 prop ；在props中选择一个用来接收父组件v-model值的prop
+            event: "sync" // 自定义一个作为双向绑定的用的 event ；自定义一个用来更新父组件数据而触发的event
+        },
         name: "CalendarTraffic",
         data() {
             return {
