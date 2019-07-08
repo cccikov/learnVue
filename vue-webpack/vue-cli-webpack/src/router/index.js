@@ -170,6 +170,9 @@ router.beforeEach((to, from, next) => {
         }
     }
 
+    var stackId = parseInt(Math.random() * 10000000000000000000).toString().slice(0, parseInt(Math.random() * 14 + 1)); // 当前调用桟ID，假装是ID而已
+    console.log("%c id:  **" + stackId + "**    进入beforeEach", "color:red;font-size:30px");
+
     if (to.name === "page1" && !("num" in to.query)) {
         router.push({
             name: "page1",
@@ -178,26 +181,19 @@ router.beforeEach((to, from, next) => {
             }
         })
     } else if (to.name === "page2" && !("num" in to.query)) {
-        var stackId = parseInt(Math.random() * 100000); // 当前调用桟ID，假装是ID而已
-        console.log("%c 进入beforeEach id:" + stackId, "color:red");
-        if (to.name === "page2" && !("num" in to.query)) {
-            console.log("%c 1 id:" + stackId, "color:red");
-            router.push({
-                name: "page2",
-                query: {
-                    num: Date.now()
-                }
-            });
-            console.log("%c 3 id:" + stackId, "color:red");
-            next();
-        } else {
-            console.log("%c 2 id:" + stackId, "color:red");
-            next();
-        }
-    }else{
+        console.log("%c id:  **" + stackId + "**    第1步", "color:red;font-size:30px");
+        router.push({
+            name: "page2",
+            query: {
+                num: Date.now()
+            }
+        });
+        console.log("%c id:  **" + stackId + "**    第3步", "color:red;font-size:30px");
+        next();
+    } else {
+        console.log("%c id:  **" + stackId + "**    第2步", "color:red;font-size:30px");
         next();
     }
-
 });
 
 
