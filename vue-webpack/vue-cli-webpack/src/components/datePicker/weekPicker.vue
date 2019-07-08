@@ -1,13 +1,139 @@
+<style lang="less" scoped>
+    @width: 24;
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    ul,
+    li {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    .calendarTraffic {
+        position: absolute;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+    }
+    .header {
+        display: flex;
+        line-height: 32px;
+        height: 32px;
+        padding: 0 10px;
+        border-bottom: 1px solid #e9eaec;
+
+        > span {
+            flex: 1 1 auto;
+            font-size: 12px;
+            color: #495060;
+            text-align: center;
+            line-height: 31px;
+        }
+        button {
+            flex: 0 0 20px;
+            background: #fff;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            span {
+                color: #bbbec4;
+                display: inline-block;
+                transform: scale(0.5, 1);
+                font-size: 19px;
+            }
+            &:hover {
+                span {
+                    color: #2d8cf0;
+                }
+            }
+        }
+    }
+
+    .calendar-list {
+        padding: 10px;
+        text-align: center;
+        font-size: 12px;
+        .calendar-weekadys {
+            display: flex;
+            width: (@width+4) * 7px;
+            .weekadys-item {
+                width: @width * 1px;
+                line-height: @width * 1px;
+                margin: 2px;
+                color: #bbbec4;
+            }
+        }
+        .week-list {
+            .week-item {
+                display: flex;
+                width: (@width+4) * 7px;
+                border-radius: 3px;
+                overflow: hidden;
+                box-shadow: 0px 0px 1px 1px rgba(45, 140, 240, 0);
+                transition: box-shadow 200ms;
+                &:hover {
+                    box-shadow: 0px 0px 1px 1px rgba(45, 140, 240, 0.5);
+                    transition: box-shadow 0ms;
+                }
+                .days-item {
+                    padding: 2px;
+                    color: #495060;
+                    .days-item-cont {
+                        width: @width * 1px;
+                        line-height: @width * 1px;
+                        border-radius: 3px;
+                        cursor: pointer;
+                        &.days-item-invalid {
+                            color: #bbbec4;
+                            &.active {
+                                background: rgba(45, 140, 240, 0.5);
+                            }
+                        }
+                        &.active {
+                            color: #fff;
+                            background: #2d8cf0;
+                        }
+
+                        &.now {
+                            position: relative;
+                            &:after {
+                                content: "";
+                                position: absolute;
+                                top: 1px;
+                                right: 1px;
+                                width: 6px;
+                                height: 6px;
+                                border-radius: 50%;
+                                background: #2d8cf0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</style>
+
 <template>
     <div class>
+        <span class="lf oprButton title-data">{{ chosen.slice(0,1)[0] }}--{{chosen.slice(-1)[0]}}</span>
         <div class="calendarTraffic" name="CalendarTraffic">
             <!-- 年份/月份 流量查询-->
-            <div class="monthHeader">
+            <div class="header">
                 <!--绑定click事件，点击按钮；重新刷新当前日期-->
-                <button class="lf oprButton oprButton-bg ml5" @click="pickPre(beginYear, beginMonth)">❮上月</button>
-                <span class="lf oprButton title-data">{{ chosen.slice(0,1)[0] }}--{{chosen.slice(-1)[0]}}</span>
-                <button class="lf oprButton oprButton-bg" @click="pickNext(beginYear,beginMonth)">下月❯</button>
-                <button class="lf oprButton oprButton-bg ml5" @click="pickToday(beginYear,beginMonth)">今天</button>
+                <button @click="pickPre(beginYear-1, beginMonth-1)">
+                    <span>&lt;&lt;</span>
+                </button>
+                <button @click="pickPre(beginYear, beginMonth)">
+                    <span>&lt;</span>
+                </button>
+                <span>{{beginYear}}年 {{beginMonth}}月</span>
+                <button @click="pickNext(beginYear,beginMonth)">
+                    <span>&gt;</span>
+                </button>
+                <button @click="pickNext(beginYear+1,beginMonth-1)">
+                    <span>&gt;&gt;</span>
+                </button>
+                <!-- <button @click="pickToday(beginYear,beginMonth)">今天</button> -->
             </div>
             <!-- 日历 -->
             <div class="calendar-list">
@@ -71,7 +197,6 @@
                 let begin; // 这个月1号
                 if (cur) {
                     begin = new Date(cur);
-                    this.pickWeeks(this.formatDate(begin));
                     begin = new Date(this.formatStr(begin.getFullYear(), begin.getMonth() + 1, 1));
                 } else {
                     const now = new Date();
@@ -212,63 +337,3 @@
         }
     };
 </script>
-<style lang="less" scoped>
-    @width: 30;
-    * {
-        padding: 0;
-        margin: 0;
-    }
-    ul,
-    li {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-    }
-    .calendar-list {
-        text-align: center;
-        .calendar-weekadys {
-            display: flex;
-            width: @width * 7px;
-            .weekadys-item {
-                width: @width * 1px;
-            }
-        }
-        .week-list {
-            .week-item {
-                display: flex;
-                width: @width * 7px;
-                &:hover {
-                    color: #fff;
-                    background: #00bcd4;
-                }
-                .days-item {
-                    width: @width * 1px;
-                    .days-item-cont {
-                        cursor: pointer;
-                        &.days-item-invalid {
-                            opacity: 0.5;
-                        }
-                        &.active {
-                            color: #fff;
-                            background: #00bcd4;
-                        }
-
-                        &.now {
-                            position: relative;
-                            &:after {
-                                content: "";
-                                position: absolute;
-                                top: 2px;
-                                right: 2px;
-                                width: 4px;
-                                height: 4px;
-                                border-radius: 4px;
-                                background: #f00;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-</style>
