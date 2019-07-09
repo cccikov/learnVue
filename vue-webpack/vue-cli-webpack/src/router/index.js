@@ -52,6 +52,10 @@ const compile = [{
 
 // 日期选择
 const datePicker = [{
+        path: "/pickerView",
+        name: "pickerView",
+        component: resolve => require(['@/components/datePicker/view.vue'], resolve)
+    }, {
         path: "/datePicker",
         name: "datePicker",
         component: resolve => require(['@/components/datePicker/datePicker.vue'], resolve)

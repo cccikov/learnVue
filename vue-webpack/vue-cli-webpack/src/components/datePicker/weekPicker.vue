@@ -1,5 +1,4 @@
 <style lang="less" scoped>
-
     @width: 24;
     * {
         padding: 0;
@@ -11,7 +10,7 @@
         margin: 0;
         list-style: none;
     }
-    .week-picker{
+    .week-picker {
         position: relative;
     }
     .calendarTraffic {
@@ -120,7 +119,7 @@
 </style>
 
 <template>
-    <div class='week-picker'>
+    <div class="week-picker">
         <!-- <span>{{ chosen.slice(0,1)[0] }}--{{chosen.slice(-1)[0]}}</span> -->
         <div class="calendarTraffic" name="CalendarTraffic">
             <!-- 年份/月份 流量查询-->
@@ -184,8 +183,8 @@
     export default {
         props: ["syncData"],
         model: {
-            prop: "syncData", // 在 props 里面选择其中一个作为双向绑定的用的 prop ；在props中选择一个用来接收父组件v-model值的prop
-            event: "sync" // 自定义一个作为双向绑定的用的 event ；自定义一个用来更新父组件数据而触发的event
+            prop: "syncData",
+            event: "sync"
         },
         name: "CalendarTraffic",
         data() {
@@ -211,7 +210,7 @@
                     begin = new Date(this.formatStr(begin.getFullYear(), begin.getMonth() + 1, 1));
                 } else {
                     const now = new Date();
-                    this.pickWeeks(this.formatDate(now));
+                    // this.pickWeeks(this.formatDate(now));
                     begin = new Date(this.formatStr(now.getFullYear(), now.getMonth() + 1, 1)); // 这个月的1号
                 }
 
@@ -219,7 +218,7 @@
                 this.beginYear = begin.getFullYear();
                 this.beginMonth = begin.getMonth() + 1;
                 this.beginDay = begin.getDate();
-                console.log(this.beginYear, this.beginMonth, this.beginDay);
+                // console.log(this.beginYear, this.beginMonth, this.beginDay);
 
                 /* 这个月的1号是周几 */
                 this.beginWeek = begin.getDay(); //获取当前星期X(0-6,0代表星期天)
@@ -228,7 +227,7 @@
                 }
 
                 const str = this.formatStr(this.beginYear, this.beginMonth, this.beginDay); // 这个月1号的字符串形式
-                console.log("str", str);
+                // console.log("str", str);
                 let arr = [];
 
                 // 例今天是周五，放在第一行第5个位置，前面4个上个月的
@@ -262,7 +261,7 @@
                     arr.push(dayObj);
                     i++;
                 }
-                console.log(arr);
+                // console.log(arr);
 
                 let week_arr = [];
                 let index = 0;
@@ -320,6 +319,8 @@
                     chosenArr.push(dateStr);
                 }
                 this.chosen = chosenArr;
+                this.$emit("pick");
+                this.$emit("sync", [this.chosen.slice(0, 1)[0], this.chosen.slice(-1)[0]]);
             },
             // 格式化日期字符串
             formatStr(year, month, day) {
