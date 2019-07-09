@@ -81,6 +81,7 @@
                 }
                 &.disable{
                     cursor: no-drop;
+                    cursor: not-allowed;
                     &:hover {
                         box-shadow: 0px 0px 1px 1px rgba(45, 140, 240, 0);
                     }
