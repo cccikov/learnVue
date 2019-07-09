@@ -79,6 +79,12 @@
                     box-shadow: 0px 0px 1px 1px rgba(45, 140, 240, 0.5);
                     transition: box-shadow 0ms;
                 }
+                &.disable{
+                    cursor: no-drop;
+                    &:hover {
+                        box-shadow: 0px 0px 1px 1px rgba(45, 140, 240, 0);
+                    }
+                }
                 .days-item {
                     padding: 2px;
                     color: #495060;
@@ -96,6 +102,11 @@
                         &.active {
                             color: #fff;
                             background: #2d8cf0;
+                        }
+                        &.disable {
+                            background: #f7f7f7;
+                            color: #bbbec4;
+                            pointer-events: none;
                         }
 
                         &.now {
@@ -125,7 +136,7 @@
             <!-- 年份/月份 流量查询-->
             <div class="header">
                 <!--绑定click事件，点击按钮；重新刷新当前日期-->
-                <button @click="pickPre(beginYear-1, beginMonth-1)">
+                <button @click="pickPre(beginYear-1, beginMonth+1 )">
                     <span>&lt;&lt;</span>
                 </button>
                 <button @click="pickPre(beginYear, beginMonth)">
@@ -155,17 +166,17 @@
                 <!-- 日期 -->
                 <ul class="week-list">
                     <!-- 每个li就是一周 -->
-                    <li class="week-item days-list" v-for="(days,index) in weeks" :key="index">
-                        <div class="days-item" v-for="dayObj in days" :key="dayObj.id">
+                    <li class="week-item days-list" v-for="(days,index) in weeks" :key="index" :class="{disable:days[0].day>=limit}">
+                        <div class="days-item" v-for="dayObj in days" :key="dayObj.id" >
                             <!--本月-->
                             <!--如果不是本月 改变类名加灰色-->
-                            <div v-if="dayObj.day.getMonth()+1 != beginMonth" class="days-item-cont days-item-invalid" :class="{active:chosen.includes(dayObj.id),now:dayObj.id === now}" @click="changeMonth(dayObj)">
+                            <div v-if="dayObj.day.getMonth()+1 != beginMonth" class="days-item-cont days-item-invalid" :class="{active:chosen.includes(dayObj.id),now:dayObj.id === now,disable:dayObj.day>=limit}" @click="changeMonth(dayObj)">
                                 <div class="days-item-mid">
                                     <p class="days-item-item">{{ dayObj.day.getDate() }}</p>
                                 </div>
                             </div>
                             <!-- 如果是本月-->
-                            <div v-else class="days-item-cont days-item-normal" :class="{active:chosen.includes(dayObj.id),now:dayObj.id === now}" @click="pickWeeks(dayObj.id)">
+                            <div v-else class="days-item-cont days-item-normal" :class="{active:chosen.includes(dayObj.id),now:dayObj.id === now,disable:dayObj.day>=limit}" @click="pickWeeks(dayObj.id)">
                                 <div class="days-item-mid">
                                     <p class="days-item-item">{{ dayObj.day.getDate() }}</p>
                                 </div>
@@ -189,6 +200,7 @@
         name: "CalendarTraffic",
         data() {
             return {
+                limit: this.getWeekStartByMon(new Date(Date.now() - 60 * 60 * 24 * 1000)), // 限制，大于这天的将不能选择
                 beginDay: 1, //这个月的1号
                 beginMonth: 1, //当前月份
                 beginYear: 1970, //当前年份
@@ -308,11 +320,7 @@
             pickWeeks(dateStr) {
                 var chosenArr = [];
                 var chosen = new Date(dateStr);
-                var chosenWeek = chosen.getDay();
-                if (chosenWeek == 0) {
-                    chosenWeek = 7;
-                }
-                var weekStartByMon = new Date(chosen.getTime() - (chosenWeek - 1) * 60 * 60 * 24 * 1000); // 以周一作为起点
+                var weekStartByMon = this.getWeekStartByMon(chosen);
                 var weekEnd = new Date(weekStartByMon.getTime() + 7 * 60 * 60 * 24 * 1000); // 以周一作为起点
                 for (var i = 0; i < 7; i++) {
                     var dateStr = this.formatDate(weekStartByMon.getTime() + i * 60 * 60 * 24 * 1000);
@@ -321,6 +329,15 @@
                 this.chosen = chosenArr;
                 this.$emit("pick");
                 this.$emit("sync", [this.chosen.slice(0, 1)[0], this.chosen.slice(-1)[0]]);
+            },
+            getWeekStartByMon(date) {
+                date = new Date(this.formatDate(date));
+                var chosenWeek = date.getDay();
+                if (chosenWeek == 0) {
+                    chosenWeek = 7;
+                }
+                console.log(new Date(date.getTime() - (chosenWeek - 1) * 60 * 60 * 24 * 1000));
+                return new Date(date.getTime() - (chosenWeek - 1) * 60 * 60 * 24 * 1000); // 以周一作为起点
             },
             // 格式化日期字符串
             formatStr(year, month, day) {
