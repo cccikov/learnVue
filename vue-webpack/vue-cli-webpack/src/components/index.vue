@@ -3,6 +3,9 @@
     <div>
         <h5>index</h5>
         <p>
+            <router-link to="/demo">demo</router-link>
+        </p>
+        <p>
             <router-link to="/publish">/publish</router-link>
             <router-link to="/subscribe">/subscribe</router-link>
         </p>
@@ -44,6 +47,9 @@
         </p>
         <p>
             <router-link to="/warning">各种坑</router-link>
+        </p>
+        <p>
+            <router-link to="/week-period">时间段 选择</router-link>
         </p>
     </div>
 </template>

@@ -154,6 +154,11 @@ const router = new Router({
             name: "page3",
             component: resolve => require(['@/components/page3.vue'], resolve)
         },
+        {
+            path: "/week-period",
+            name: "week-period",
+            component: resolve => require(['@/components/widget/week-period.vue'], resolve)
+        },
         ...checkbox,
         ...vModel,
         ...mixin,
