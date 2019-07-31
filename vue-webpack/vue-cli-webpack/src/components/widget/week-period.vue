@@ -6,7 +6,10 @@
                 <span :class="{active:select.includes(day+'-'+hour),selecting:multiple.includes(day+'-'+hour)}" v-for="hour in 48" :key="day+'-'+hour" :data-id="day+'-'+hour"></span>
             </p>
         </div>
-        <div v-for="(val,key) in data" :key="key" :data-key="key">星期{{key}}：{{val.join(" ， ")}}</div>
+        <div v-for="(val,key) in timeData" :key="key" :data-key="key">星期{{key}}：{{val.join(" ， ")}}</div>
+        <ul>
+            <li v-for="val in  data2wechat(this.sortData)">{{val}}</li>
+        </ul>
     </div>
 </template>
 <script>
@@ -19,16 +22,17 @@
      *
      * mousemove - 记下当前坐标，多选选中显示multipleHandler()
      *
-     * mouseup - 判断是单选还是多选，多选toSelect() - 整理数据sort() - 将数据转化成对应事件data2Date
+     * mouseup - 判断是单选还是多选，多选toSelect() - 整理数据sort()
      */
     export default {
         data() {
             return {
+                select: [], // 选中的块，原始数据
+                sortData: {}, // 整理好的数据
+                timeData: {}, // 转化为时间后的数据
                 multiple: [],
-                select: [], // 选中的块
                 twoPoint: [], // 记录选择的两个点（或者点击的一个点）
-                is_mousedown: false,
-                data: {}
+                is_mousedown: false
             };
         },
         created() {
@@ -121,8 +125,9 @@
             },
             // 整理
             sort() {
-                console.clear();
                 var obj = {};
+                this.sortData = {};
+
                 /* 数组转为对象格式 */
                 this.select.forEach(val => {
                     val = val.split("-");
@@ -136,61 +141,36 @@
 
                 /* 排序，整理连续 */
                 Object.keys(obj).forEach(week => {
-                    var ori = obj[week].sort(function(a, b) {
+                    var dayTimes = obj[week].sort(function(a, b) {
                         return a - b;
                     }); // 排序后的原始数据
 
+                    this.sortData[week] = dayTimes.slice(); // 保存排序好的值
+
                     /* 去连续，连续的分成一组 */
-                    var result = []; // 去连续返回结果
-                    var last = 0; // 中间变量变量，处理用
-                    var arr = []; // 中间变量变量，处理用
-                    var max = ori.length - 1;
-                    ori.forEach((val, i) => {
-                        if (i === 0) {
-                            // 第一个，赋值
-                            last = val;
-                            arr = [val];
-                        } else {
-                            // 和上一个数对比，来确定，上一个数是否分组
-                            if (val - last === 1) {
-                                // 连续
-                                last = val;
-                            } else {
-                                if (last != arr[0]) {
-                                    arr.push(last);
-                                }
-                                result.push(arr);
+                    var groups = times2groups(dayTimes);
 
-                                // 重新
-                                last = val;
-                                arr = [val];
-                            }
-                        }
-
-                        // 如果是最后一个数，帮上一个数判断好之后，自己也一定要形成分组了
-                        if (i === max) {
-                            if (last != arr[0]) {
-                                arr.push(last);
-                            }
-                            result.push(arr);
-                        }
-                    });
-
-                    obj[week] = result;
-                });
-                this.data2Date(obj);
-            },
-            // 将数据转化成对应事件
-            data2Date(data) {
-                Object.keys(data).forEach(week => {
-                    var hours = data[week]; // 一天的多个时间段数组
-                    data[week] = hours.map(hour => {
-                        var begin = number2Date(hour[0] - 1);
-                        var end = number2Date(hour[hour.length - 1]);
+                    /* 数据转化为时间 */
+                    obj[week] = groups.map(hours => {
+                        // 每个分组时间段
+                        var begin = number2Date(hours[0] - 1);
+                        var end = number2Date(hours[hours.length - 1]);
                         return [begin, end].join("~");
                     });
                 });
-                this.data = data;
+                this.timeData = obj;
+            },
+            /* 为了上传到微信接口做的数据处理 */
+            data2wechat(data) {
+                var wechatData = new Array(7).fill("").map(item => {
+                    return new Array(48).fill(0);
+                });
+                Object.keys(data).forEach(key => {
+                    data[key].forEach(num => {
+                        wechatData[key - 1][num - 1] = 1;
+                    });
+                });
+                return wechatData;
             }
         }
     };
@@ -211,6 +191,45 @@
         hour = (hour > 9 ? "" : "0") + hour;
         var min = num % 2 === 1 ? "30" : "00";
         return hour + ":" + min;
+    }
+
+    /* 去连续，连续的分成一组 */
+    function times2groups(dayTimes) {
+        var dayTimeGroups = []; // 去连续返回结果
+        var last = 0; // 中间变量变量，处理用
+        var arr = []; // 中间变量变量，处理用
+        var max = dayTimes.length - 1;
+        dayTimes.forEach((val, i) => {
+            if (i === 0) {
+                // 第一个，赋值
+                last = val;
+                arr = [val];
+            } else {
+                // 和上一个数对比，来确定，上一个数是否分组
+                if (val - last === 1) {
+                    // 连续
+                    last = val;
+                } else {
+                    if (last != arr[0]) {
+                        arr.push(last);
+                    }
+                    dayTimeGroups.push(arr);
+
+                    // 重新赋值
+                    last = val;
+                    arr = [val];
+                }
+            }
+
+            // 如果是最后一个数，帮上一个数判断好之后，自己也一定要形成分组了
+            if (i === max) {
+                if (last != arr[0]) {
+                    arr.push(last);
+                }
+                dayTimeGroups.push(arr);
+            }
+        });
+        return dayTimeGroups;
     }
 </script>
 <style lang="less" scoped>
