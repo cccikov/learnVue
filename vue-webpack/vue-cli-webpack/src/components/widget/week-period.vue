@@ -68,6 +68,7 @@
                 e.preventDefault();
                 this.is_mousedown = false;
                 this.toSelect();
+                this.twoPoint = []; // 清空，避免在别的位置触发mouseup，而this.twoPoint的长度又为1,然后出发toggleSelect
             },
             toSelect() {
                 if (this.twoPoint.length === 1) {
