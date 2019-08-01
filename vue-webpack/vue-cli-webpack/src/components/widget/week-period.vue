@@ -10,6 +10,7 @@
         <ul>
             <li v-for="val in  data2wechat(this.sortData)">{{val}}</li>
         </ul>
+        <div>{{wechat2data(data2wechat(this.sortData))}}</div>
     </div>
 </template>
 <script>
@@ -27,10 +28,10 @@
     export default {
         data() {
             return {
-                select: [], // 选中的块，原始数据
+                select: [], // 选中的块，原始数据，绑定数据
                 sortData: {}, // 整理好的数据
                 timeData: {}, // 转化为时间后的数据
-                multiple: [],
+                multiple: [], // 选择时的数据
                 twoPoint: [], // 记录选择的两个点（或者点击的一个点）
                 is_mousedown: false
             };
@@ -86,6 +87,7 @@
                     this.multiple = [];
                 }
                 this.sort();
+                console.log(this.select);
             },
             // 判断有无添加移除（单选逻辑）
             toggleSelect(val) {
@@ -171,6 +173,18 @@
                     });
                 });
                 return wechatData;
+            },
+            /* 回显，微信数据转化为视图数据 */
+            wechat2data(arr) {
+                var resultArr = [];
+                arr.forEach((first, firstIndex) => {
+                    first.forEach((val, secondIndex) => {
+                        if (val === 1) {
+                            resultArr.push(firstIndex + 1 + "-" + (secondIndex + 1));
+                        }
+                    });
+                });
+                return resultArr;
             }
         }
     };
