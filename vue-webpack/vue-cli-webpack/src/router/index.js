@@ -98,6 +98,10 @@ const router = new Router({
             path: "/demo",
             name: "demo",
             component: resolve => require(['@/components/demo.vue'], resolve)
+        },{
+            path: "/standard",
+            name: "standard",
+            component: resolve => require(['@/components/standard.vue'], resolve)
         }, {
             path: '/HelloWorld',
             name: 'HelloWorld',
