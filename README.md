@@ -18,6 +18,12 @@ $ vue init webpack my-project
 
 #### 附带
 
-* vuex
+* vue-loader
+
 * vue-router
+* vuex
+* vue ssr , Nuxt.js
+
+* VuePress
+
 * keep-alive
