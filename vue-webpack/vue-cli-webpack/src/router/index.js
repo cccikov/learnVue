@@ -163,6 +163,11 @@ const router = new Router({
             name: "week-period",
             component: resolve => require(['@/components/widget/week-period.vue'], resolve)
         },
+        {
+            path: "/nesting",
+            name: "nesting",
+            component: resolve => require(['@/components/nesting/out.vue'], resolve)
+        },
         ...checkbox,
         ...vModel,
         ...mixin,

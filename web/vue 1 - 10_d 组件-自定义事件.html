@@ -46,7 +46,9 @@
                     this.counter += 1
                     this.$emit('increment', data); // 只是触发事件 increment , 可以传参所以就可以传递数据
                     // 子组件里面也不用特意去定义事件 increment
-                    // 值得注意的是 , 这里面事件的名称如果是多个单词只能使用 短横线隔开式 。 ps:props只能使用驼峰式是因为是作为对象的属性去使用，定义上（js中定义）与使用上（html标签使用）存在冲突，才导致props在js中只能用驼峰式，在HTML使用时只能用短横线隔开式 ； 而这里事件的名称是要用在标签的属性上 , 而且在js层面上只是一个字符串 , 所以用短横线隔开式也无妨，所以可能vue.js因此而取消"自定义事件"事件名称驼峰式转为短横线隔开式.
+                    // 值得注意的是 , 这里面事件的名称如果是多个单词只能使用 短横线隔开式 。 ps:props只能使用驼峰式是因为是作为对象的属性去使用（this.xxx xxx只能是标识符，组件如果是使用import引用的话也是要使用标识符保存），定义上（js中定义）与使用上（html标签使用）存在冲突，才导致props在js中只能用驼峰式，在HTML使用时只能用短横线隔开式 ； 而这里事件的名称是要用在标签的属性上 , 而且在js层面上只是一个字符串 , 所以用短横线隔开式也无妨，所以可能vue.js因此而取消"自定义事件"事件名称驼峰式转为短横线隔开式.
+                    /* 如果使用的字符串模板事件的名称可以使用大写字母，驼峰式等方式 */
+                    /* 推荐你始终使用 kebab-case 的事件名 */
                 }
             },
         });
@@ -313,7 +315,7 @@
     <!-- v-modal 在非 input 标签中 -->
     <script type="text/javascript">
         // 组件
-        Vue.component("edit", {
+        Vue.component("editA", {
             template: `<div>
                 <button @click="changeValue">改变值</button>
             </div>`,
@@ -328,7 +330,7 @@
     <div id="app9">
         <h5>app9</h5>
         <p>父组件的值：{{age}}</p>
-        <edit v-model="age" abc="haha"></edit>
+        <edit-a v-model="age" abc="haha"></edit-a>
         <hr>
     </div>
     <script type="text/javascript">
@@ -345,20 +347,20 @@
     <!-- v-modal 在非 input 标签中,自定义v-model 的 prop 和 event  -->
     <script type="text/javascript">
         // 组件
-        Vue.component("edit", {
+        Vue.component("editB", {
             template: `<div>
-                <p>props:value => {{syncDate}}</p>
+                <p>props:value => {{syncData}}</p>
                 <button @click="changeValue">改变值</button>
             </div>`,
             model: {
-                prop: "syncDate", // 指定 组件v-model 的 prop
-                event: "syncEvent" // 指定 组件v-model 监听的事件
+                prop: "syncData", // 指定 组件v-model 的 prop
+                event: "sync-event" // 指定 组件v-model 监听的事件
             },
-            props: ["syncDate"],
+            props: ["syncData"],
             methods: {
                 changeValue() {
                     let ran = Math.random();
-                    this.$emit("syncEvent", ran); // ***，关键，父组件变量的值（age）为触发的事件附加的参数
+                    this.$emit("sync-event", ran); // ***，关键，父组件变量的值（age）为触发的事件附加的参数
                 }
             }
         })
@@ -366,7 +368,9 @@
     <div id="app10">
         <h5>app10</h5>
         <p>父组件的值：{{age}}</p>
-        <edit v-model="age" abc="haha"></edit>
+        <edit-b v-model="age" abc="haha"></edit-b>
+        <!-- 相当于 -->
+        <edit-b :sync-data="age" @sync-event="val => { age = val }" abc="haha"></edit-b>
         <hr>
     </div>
     <script type="text/javascript">
@@ -374,7 +378,7 @@
             el: "#app10",
             data: {
                 age: 19
-            }
+            },
         })
     </script>
 
@@ -383,7 +387,7 @@
     <!-- v-modal 在非 input 标签中 ， 默认情况下，一个组件上的 v-model 会把 value 用作 prop 且把 input 用作 event-->
     <script type="text/javascript">
         // 组件
-        Vue.component("edit", {
+        Vue.component("editC", {
             template: `<div>
                 <p>props:value => {{value}}</p>
                 <button @click="changeValue">改变值</button>
@@ -400,9 +404,9 @@
     <div id="app11">
         <h5>app11</h5>
         <p>父组件的值：{{age}}</p>
-        <edit v-model="age" abc="haha"></edit>
+        <edit-c v-model="age" abc="haha"></edit-c>
         <!-- 相当于 -->
-        <edit :value="age" @input="val => { age = val }" abc="haha"></edit>
+        <edit-c :value="age" @input="val => { age = val }" abc="haha"></edit-c>
         <hr>
     </div>
     <script type="text/javascript">

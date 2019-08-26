@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="zh">
 
 <head>
@@ -60,7 +60,7 @@
                     // 以及其他属性
                 }
             },
-            /* 
+            /*
             比如
             data: {
                 txt: false,
@@ -129,12 +129,12 @@
         <tpl v-bind:my-class="className" v-bind:live-message="message" static-message="Hello "></tpl>
 
 
-        <!-- my-class,live-message 是动态的,该属性值是一个变量在js中获取值 static-message是静态的,值就是这个属性的值-->
+        <!-- my-class,live-message 是动态的,该属性值是一个变量在js中获取值 static-message是静态的,值就是这个属性的值（字符串）-->
 
         <div v-bind:my-class="className" v-bind:live-message="message" static-message="Hello "></div>
         <!-- 渲染结果: <div my-class="active" live-message="world!" static-message="Hello "></div> -->
         <!--
-             属性想要动态采用v-bind方式绑定数据,绑定后的值是一个变量,如上面的className,message , 是动态的; 如果不采用v-bind就是静态的,这个属性会直接出现在标签中,值就是字符串就是属性值了 , 是写死的 ,如上面的Hello ; 
+             属性想要动态采用v-bind方式绑定数据,绑定后的值是一个变量,如上面的className,message , 是动态的; 如果不采用v-bind就是静态的,这个属性会直接出现在标签中,值就是字符串就是属性值了 , 是写死的 ,如上面的Hello ;
              就是说只有加上v-bind: 值才会被当成JavaScript表达式计算
          -->
 

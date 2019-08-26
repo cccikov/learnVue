@@ -51,6 +51,9 @@
         <p>
             <router-link to="/week-period">时间段 选择</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'nesting'}">多层组件嵌套处理</router-link>
+        </p>
     </div>
 </template>
 <script>
