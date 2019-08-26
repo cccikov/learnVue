@@ -168,6 +168,11 @@ const router = new Router({
             name: "nesting",
             component: resolve => require(['@/components/nesting/out.vue'], resolve)
         },
+        {
+            path: "/tableandflex",
+            name: "tableandflex",
+            component: resolve => require(['@/components/table & flex.vue'], resolve)
+        },
         ...checkbox,
         ...vModel,
         ...mixin,

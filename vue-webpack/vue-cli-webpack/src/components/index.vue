@@ -54,6 +54,9 @@
         <p>
             <router-link :to="{name:'nesting'}">多层组件嵌套处理</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'tableandflex'}">table and flex 布局</router-link>
+        </p>
     </div>
 </template>
 <script>
