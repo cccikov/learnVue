@@ -57,6 +57,9 @@
         <p>
             <router-link :to="{name:'tableandflex'}">table and flex 布局</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'slot'}">slot 插槽用法</router-link>
+        </p>
     </div>
 </template>
 <script>

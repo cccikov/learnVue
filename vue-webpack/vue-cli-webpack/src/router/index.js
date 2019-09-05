@@ -73,6 +73,13 @@ const datePicker = [{
 ]
 
 // 各种坑
+const slot = [{
+    path: "/slot",
+    name: "slot",
+    component: resolve => require(['@/components/slot/slot.vue'], resolve)
+}]
+
+// 各种坑
 const warning = [{
     path: "/warning",
     name: "warning",
@@ -98,7 +105,7 @@ const router = new Router({
             path: "/demo",
             name: "demo",
             component: resolve => require(['@/components/demo.vue'], resolve)
-        },{
+        }, {
             path: "/standard",
             name: "standard",
             component: resolve => require(['@/components/standard.vue'], resolve)
@@ -178,6 +185,7 @@ const router = new Router({
         ...mixin,
         ...compile,
         ...datePicker,
+        ...slot,
         ...warning,
         {
             path: "/page*",
