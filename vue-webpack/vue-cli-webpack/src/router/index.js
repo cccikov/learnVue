@@ -180,6 +180,11 @@ const router = new Router({
             name: "tableandflex",
             component: resolve => require(['@/components/table & flex.vue'], resolve)
         },
+        {
+            path: "/computedandwatch",
+            name: "computedandwatch",
+            component: resolve => require(['@/components/computed & watch.vue'], resolve)
+        },
         ...checkbox,
         ...vModel,
         ...mixin,

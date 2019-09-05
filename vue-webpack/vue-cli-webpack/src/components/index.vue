@@ -60,6 +60,9 @@
         <p>
             <router-link :to="{name:'slot'}">slot 插槽用法</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'computedandwatch'}">computed & watch 同步异步对比</router-link>
+        </p>
     </div>
 </template>
 <script>
