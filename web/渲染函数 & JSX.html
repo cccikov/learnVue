@@ -52,7 +52,7 @@
                         color: 'red',
                         fontSize: '14px'
                     },
-                    // 事件
+                    // 事件，如果是html标签，原生事件；如果是组件，则是组件内部使用 `vm.$emit` 触发的事件。
                     on: {
                         click: this.fn, // 要的是函数，所以不要不小心加上()，如果返回值是函数也可以
                         touchstart: function() {

@@ -190,6 +190,11 @@ const router = new Router({
             name: "provide&inject",
             component: resolve => require(['@/components/provide&inject/index.vue'], resolve)
         },
+        {
+            path: "/keyincomponent",
+            name: "keyincomponent",
+            component: resolve => require(['@/components/key/index.vue'], resolve)
+        },
         ...checkbox,
         ...vModel,
         ...mixin,

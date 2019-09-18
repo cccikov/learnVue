@@ -66,6 +66,9 @@
         <p>
             <router-link :to="{name:'provide&inject'}">provide & inject 依赖注入</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'keyincomponent'}">遍历组件中使用key</router-link>
+        </p>
     </div>
 </template>
 <script>
