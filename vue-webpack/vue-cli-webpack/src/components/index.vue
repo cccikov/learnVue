@@ -63,6 +63,9 @@
         <p>
             <router-link :to="{name:'computedandwatch'}">computed & watch 同步异步对比</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'provide&inject'}">provide & inject 依赖注入</router-link>
+        </p>
     </div>
 </template>
 <script>

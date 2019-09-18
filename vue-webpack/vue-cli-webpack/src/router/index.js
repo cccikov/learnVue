@@ -185,6 +185,11 @@ const router = new Router({
             name: "computedandwatch",
             component: resolve => require(['@/components/computed & watch.vue'], resolve)
         },
+        {
+            path: "/provide&inject",
+            name: "provide&inject",
+            component: resolve => require(['@/components/provide&inject/index.vue'], resolve)
+        },
         ...checkbox,
         ...vModel,
         ...mixin,
