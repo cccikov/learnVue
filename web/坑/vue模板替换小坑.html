@@ -7,19 +7,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>模板替换小坑</title>
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript" src="vue.js"></script>
+    <script type="text/javascript" src="../vue.js"></script>
 </head>
 
 <body>
     <div id="app1">
-        <p v-if="msg.somg.flag">这里装的是默认数据{{msg.name}} , 有新数据会自动替换</p>
+        <p v-if="msg.somg.flag">这里装的是默认数据{{msg.name}} , msg有新数据会自动替换</p>
         <a href="javascript:void(0)">a1</a>
         <a href="###">a2</a>
         <a>a3</a>
     </div>
 
     <div id="app2">
-        <p v-if="msg.somg.flag">这里装的是获取的数据{{msg.name}} , 没有默认数据</p>
+        <p v-if="msg.somg.flag">这里装的是获取的数据{{msg.name}} , msg没有默认数据</p>
 
         <a href="javascript:void(0)">a1</a>
         <a href="###">a2</a>

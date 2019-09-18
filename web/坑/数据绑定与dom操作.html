@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数据绑定与dom操作</title>
+    <script type="text/javascript" src="../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <ul v-if="show">
+            <li>
+                dom操作 innerHTML
+                <p :data-id="num">num：{{num}}</p>
+            </li>
+            <li>
+                dom操作 data-id
+                <p :data-id="num">num：{{num}}</p>
+            </li>
+            <li>
+                dom操作 data-id innerHTML
+                <p :data-id="num">num：{{num}}</p>
+            </li>
+            <li>
+                dom操作 data-id innerHTML
+                <p :data-id="num" v-text="'num：' + num"></p>
+            </li>
+        </ul>
+        <button @click="change">vue改变数据</button>
+        <button @click="changeShow">changeShow</button>
+    </div>
+    <button onclick="fn()">dom操作</button>
+    <p>结论：{{}}包裹的内容被js通过dom操作更改过之后，将无法继续响应vue数据变化。解决方式：</p>
+    <p>用v-text替换{{}}，{{}}基本都可以通过v-text替代</p>
+    <p>使用v-if删除dom后重新渲染</p>
+    <p>使用render写渲染模板；如果采用的是createElement的第三个参数文本虚拟节点，那么情况就像是用{{}}一样；如果是采用domProps，情况就像v-text一样</p>
+    <p>本质，vue是数据绑定框架，可以使用数据绑定就应该使用数据绑定，而不要采用dom去做数据绑定可以做的事。</p>
+    <script type="text/javascript">
+    function fn() {
+        var p = document.getElementById("app").querySelectorAll("p");
+
+        p[0].innerHTML = -1;
+
+        p[1].setAttribute("data-id", "-1");
+
+        p[2].setAttribute("data-id", "-1");
+        p[2].innerHTML = -1;
+
+        p[3].setAttribute("data-id", "-1");
+        p[3].innerHTML = -1;
+    }
+
+    function render(h) {
+        var list = new Array(4).fill().map((v, i) => {
+            if (i != 3) {
+                return h("li", [
+                    h("p", {
+                        attrs: {
+                            "data-id": this.num
+                        },
+                    }, this.num) // 采用第三个参数，字符串，文本虚拟节点
+                ]);
+            } else {
+                return h("li", [
+                    h("p", {
+                        attrs: {
+                            "data-id": this.num
+                        },
+                        domProps: {
+                            innerHTML: this.num // 采用domProps修改的是dom属性
+                        }
+                    })
+                ]);
+            }
+
+        });
+        return h("div", {
+            domProps: { // 由于dom的id会影响标签的id，所以两个是一样的
+                id: "app"
+            }
+        }, [
+            h("ul", [list]),
+            h("button", {
+                on: {
+                    click: this.change // 要的是函数，所以不要不小心加上()，如果返回值是函数也可以
+                }
+            }, "vue改变数据"),
+            h("button", {
+                on: {
+                    click: this.changeShow
+                }
+            }, "vue改变数据"),
+        ])
+    }
+    new Vue({
+        el: "#app",
+        data: {
+            num: 1,
+            show: true
+        },
+        render: render,
+        methods: {
+            change() {
+                this.num++;
+            },
+            changeShow() {
+                this.show = !this.show;
+            }
+        }
+    });
+    </script>
+</body>
+
+</html>
