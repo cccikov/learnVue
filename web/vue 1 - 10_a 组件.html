@@ -8,8 +8,6 @@
 </head>
 
 <body>
-
-
     <!-- 全局组件 -->
     <div id="app1">
         <my-app1></my-app1>
@@ -24,7 +22,6 @@
             el: '#app1'
         });
     </script>
-
     <!-- !!!!注意 对于全局组件 , 一定要先有模板再有创建实例 ; 因为在渲染过程的时候 自定义标签找不到对应的组件 , 就会直接渲染-->
     <!-- <div id="app1b">
         <my-app1b>哈哈哈哈哈哈</my-app1b>
@@ -38,9 +35,6 @@
             template: '<div>A custom component!</div>'
         });
     </script> -->
-
-
-
     <!-- 局部组件 -->
     <div id="app2">
         <my-app2></my-app2>
@@ -51,19 +45,29 @@
             el: '#app2',
             // 注册局部组件
             components: {
+                // 组件选项
                 "my-app2": {
-                    template: '<div>A custom component2!</div>'
+                    // render:function(){}
+                    template: '<div @click="fn">A custom component2!{{text}}</div>',
+                    data(){
+                        return {
+                             text:"haha"
+                        }
+                    },
+                    methods:{
+                        fn(){
+                            console.log(this.text);
+                        }
+                    }
                 }
             }
         });
     </script>
-
     <!-- DOM 模板解析说明 -->
     <p>
         当使用 DOM 作为模板时 (例如，将 <code>el</code> 选项挂载到一个已存在的元素上), 你会受到 HTML 的一些限制，<strong>因为 Vue 只有在浏览器解析和标准化 HTML 后才能获取模板内容。</strong> 尤其像这些元素 <code>&lt;ul&gt;</code>，<code>&lt;ol&gt;</code>，<code>&lt;table&gt;</code>，<code>&lt;select&gt;</code> 限制了能被它包裹的元素，而一些像
         <code>&lt;option&gt;</code>,<code>&lt;li&gt;</code> 这样的元素只能出现在某些其它元素内部。
     </p>
-
     <table id="app3">
         <my-row>...</my-row>
         <!-- <<my-row>标签在html引擎中会被认为是无效内容 , 因为不是标准标签嘛 , 有可能在渲染过程中导致错误 -->
@@ -88,12 +92,7 @@
          * 因此，有必要的话请使用 字符串模板。(下面有例子解释)
          */
     </script>
-
-
-
-
     <!-- 要知道 Vue.js 使用了基于 HTML 的模板语法(Vue.js 使用了模板语法(是以html为基础的)) -->
-
     <!-- 使用 DOM 作为模板 -->
     <div id="app4">{{message}}</div>
     <!-- 渲染结果: <div id="app4">hello world</div> 模板为:<div id="app4">{{message}}</div> 这个dom-->
@@ -121,7 +120,6 @@
         // 一个字符串模板作为 Vue 实例的标识使用。模板将会 替换 挂载的元素。挂载元素的内容都将被忽略，除非模板的内容有分发 slot。
         // 意思就是创建实例的时候要是有template属性 ,挂载el属性的dom元素(如上面的<div id="app5">)会被替换 , 且忽略里面的内容(如上面的lorem)(除非模板的内容有分发 slot。)
     </script>
-
     <div id="app6"></div>
     <!-- 渲染结果 : <p>hello world</p> -->
     <script>
@@ -133,14 +131,6 @@
             }
         });
     </script>
-
-
-
-
-
-
-
-
     <!-- JavaScript 字符串模板 -->
     <div id="app7"></div>
     <script>
@@ -156,10 +146,6 @@
             }
         });
     </script>
-
-
-
-
     <!-- <script type="text/x-template">模板 -->
     <script type="text/x-template" id="app8Tpl">
         <!-- type="text/x-template"(可能是vue约定俗成) 可以写成 type="text/template" (一般模板框架约定俗成 , 规范推荐) 甚至不写这个属性都可以 -->
@@ -178,10 +164,7 @@
             template: "#app8Tpl" // 模板标签的id 也是字符串模板
         });
     </script>
-
     <!-- 可以看出 上面两个例子由于使用了字符串模板 DOM模板解析限制将不复存在-->
-
-
     <!-- 原理 -->
     <script type="text/template" id="tpl">
         <p>
@@ -199,12 +182,10 @@
         -->
     </div>
     <script>
-        var tpl = document.getElementById('tpl').innerHTML;
-        var main = document.getElementById('main');
-        main.innerHTML += tpl;
+    var tpl = document.getElementById('tpl').innerHTML;
+    var main = document.getElementById('main');
+    main.innerHTML += tpl;
     </script>
-
-
 </body>
 
 </html>
