@@ -8,8 +8,6 @@
 </head>
 
 <body>
-
-
     <div id="app1">
         <p>hi 我是app</p>
         <component_a></component_a>
@@ -17,33 +15,41 @@
         <component_c></component_c>
     </div>
     <script>
-        // 注册
-        var component_a = {
-            template: '<div>component A!</div>'
-        };
-        var component_b = {
-            template: '<div>component B!</div>'
-            // template: '<div>component B! <component_a></component_a></div>' // 这样使用是错误的，由于组件a并没有在b里面局部注册，所以组件a是不能在组件b里面使用的，正确的使用方式见C
-        };
-        var component_c = {
-            template: '<div>component C! <component_a></component_a></div>',
-            components:{
-                component_a,
-                component_b
+    // 注册
+    var component_a = {
+        template: '<div @click="fn">component A! {{text}}</div>',
+        data() {
+            return {
+                text: "haha"
             }
-        };
-        // 创建根实例
-        new Vue({
-            el: '#app1',
-            components:{
-                component_a,
-                component_b,
-                component_c
+        },
+        methods:{
+            fn(){
+                console.log(this.text);
             }
-        });
+        }
+    };
+    var component_b = {
+        template: '<div>component B!</div>'
+        // template: '<div>component B! <component_a></component_a></div>' // 这样使用是错误的，由于组件a并没有在b里面局部注册，所以组件a是不能在组件b里面使用的，正确的使用方式见C
+    };
+    var component_c = {
+        template: '<div>component C! <component_a></component_a></div>',
+        components: {
+            component_a,
+            component_b
+        }
+    };
+    // 创建根实例
+    new Vue({
+        el: '#app1',
+        components: {
+            component_a,
+            component_b,
+            component_c
+        }
+    });
     </script>
-
-
 </body>
 
 </html>
