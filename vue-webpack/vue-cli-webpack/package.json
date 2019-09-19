@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --port 3000",
+    "start": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --port=3000 --host=127.0.0.1",
     "build": "node build/build.js"
   },
   "dependencies": {
