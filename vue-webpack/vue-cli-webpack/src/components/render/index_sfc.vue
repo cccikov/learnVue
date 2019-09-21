@@ -10,7 +10,7 @@
 <template>
     <div>
         <!-- 对于组件来说，监听事件不加.native修饰符的话 , 会监听自定义事件-->
-        <componentA :str="str" :num="num" :bool="bool" :arr="arr" :obj="obj" @click="eventHandler" @mouseenter="eventHandler" @change="eventHandler('自定义change事件')" @clickBtn="eventHandler" @click.native="eventHandler" @mouseenter.native="eventHandler('原生mouseenter事件')" @touchstart.native="eventHandler">
+        <componentA :str="str" :num="num" :bool="bool" :arr="arr" :obj="obj" @click="eventHandler" @mouseenter="eventHandler" @change="eventHandler('自定义change事件')" @clickBtn="eventHandler" @click.native="eventHandler" @mouseenter.native="eventHandler('原生mouseenter事件',$event)" @touchstart.native="eventHandler">
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio, atque animi, sunt dolores modi excepturi molestiae aspernatur ad ex rerum in eos. Quidem error accusamus ipsam quos vitae officiis cupiditate.</p>
             <template v-slot:footer>
                 <p>Here's some contact info</p>
@@ -102,13 +102,17 @@
             };
         },
         methods: {
-            eventHandler(event) {
-                if (event === undefined) {
+            eventHandler(arg,event) {
+                if (arg === undefined) {
                     console.log("%c自定义事件", "font-size:20px;color:red");
-                } else if (typeof event === "string") {
-                    console.log(event);
+                } else if (typeof arg === "string") {
+                    console.log(arg);
                 } else {
-                    console.log("原生", event.type);
+                    console.log("原生", arg.type);
+                }
+                if(event){
+                    console.log(event);
+                    console.log("==================");
                 }
             }
         },

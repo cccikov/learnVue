@@ -198,7 +198,7 @@ const router = new Router({
         {
             path: "/render",
             name: "render",
-            component: resolve => require(['@/components/render/index_sfc.vue'], resolve)
+            component: resolve => require(['@/components/render/index.vue'], resolve)
         },
         {
             path: "/render_sfc",
