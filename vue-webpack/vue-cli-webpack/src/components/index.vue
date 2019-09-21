@@ -70,7 +70,8 @@
             <router-link :to="{name:'keyincomponent'}">遍历组件中使用key</router-link>
         </p>
         <p>
-            <router-link :to="{name:'render'}">渲染函数render</router-link>
+            <router-link :to="{name:'render'}">渲染函数 render 单文件组件版</router-link>
+            <router-link :to="{name:'render_sfc'}">渲染函数 render 单文件组件对比版</router-link>
         </p>
     </div>
 </template>

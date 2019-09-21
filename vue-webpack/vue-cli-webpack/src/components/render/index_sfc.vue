@@ -24,7 +24,7 @@
 </template>
 <script>
     /* 组件对象 */
-    import componentA from "./component-a";
+    import componentA from "./widget/component-a";
     /* 局部组件的本质就是选项组成的对象 */
     let componentB = {
         template:

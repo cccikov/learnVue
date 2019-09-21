@@ -198,7 +198,12 @@ const router = new Router({
         {
             path: "/render",
             name: "render",
-            component: resolve => require(['@/components/render/index.vue'], resolve)
+            component: resolve => require(['@/components/render/index_sfc.vue'], resolve)
+        },
+        {
+            path: "/render_sfc",
+            name: "render_sfc",
+            component: resolve => require(['@/components/render/index_sfc.vue'], resolve)
         },
         ...checkbox,
         ...vModel,
