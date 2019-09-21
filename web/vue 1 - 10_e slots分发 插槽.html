@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>vue slots分发</title>
+    <title>vue slots分发 插槽</title>
     <style>
         body * {
             margin: 0;
@@ -144,7 +144,7 @@
                 <footer>
                     <slot name="footer"></slot>
                 </footer>
-            </div>  
+            </div>
             `,
             render: function (ele) {
                 console.log(this.$slots);
@@ -157,7 +157,7 @@
                             bar: false,
                             container: true
                         },
-                        // 正常的 HTML 特性 
+                        // 正常的 HTML 特性
                         attrs: {
                             id: 'foo',
                             class: "container"
@@ -328,6 +328,10 @@
             }
         });
     </script>
+
+
+    scope="slotScope" vue2.5 改为 slot-scope="slotScope"
+    slot-scope="slotScope" 和 slot="slotName" 都整合到v-slot:slotName="slotScope"
 </body>
 
 </html>

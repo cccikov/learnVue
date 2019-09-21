@@ -15,7 +15,14 @@
     var vm3 = new Vue({
         el: "#app1",
         render: function(createElement) {
+            /* 单文件组件会在render函数前面定义这些 */
+            /*var _vm = this
+            var _h = _vm.$createElement
+            var _c = _vm._self._c || _h*/
+
             console.log(this);
+            console.log(this.$createElement == createElement);
+
             return createElement(
                 /**
                  * 必选

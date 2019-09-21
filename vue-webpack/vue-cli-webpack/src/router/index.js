@@ -195,6 +195,11 @@ const router = new Router({
             name: "keyincomponent",
             component: resolve => require(['@/components/key/index.vue'], resolve)
         },
+        {
+            path: "/render",
+            name: "render",
+            component: resolve => require(['@/components/render/index.vue'], resolve)
+        },
         ...checkbox,
         ...vModel,
         ...mixin,
