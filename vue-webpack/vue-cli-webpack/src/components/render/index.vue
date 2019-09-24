@@ -13,12 +13,11 @@
     /* 组件对象 */
     import componentA from "./widget/component-a";
     let componentB = {
-        template:
-        `<div class="component-wrap">
-            <h3>组件B</h3>
-            <p>{{str}}</p>
-            <p><button @click='fn'>按钮</button></p>
-        </div>`,
+        template: `<div class="component-wrap">
+                            <h3>组件B</h3>
+                            <p>{{str}}</p>
+                            <p><button @click='fn'>按钮</button></p>
+                        </div>`,
         data() {
             return {
                 str: "Lorem, ipsum dolor."
@@ -113,13 +112,19 @@
                     },
                     // 事件，如果是html标签，原生事件；如果是组件，则是组件内部使用 `vm.$emit` 触发的事件。
                     on: {
-                        click: this.fn, // 要的是函数，所以不要不小心加上()，如果返回值是函数也可以
-                        mouseenter: function() {
-                            console.log(this, "mouseenter"); // 方法的this指向null
-                            console.log.call(_vm,_vm,"mouseenter"); // 外面对象，render的this是指向实例，所以第二个参数对象this也指向实例，但是事件监听器未知是如何调用的
+                        click: this.fn, // 要的是函数，所以不要不小心加上()，如果返回值是函数也可以；createElement第二个参数对象this也指向实例
+                        mouseenter: function(event) {
+                            console.log("%c\n\n\n mouseenter", "font-size:30px;color:red;");
+                            console.log("this", this); // this指向null
+                            console.log("_vm", _vm);
+                            /**
+                             * render函数里面的this是指向实例（非箭头函数时）
+                             * createElement是在render函数里面执行的，createElement第二个参数对象this也指向实例；但是事件监听器未知是如何调用的，导致事件监听器this执行null
+                             */
                         },
-                        mouseleave:()=>{
-                            console.log(this,"mouseleave")
+                        mouseleave: event => {
+                            console.log("%c\n\n\n mouseleave", "font-size:30px;color:red;");
+                            console.log("this", this); // 箭头函数，表明createElement第二个参数对象this也指向实例
                         }
                     },
                     // 作为组件是使用，传到本组件的prop
@@ -157,17 +162,21 @@
                     },
                     on: {
                         click: this.eventHandler,
-                        mouseenter: this.eventHandler,
+                        mouseenter: () => {
+                            console.log("this", this);
+                            this.eventHandler();
+                        },
                         change() {
-                            this.eventHandler("自定义change事件");
+                            console.log("this", this);
+                            console.log("_vm", _vm);
+                            _vm.eventHandler("自定义change事件");
                         },
                         clickBtn: this.eventHandler
                     },
                     nativeOn: {
                         click: this.eventHandler,
                         mouseenter(event) {
-                            console.log(this);
-                            // this.eventHandler("原生mouseenter事件", event);
+                            _vm.eventHandler("原生mouseenter事件", event);
                         },
                         touchstart: this.eventHandler
                     }
@@ -226,7 +235,7 @@
                 }
                 if (event) {
                     console.log(event);
-                    console.log("==================");
+                    console.log("==================\n\n\n\n\n");
                 }
             },
             fn() {
