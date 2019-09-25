@@ -13,11 +13,12 @@
     /* 组件对象 */
     import componentA from "./widget/component-a";
     let componentB = {
-        template: `<div class="component-wrap">
-                            <h3>组件B</h3>
-                            <p>{{str}}</p>
-                            <p><button @click='fn'>按钮</button></p>
-                        </div>`,
+        template:
+        `<div class="component-wrap">
+            <h3>组件B</h3>
+            <p>{{str}}</p>
+            <p><button @click='fn'>按钮</button></p>
+        </div>`,
         data() {
             return {
                 str: "Lorem, ipsum dolor."
@@ -186,8 +187,14 @@
                         touchstart: this.eventHandler
                     }
                 },
-                // 内容
-                [this.str]
+                // 内容（如果组件，就是插槽内容）
+                [
+                    this.str, // 不指定就是默认插槽
+                    h("p",{
+                        // 作为组件的插槽内容，插槽指定名称
+                        slot:"footer"
+                    },"Here's some contact info")
+                ]
             );
 
             return h("div", [

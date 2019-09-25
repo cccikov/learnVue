@@ -205,6 +205,11 @@ const router = new Router({
             name: "render_sfc",
             component: resolve => require(['@/components/render/index_sfc.vue'], resolve)
         },
+        {
+            path: "/render-v-if",
+            name: "render-v-if",
+            component: resolve => require(['@/components/render/render-v-if.vue'], resolve)
+        },
         ...checkbox,
         ...vModel,
         ...mixin,
