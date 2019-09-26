@@ -205,6 +205,12 @@ const router = new Router({
             name: "render_sfc",
             component: resolve => require(['@/components/render/index_sfc.vue'], resolve)
         },
+        // 查看render函数的
+        {
+            path: "/getRender",
+            name: "getRender",
+            component: resolve => require(['@/components/render/getRender/getRender.vue'], resolve)
+        },
         {
             path: "/render-v-if",
             name: "render-v-if",

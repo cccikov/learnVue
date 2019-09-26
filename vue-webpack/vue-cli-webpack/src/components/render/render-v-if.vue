@@ -13,9 +13,9 @@
     <div class="wrap">
         <button @click="refresh">刷新数据</button>
         <empty class="demo-section"></empty>
-        <hr />
 
         <!-- 简单用法 -->
+        <h2>简单用法</h2>
         <div class="demo-section">
             <div v-if="num===1">这是数据为1时，显示的内容。Lorem.</div>
             <div v-else-if="num===2">这是数据为2时，显示的内容。Lorem, ipsum.</div>
@@ -24,14 +24,15 @@
         <simple class="demo-section" :num="num"></simple>
         <simple2 class="demo-section" :num="num"></simple2>
         <simple3 class="demo-section" :num="num"></simple3>
-        <hr />
 
         <!-- 多个if -->
-        <!-- <div class="demo-section">
+        <h2>多个if</h2>
+        <div class="demo-section">
             <div v-if="num>=1">这是数据为1时，显示的内容。Lorem.</div>
             <div v-if="num>=2">这是数据为2时，显示的内容。Lorem, ipsum.</div>
             <div v-if="num>=3">这是数据为3时，显示的内容。Lorem, ipsum dolor.</div>
-        </div>-->
+        </div>
+        <multiple class="demo-section" :num="num"></multiple>
     </div>
 </template>
 <script>
@@ -49,6 +50,9 @@
         components: {
             empty: {
                 render: function(h) {
+                    console.log(this._e(), h(undefined, "")); // vue 内部空内容 this._e() ， 相当于 h(undefined, "")
+                    console.log(JSON.stringify(this._e()) == JSON.stringify(h(undefined, "")));
+
                     /* 有些时候我们需要通过if判断，有就显示，没有就不显示；没有的时候，可以返回空字符串，null等 */
                     return h("div", ["", "", null, undefined, false, true]);
                 }
@@ -131,6 +135,30 @@
                     );
                 },
                 props: ["num"]
+            },
+
+            multiple: {
+                render: function(h) {
+                    return h(
+                        // 第一参数
+                        "div",
+                        // 第三参数
+                        [
+                            this.num >= 1 // if
+                                ? h("div", "这是数据为1时，显示的内容。Lorem.")
+                                : "",
+
+                            this.num >= 2 //
+                                ? h("div", "这是数据为2时，显示的内容。Lorem, ipsum.")
+                                : this._e(),
+
+                            this.num >= 3 //
+                                ? h("div", "这是数据为3时，显示的内容。Lorem, ipsum dolor.")
+                                : this._e()
+                        ]
+                    );
+                },
+                props:["num"]
             }
         }
     };

@@ -73,6 +73,7 @@
             <router-link :to="{name:'render'}">渲染函数 render 单文件组件版</router-link>
             <router-link :to="{name:'render_sfc'}">渲染函数 render 单文件组件对比版</router-link>
             <router-link :to="{name:'render-v-if'}">渲染函数 render v-if</router-link>
+            <router-link :to="{name:'getRender'}">查看渲染函数</router-link>
         </p>
     </div>
 </template>
