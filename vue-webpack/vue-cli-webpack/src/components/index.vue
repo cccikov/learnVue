@@ -79,7 +79,17 @@
 </template>
 <script>
     export default {
-        name: "index"
+        name: "index",
+        created() {
+            this.$axios({
+                url:"../main.js"
+            }).then(res=>{
+                console.log(res)
+            }).catch(function (err) {
+                console.log(this)
+                console.log(err)
+            })
+        },
     };
 </script>
 <style scoped lang='less'>

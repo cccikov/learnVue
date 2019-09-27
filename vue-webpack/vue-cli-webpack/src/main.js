@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import axios from 'axios'
 
 // 全局暴露，未必需要;
 window.$ = $;
@@ -35,6 +36,9 @@ Vue.mixin({
         window.__vm__ = this;
     },
 });
+
+
+Vue.prototype.$axios = axios;
 
 // 发布，订阅模式
 Vue.prototype.bus = new Vue(); // 发布-订阅总线 EventBus
