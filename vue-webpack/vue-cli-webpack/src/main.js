@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 
+import "./mock" // mock
+
 // 全局暴露，未必需要;
 window.$ = $;
 
