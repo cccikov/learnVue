@@ -75,6 +75,9 @@
             <router-link :to="{name:'render-v-if'}">渲染函数 render v-if</router-link>
             <router-link :to="{name:'getRender'}">查看渲染函数</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'axiosGetData'}">axios获取mock数据</router-link>
+        </p>
     </div>
 </template>
 <script>
@@ -82,14 +85,16 @@
         name: "index",
         created() {
             this.$axios({
-                url:"../main.js"
-            }).then(res=>{
-                console.log(res)
-            }).catch(function (err) {
-                console.log(this)
-                console.log(err)
+                url: "../main.js"
             })
-        },
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(function(err) {
+                    console.log(this);
+                    console.log(err);
+                });
+        }
     };
 </script>
 <style scoped lang='less'>

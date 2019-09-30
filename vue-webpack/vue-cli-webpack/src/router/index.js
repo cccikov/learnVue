@@ -216,6 +216,17 @@ const router = new Router({
             name: "render-v-if",
             component: resolve => require(['@/components/render/render-v-if.vue'], resolve)
         },
+        // getData 测试 axios mock
+        {
+            path: "/axios-get-data",
+            name: "axiosGetData",
+            component: resolve => require(['@/components/axiosGetData/index.vue'], resolve)
+        },
+        {
+            path: "/mock",
+            name: "mock",
+            component: resolve => require(['@/components/axiosGetData/mock.vue'], resolve)
+        },
         ...checkbox,
         ...vModel,
         ...mixin,

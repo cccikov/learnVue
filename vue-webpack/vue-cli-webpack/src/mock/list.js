@@ -5,10 +5,10 @@ import Mock from 'mockjs'
  */
 Mock.mock('/mock/api/list', 'post', {
     "data|5-10": [{
-        "name": "@cname 测试",
-        'num|3': '1',
-        "style": "@clast 式",
-        "space": "@clast 空间",
+        "name": "@name",
+        'num|3': '@integer(11, 99)',
+        "style": "@clast",
+        "space": "@clast",
         "area": "@integer(11, 99)",
         "time": "@date(yyyy-MM-dd)",
         "money": '@integer(1001, 9999)',
