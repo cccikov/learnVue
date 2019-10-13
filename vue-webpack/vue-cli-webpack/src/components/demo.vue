@@ -1,12 +1,341 @@
+<style scoped lang="less">
+.eight-corner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 150px;
+    border: 1px dashed #ccc;
+
+    .corner-wrap {
+        width: 0px;
+        height: 0px;
+
+        .corner {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            padding: 1px;
+            border: 1px solid #000;
+            background: #000;
+            background-clip: content-box;
+
+            &.corner1 {
+                top: 0;
+                left: 0;
+                transform: translate(-50%, -50%);
+                cursor: nwse-resize;
+            }
+
+            &.corner2 {
+                top: 0;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                cursor: ns-resize;
+            }
+
+            &.corner3 {
+                top: 0;
+                right: 0%;
+                transform: translate(50%, -50%);
+                cursor: nesw-resize;
+
+            }
+
+            &.corner4 {
+                top: 50%;
+                left: 100%;
+                transform: translate(-50%, -50%);
+                cursor: ew-resize;
+
+            }
+
+            &.corner5 {
+                top: 100%;
+                left: 100%;
+                transform: translate(-50%, -50%);
+                cursor: nwse-resize;
+            }
+
+            &.corner6 {
+                top: 100%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                cursor: ns-resize;
+            }
+
+            &.corner7 {
+                top: 100%;
+                left: 0%;
+                transform: translate(-50%, -50%);
+                cursor: nesw-resize;
+            }
+
+            &.corner8 {
+                top: 50%;
+                left: 0%;
+                transform: translate(-50%, -50%);
+                cursor: ew-resize;
+            }
+        }
+
+    }
+
+    .content {
+        width: 100%;
+        height: 100%;
+        cursor: move;
+    }
+}
+
+</style>
 <template>
-    <div></div>
+    <div class="wrap">
+        <!-- tar -->
+        <div ref="tar" class="eight-corner">
+            <div class="corner-wrap">
+                <span class="corner corner1 top-left" @mousedown="mouseDownHandler(corner1Move,$event)" ></span>
+                <span class="corner corner2 top-middle" @mousedown="mouseDownHandler(corner2Move,$event)"></span>
+                <span class="corner corner3 top-right" @mousedown="mouseDownHandler(corner3Move,$event)"></span>
+                <span class="corner corner4 middle-right" @mousedown="mouseDownHandler(corner4Move,$event)"></span>
+                <span class="corner corner5 bottom-right" @mousedown="mouseDownHandler(corner5Move,$event)"></span>
+                <span class="corner corner6 bottom-middle" @mousedown="mouseDownHandler(corner6Move,$event)"></span>
+                <span class="corner corner7 bottom-left" @mousedown="mouseDownHandler(corner7Move,$event)"></span>
+                <span class="corner corner8 middle-left" @mousedown="mouseDownHandler(corner8Move,$event)"></span>
+            </div>
+            <div class="content" @mousedown="mouseDownHandler(contentMove,$event)">
+            </div>
+        </div>
+        <!-- tar end -->
+        <button @mouseup.stop @click="startFrameRender">启动</button>
+        <button @mouseup.stop @click="cancelFrameRender">cancel</button>
+    </div>
 </template>
 <script>
-    export default {
-        data() {
-            return {
+export default {
+    data() {
+        return {
+            animationFrame: {
+                markNum: 0,
+                animationFrameId: null,
+                cancelFlag: false,
+            },
+            box: {
+                width: 100,
+                height: 100,
+                top: 200,
+                left: 300,
+            },
+            event: {
+                mouseMoveListener: null, // 记录当前document mousemove 事件的监听器
+            },
+            oldPoint: {
+                x: 0,
+                y: 0
+            },
+            newPoint: {
+                x: 0,
+                y: 0
+            }
+        };
+    },
+    mounted() {
+        let _this = this;
+        _this.$nextTick(() => {
+            _this.handler();
+            document.addEventListener("mouseup", function() {
+                _this.cancelFrameRender();
+                document.removeEventListener("mousemove", _this.event.mouseMoveListener, false);
+            }, false);
+        });
+    },
+    methods: {
+        /**
+         * 启动帧渲染
+         * @return {[type]} [description]
+         */
+        frameRender() {
+            console.log("%c Id:" + this.animationFrame.animationFrameId + " num:" + this.animationFrame.markNum, "font-size:20px;color:blue;");
+            this.animationFrame.animationFrameId = window.requestAnimationFrame(() => {
+                this.animationFrame.markNum++;
+                if (this.animationFrame.markNum >= 600) {
+                    this.animationFrame.markNum = 0;
+                    console.clear();
+                }
+                this.handler();
+                console.log("%c Id:" + this.animationFrame.animationFrameId + " num:" + this.animationFrame.markNum, "font-size:20px;color:red;");
 
-            };
+                ///////////////////////////
+                // 取消 animationFrame 方式二 //
+                ///////////////////////////
+                if (!this.animationFrame.cancelFlag) {
+                    this.frameRender();
+                } else {
+                    console.log("%c Id:" + this.animationFrame.animationFrameId, "font-size:20px;color:pink;");
+                    this.animationFrame.cancelFlag = false;
+                }
+
+            });
+
+            ///////////////////////////
+            // 取消 animationFrame 方式一 //
+            ///////////////////////////
+            if (this.animationFrame.cancelFlag) {
+                console.log("%c Id:" + this.animationFrame.animationFrameId, "font-size:20px;color:blue;");
+                window.cancelAnimationFrame(this.animationFrame.animationFrameId);
+                this.animationFrame.cancelFlag = false;
+            }
+
+        },
+        /**
+         * 关闭帧渲染
+         * @return {[type]} [description]
+         */
+        cancelFrameRender() {
+            console.warn("关闭 requestAnimationFrame")
+            console.log("%c Id:" + this.animationFrame.animationFrameId, "font-size:20px;color:yellow;");
+            if (!this.animationFrame.cancelFlag) {
+                this.animationFrame.cancelFlag = true;
+            }
+        },
+        /**
+         * 开始
+         */
+        startFrameRender() {
+            console.warn("启动 requestAnimationFrame")
+            this.animationFrame.cancelFlag = false;
+            this.frameRender();
+        },
+        /**
+         * 渲染主要内容
+         */
+        handler() {
+            Object.assign(this.$refs.tar.style, {
+                width: this.box.width + "px",
+                height: this.box.height + "px",
+                transform: "translate3d(" + this.box.left + "px, " + this.box.top + "px, 0)"
+            });
+        },
+        /**
+         * 事件handler
+         */
+        mouseDownHandler(listener, event) {
+            event.preventDefault();
+            this.startFrameRender();
+
+            this.oldPoint = {
+                x: event.clientX,
+                y: event.clientY
+            }
+            this.event.mouseMoveListener = listener;
+            document.addEventListener("mousemove", listener, false);
+        },
+        /**
+         * commonMove
+         */
+        commonMove(event, cb) {
+            event.preventDefault();
+            this.newPoint = {
+                x: event.clientX,
+                y: event.clientY
+            }
+
+            let delta = {
+                x: this.newPoint.x - this.oldPoint.x,
+                y: this.newPoint.y - this.oldPoint.y
+            }
+
+            cb && cb.call(this, delta);
+
+            console.log(delta);
+
+            this.oldPoint = this.newPoint;
+        },
+        /**
+         * 拖拽
+         */
+        contentMove(event) {
+            this.commonMove(event, function(delta) {
+                console.log(delta, this)
+                this.box.top += delta.y
+                this.box.left += delta.x
+            });
+        },
+        /**
+         * corner 1
+         */
+        corner1Move(event) {
+            this.commonMove(event, function(delta) {
+                this.box.width -= delta.x
+                this.box.height -= delta.y
+                this.box.top += delta.y
+                this.box.left += delta.x
+            })
+        },
+        /**
+         * corner 2
+         */
+        corner2Move(event) {
+            this.commonMove(event, function(delta) {
+                this.box.height -= delta.y
+                this.box.top += delta.y
+            })
+        },
+        /**
+         * corner 3
+         */
+        corner3Move(event) {
+            this.commonMove(event, function(delta) {
+                this.box.width += delta.x
+                this.box.height -= delta.y
+                this.box.top += delta.y
+            })
+        },
+        /**
+         * corner 4
+         */
+        corner4Move(event) {
+            this.commonMove(event, function(delta) {
+                this.box.width += delta.x
+            })
+        },
+        /**
+         * corner 5
+         */
+        corner5Move(event) {
+            this.commonMove(event, function(delta) {
+                this.box.width += delta.x
+                this.box.height += delta.y
+            })
+        },
+        /**
+         * corner 6
+         */
+        corner6Move(event) {
+            this.commonMove(event, function(delta) {
+                this.box.height += delta.y
+            })
+        },
+        /**
+         * corner 7
+         */
+        corner7Move(event) {
+            this.commonMove(event, function(delta) {
+                this.box.width -= delta.x
+                this.box.height += delta.y
+                this.box.left += delta.x
+            })
+        },
+        /**
+         * corner 8
+         */
+        corner8Move(event) {
+            this.commonMove(event, function(delta) {
+                this.box.width -= delta.x
+                this.box.left += delta.x
+            })
         }
-    };
+    }
+};
+
 </script>
