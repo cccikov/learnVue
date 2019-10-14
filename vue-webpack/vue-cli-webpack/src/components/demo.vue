@@ -5,20 +5,38 @@
     left: 0;
     width: 200px;
     height: 150px;
-    border: 1px dashed #ccc;
+
+    &.active {
+        border: 1px dashed #ccc;
+
+        .corner-wrap {
+            .corner {
+                display: block;
+            }
+        }
+    }
 
     .corner-wrap {
         width: 0px;
         height: 0px;
 
         .corner {
+            display: none;
             position: absolute;
             width: 8px;
             height: 8px;
             padding: 1px;
             border: 1px solid #000;
-            background: #000;
-            background-clip: content-box;
+
+            &:after {
+                content: "";
+                position: absolute;
+                top: 1px;
+                left: 1px;
+                width: 8px;
+                height: 8px;
+                background: #000;
+            }
 
             &.corner1 {
                 top: 0;
@@ -39,7 +57,6 @@
                 right: 0%;
                 transform: translate(50%, -50%);
                 cursor: nesw-resize;
-
             }
 
             &.corner4 {
@@ -47,7 +64,6 @@
                 left: 100%;
                 transform: translate(-50%, -50%);
                 cursor: ew-resize;
-
             }
 
             &.corner5 {
@@ -78,7 +94,6 @@
                 cursor: ew-resize;
             }
         }
-
     }
 
     .content {
@@ -92,9 +107,9 @@
 <template>
     <div class="wrap">
         <!-- tar -->
-        <div ref="tar" class="eight-corner">
+        <div ref="tar" class="eight-corner" :class="{active}">
             <div class="corner-wrap">
-                <span class="corner corner1 top-left" @mousedown="mouseDownHandler(corner1Move,$event)" ></span>
+                <span class="corner corner1 top-left" @mousedown="mouseDownHandler(corner1Move,$event)"></span>
                 <span class="corner corner2 top-middle" @mousedown="mouseDownHandler(corner2Move,$event)"></span>
                 <span class="corner corner3 top-right" @mousedown="mouseDownHandler(corner3Move,$event)"></span>
                 <span class="corner corner4 middle-right" @mousedown="mouseDownHandler(corner4Move,$event)"></span>
@@ -103,31 +118,29 @@
                 <span class="corner corner7 bottom-left" @mousedown="mouseDownHandler(corner7Move,$event)"></span>
                 <span class="corner corner8 middle-left" @mousedown="mouseDownHandler(corner8Move,$event)"></span>
             </div>
-            <div class="content" @mousedown="mouseDownHandler(contentMove,$event)">
-            </div>
+            <div class="content" @mousedown="mouseDownHandler(contentMove,$event)"></div>
         </div>
-        <!-- tar end -->
-        <button @mouseup.stop @click="startFrameRender">启动</button>
-        <button @mouseup.stop @click="cancelFrameRender">cancel</button>
     </div>
 </template>
 <script>
 export default {
+    props: ["value"],
     data() {
         return {
+            active: true,
             animationFrame: {
                 markNum: 0,
                 animationFrameId: null,
-                cancelFlag: false,
+                cancelFlag: false
             },
             box: {
                 width: 100,
                 height: 100,
                 top: 200,
-                left: 300,
+                left: 300
             },
             event: {
-                mouseMoveListener: null, // 记录当前document mousemove 事件的监听器
+                mouseMoveListener: null // 记录当前document mousemove 事件的监听器
             },
             oldPoint: {
                 x: 0,
@@ -143,11 +156,11 @@ export default {
         let _this = this;
         _this.$nextTick(() => {
             _this.handler();
-            document.addEventListener("mouseup", function() {
-                _this.cancelFrameRender();
-                document.removeEventListener("mousemove", _this.event.mouseMoveListener, false);
-            }, false);
+            document.addEventListener("mouseup", _this.documentMouseUp, false);
         });
+    },
+    destroyed() {
+        document.removeEventListener("mouseup", this.documentMouseUp, false);
     },
     methods: {
         /**
@@ -174,7 +187,6 @@ export default {
                     console.log("%c Id:" + this.animationFrame.animationFrameId, "font-size:20px;color:pink;");
                     this.animationFrame.cancelFlag = false;
                 }
-
             });
 
             ///////////////////////////
@@ -185,15 +197,14 @@ export default {
                 window.cancelAnimationFrame(this.animationFrame.animationFrameId);
                 this.animationFrame.cancelFlag = false;
             }
-
         },
         /**
          * 关闭帧渲染
          * @return {[type]} [description]
          */
         cancelFrameRender() {
-            console.warn("关闭 requestAnimationFrame")
-            console.log("%c Id:" + this.animationFrame.animationFrameId, "font-size:20px;color:yellow;");
+            console.warn("关闭 requestAnimationFrame");
+            console.log("%c Id:" + this.animationFrame.animationFrameId, "font-size:20px;color:#ff5722;");
             if (!this.animationFrame.cancelFlag) {
                 this.animationFrame.cancelFlag = true;
             }
@@ -202,7 +213,7 @@ export default {
          * 开始
          */
         startFrameRender() {
-            console.warn("启动 requestAnimationFrame")
+            console.warn("启动 requestAnimationFrame");
             this.animationFrame.cancelFlag = false;
             this.frameRender();
         },
@@ -226,9 +237,16 @@ export default {
             this.oldPoint = {
                 x: event.clientX,
                 y: event.clientY
-            }
+            };
             this.event.mouseMoveListener = listener;
             document.addEventListener("mousemove", listener, false);
+        },
+        /**
+         * document mouseup
+         */
+        documentMouseUp() {
+            this.cancelFrameRender();
+            document.removeEventListener("mousemove", this.event.mouseMoveListener, false);
         },
         /**
          * commonMove
@@ -238,12 +256,12 @@ export default {
             this.newPoint = {
                 x: event.clientX,
                 y: event.clientY
-            }
+            };
 
             let delta = {
                 x: this.newPoint.x - this.oldPoint.x,
                 y: this.newPoint.y - this.oldPoint.y
-            }
+            };
 
             cb && cb.call(this, delta);
 
@@ -256,9 +274,9 @@ export default {
          */
         contentMove(event) {
             this.commonMove(event, function(delta) {
-                console.log(delta, this)
-                this.box.top += delta.y
-                this.box.left += delta.x
+                console.log(delta, this);
+                this.box.top += delta.y;
+                this.box.left += delta.x;
             });
         },
         /**
@@ -266,74 +284,89 @@ export default {
          */
         corner1Move(event) {
             this.commonMove(event, function(delta) {
-                this.box.width -= delta.x
-                this.box.height -= delta.y
-                this.box.top += delta.y
-                this.box.left += delta.x
-            })
+                this.box.width -= delta.x;
+                this.box.height -= delta.y;
+                this.box.top += delta.y;
+                this.box.left += delta.x;
+            });
         },
         /**
          * corner 2
          */
         corner2Move(event) {
             this.commonMove(event, function(delta) {
-                this.box.height -= delta.y
-                this.box.top += delta.y
-            })
+                this.box.height -= delta.y;
+                this.box.top += delta.y;
+            });
         },
         /**
          * corner 3
          */
         corner3Move(event) {
             this.commonMove(event, function(delta) {
-                this.box.width += delta.x
-                this.box.height -= delta.y
-                this.box.top += delta.y
-            })
+                this.box.width += delta.x;
+                this.box.height -= delta.y;
+                this.box.top += delta.y;
+            });
         },
         /**
          * corner 4
          */
         corner4Move(event) {
             this.commonMove(event, function(delta) {
-                this.box.width += delta.x
-            })
+                this.box.width += delta.x;
+            });
         },
         /**
          * corner 5
          */
         corner5Move(event) {
             this.commonMove(event, function(delta) {
-                this.box.width += delta.x
-                this.box.height += delta.y
-            })
+                this.box.width += delta.x;
+                this.box.height += delta.y;
+            });
         },
         /**
          * corner 6
          */
         corner6Move(event) {
             this.commonMove(event, function(delta) {
-                this.box.height += delta.y
-            })
+                this.box.height += delta.y;
+            });
         },
         /**
          * corner 7
          */
         corner7Move(event) {
             this.commonMove(event, function(delta) {
-                this.box.width -= delta.x
-                this.box.height += delta.y
-                this.box.left += delta.x
-            })
+                this.box.width -= delta.x;
+                this.box.height += delta.y;
+                this.box.left += delta.x;
+            });
         },
         /**
          * corner 8
          */
         corner8Move(event) {
             this.commonMove(event, function(delta) {
-                this.box.width -= delta.x
-                this.box.left += delta.x
-            })
+                this.box.width -= delta.x;
+                this.box.left += delta.x;
+            });
+        }
+    },
+    watch: {
+        box: {
+            handler(val) {
+                this.$emit("input", val);
+            },
+            deep: true
+        },
+        value: {
+            handler(val) {
+                this.box = this.value;
+                this.handler();
+            },
+            deep: true
         }
     }
 };
