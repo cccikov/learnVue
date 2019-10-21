@@ -227,8 +227,16 @@
                 this.commonMove(event, function(delta) {
                     this.box.width = this.oldBox.width - delta.x;
                     this.box.height = this.oldBox.height - delta.y;
-                    this.box.top = this.oldBox.top + delta.y;
-                    this.box.left = this.oldBox.left + delta.x;
+
+                    if (!this.box.rate) {
+                        this.box.top = this.oldBox.top + delta.y;
+                        this.box.left = this.oldBox.left + delta.x;
+                    } else {
+                        this.keepRate();
+                        // 按比例后 delta.x 为 this.oldBox.width - this.box.width；delta.y同理
+                        this.box.left = this.oldBox.left + (this.oldBox.width - this.box.width);
+                        this.box.top = this.oldBox.top + (this.oldBox.height - this.box.height);
+                    }
                 });
             },
             /**
@@ -247,7 +255,14 @@
                 this.commonMove(event, function(delta) {
                     this.box.width = this.oldBox.width + delta.x;
                     this.box.height = this.oldBox.height - delta.y;
-                    this.box.top = this.oldBox.top + delta.y;
+
+                    if (!this.box.rate) {
+                        this.box.top = this.oldBox.top + delta.y;
+                    } else {
+                        this.keepRate();
+                        // 按比例后 delta.x 为 this.oldBox.width - this.box.width；delta.y同理
+                        this.box.top = this.oldBox.top + (this.oldBox.height - this.box.height);
+                    }
                 });
             },
             /**
@@ -265,6 +280,11 @@
                 this.commonMove(event, function(delta) {
                     this.box.width = this.oldBox.width + delta.x;
                     this.box.height = this.oldBox.height + delta.y;
+
+                    if (!this.box.rate) {
+                    } else {
+                        this.keepRate();
+                    }
                 });
             },
             /**
@@ -282,7 +302,14 @@
                 this.commonMove(event, function(delta) {
                     this.box.width = this.oldBox.width - delta.x;
                     this.box.height = this.oldBox.height + delta.y;
-                    this.box.left = this.oldBox.left + delta.x;
+
+                    if (!this.box.rate) {
+                        this.box.left = this.oldBox.left + delta.x;
+                    } else {
+                        this.keepRate();
+                        // 按比例后 delta.x 为 this.oldBox.width - this.box.width；delta.y同理
+                        this.box.left = this.oldBox.left + (this.oldBox.width - this.box.width);
+                    }
                 });
             },
             /**
@@ -293,6 +320,16 @@
                     this.box.width = this.oldBox.width - delta.x;
                     this.box.left = this.oldBox.left + delta.x;
                 });
+            },
+            /**
+             * keepRate 保持比例
+             */
+            keepRate() {
+                if (this.box.width / this.box.height > this.box.rate) {
+                    this.box.width = this.box.rate * this.box.height;
+                } else if (this.box.width / this.box.height < this.box.rate) {
+                    this.box.height = this.box.width / this.box.rate;
+                }
             }
         },
         watch: {
