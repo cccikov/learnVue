@@ -81,6 +81,7 @@
         <p>
             <router-link :to="{name:'eightcorner1'}">8角拖拽</router-link>
             <router-link :to="{name:'eightcorner2'}">8角拖拽 demo2</router-link>
+            <router-link :to="{name:'eightcorner3'}">8角拖拽 demo3</router-link>
         </p>
     </div>
 </template>

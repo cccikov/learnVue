@@ -237,6 +237,11 @@ const router = new Router({
             name: "eightcorner2",
             component: resolve => require(['@/components/eightCorner/demo2/index.vue'], resolve)
         },
+        {
+            path: "/eightcorner3",
+            name: "eightcorner3",
+            component: resolve => require(['@/components/eightCorner/demo3/index.vue'], resolve)
+        },
         ...checkbox,
         ...vModel,
         ...mixin,
