@@ -79,7 +79,8 @@
             <router-link :to="{name:'axiosGetData'}">axios获取mock数据</router-link>
         </p>
         <p>
-            <router-link :to="{name:'eightcorner'}">8角拖拽</router-link>
+            <router-link :to="{name:'eightcorner1'}">8角拖拽</router-link>
+            <router-link :to="{name:'eightcorner2'}">8角拖拽 demo2</router-link>
         </p>
     </div>
 </template>

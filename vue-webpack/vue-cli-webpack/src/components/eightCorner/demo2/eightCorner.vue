@@ -1,112 +1,7 @@
-<style scoped lang="less">
-    .eight-corner {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 200px;
-        height: 150px;
-
-        &.active {
-            border: 1px dashed #ccc;
-
-            .corner-wrap {
-                .corner {
-                    display: block;
-                }
-            }
-        }
-
-        .corner-wrap {
-            width: 0px;
-            height: 0px;
-
-            .corner {
-                display: none;
-                position: absolute;
-                width: 8px;
-                height: 8px;
-                padding: 1px;
-                border: 1px solid #000;
-
-                &:after {
-                    content: "";
-                    position: absolute;
-                    top: 1px;
-                    left: 1px;
-                    width: 8px;
-                    height: 8px;
-                    background: #000;
-                }
-
-                &.corner1 {
-                    top: 0;
-                    left: 0;
-                    transform: translate(-50%, -50%);
-                    cursor: nwse-resize;
-                }
-
-                &.corner2 {
-                    top: 0;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    cursor: ns-resize;
-                }
-
-                &.corner3 {
-                    top: 0;
-                    right: 0%;
-                    transform: translate(50%, -50%);
-                    cursor: nesw-resize;
-                }
-
-                &.corner4 {
-                    top: 50%;
-                    left: 100%;
-                    transform: translate(-50%, -50%);
-                    cursor: ew-resize;
-                }
-
-                &.corner5 {
-                    top: 100%;
-                    left: 100%;
-                    transform: translate(-50%, -50%);
-                    cursor: nwse-resize;
-                }
-
-                &.corner6 {
-                    top: 100%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    cursor: ns-resize;
-                }
-
-                &.corner7 {
-                    top: 100%;
-                    left: 0%;
-                    transform: translate(-50%, -50%);
-                    cursor: nesw-resize;
-                }
-
-                &.corner8 {
-                    top: 50%;
-                    left: 0%;
-                    transform: translate(-50%, -50%);
-                    cursor: ew-resize;
-                }
-            }
-        }
-
-        .content {
-            width: 100%;
-            height: 100%;
-            cursor: move;
-        }
-    }
-</style>
 <template>
     <div class="wrap">
         <!-- tar -->
-        <div ref="tar" class="eight-corner" :class="{active}">
+        <div ref="tar" class="eight-corner" :class="{active:box.show}">
             <div class="corner-wrap">
                 <span class="corner corner1 top-left" @mousedown="mouseDownHandler(corner1Move,$event)"></span>
                 <span class="corner corner2 top-middle" @mousedown="mouseDownHandler(corner2Move,$event)"></span>
@@ -117,7 +12,7 @@
                 <span class="corner corner7 bottom-left" @mousedown="mouseDownHandler(corner7Move,$event)"></span>
                 <span class="corner corner8 middle-left" @mousedown="mouseDownHandler(corner8Move,$event)"></span>
             </div>
-            <div class="content" @mousedown="mouseDownHandler(contentMove,$event)">
+            <div class="eight-content" @mousedown="mouseDownHandler(contentMove,$event)">
                 <slot></slot>
             </div>
         </div>
@@ -125,10 +20,9 @@
 </template>
 <script>
     export default {
-        props: ["value"],
+        props: ["value","type"],
         data() {
             return {
-                active: true,
                 animationFrame: {
                     markNum: 0,
                     animationFrameId: null,
@@ -138,7 +32,15 @@
                     width: 120,
                     height: 90,
                     top: 10,
-                    left: 10
+                    left: 10,
+                    show: true,
+                },
+                oldBox: {
+                    width: 120,
+                    height: 90,
+                    top: 10,
+                    left: 10,
+                    show: true,
                 },
                 event: {
                     mouseMoveListener: null // 记录当前document mousemove 事件的监听器
@@ -150,6 +52,10 @@
                 newPoint: {
                     x: 0,
                     y: 0
+                },
+                limit:{
+                    x:0,
+                    y:0
                 }
             };
         },
@@ -239,6 +145,14 @@
                     x: event.clientX,
                     y: event.clientY
                 };
+
+                this.limit = {
+                    x:this.box.left+this.box.width,
+                    y:this.box.top+this.box.height
+                }
+
+                Object.assign(this.oldBox,this.box)
+
                 this.event.mouseMoveListener = listener;
                 document.addEventListener("mousemove", listener, false);
             },
@@ -252,7 +166,7 @@
             /**
              * commonMove
              */
-            commonMove(event, cb) {
+            commonMove(event, cb, isLimit = true) {
                 event.preventDefault();
                 this.newPoint = {
                     x: event.clientX,
@@ -264,11 +178,14 @@
                     y: this.newPoint.y - this.oldPoint.y
                 };
 
+
                 cb && cb.call(this, delta);
 
-                console.log(delta);
+                if(isLimit){
+                    this.limitHandler();
+                }
 
-                this.oldPoint = this.newPoint;
+                console.log(delta);
             },
             /**
              * 拖拽
@@ -276,19 +193,39 @@
             contentMove(event) {
                 this.commonMove(event, function(delta) {
                     console.log(delta, this);
-                    this.box.top += delta.y;
-                    this.box.left += delta.x;
-                });
+                    this.box.top = this.oldBox.top + delta.y;
+                    this.box.left = this.oldBox.left + delta.x;
+                },false);
+            },
+            /**
+             * limitHandler
+             */
+            limitHandler(){
+                if(this.box.width<30){
+                        this.box.width =30;
+                    }
+
+                    if(this.box.height<30){
+                        this.box.height = 30;
+                    }
+
+                    if(this.box.top >this.limit.y-30){
+                        this.box.top = this.limit.y-30
+                    }
+
+                    if(this.box.left >this.limit.x-30){
+                        this.box.left = this.limit.x-30
+                    }
             },
             /**
              * corner 1
              */
             corner1Move(event) {
                 this.commonMove(event, function(delta) {
-                    this.box.width -= delta.x;
-                    this.box.height -= delta.y;
-                    this.box.top += delta.y;
-                    this.box.left += delta.x;
+                    this.box.width = this.oldBox.width - delta.x;
+                    this.box.height = this.oldBox.height - delta.y;
+                    this.box.top = this.oldBox.top + delta.y;
+                    this.box.left = this.oldBox.left + delta.x;
                 });
             },
             /**
@@ -296,8 +233,9 @@
              */
             corner2Move(event) {
                 this.commonMove(event, function(delta) {
-                    this.box.height -= delta.y;
-                    this.box.top += delta.y;
+                    this.box.height = this.oldBox.height - delta.y;
+                    this.box.top = this.oldBox.top + delta.y;
+
                 });
             },
             /**
@@ -305,9 +243,10 @@
              */
             corner3Move(event) {
                 this.commonMove(event, function(delta) {
-                    this.box.width += delta.x;
-                    this.box.height -= delta.y;
-                    this.box.top += delta.y;
+                    this.box.width = this.oldBox.width + delta.x;
+                    this.box.height = this.oldBox.height - delta.y;
+                    this.box.top = this.oldBox.top + delta.y;
+
                 });
             },
             /**
@@ -315,7 +254,8 @@
              */
             corner4Move(event) {
                 this.commonMove(event, function(delta) {
-                    this.box.width += delta.x;
+                    this.box.width = this.oldBox.width + delta.x;
+
                 });
             },
             /**
@@ -323,8 +263,9 @@
              */
             corner5Move(event) {
                 this.commonMove(event, function(delta) {
-                    this.box.width += delta.x;
-                    this.box.height += delta.y;
+                    this.box.width = this.oldBox.width + delta.x;
+                    this.box.height = this.oldBox.height + delta.y;
+
                 });
             },
             /**
@@ -332,7 +273,8 @@
              */
             corner6Move(event) {
                 this.commonMove(event, function(delta) {
-                    this.box.height += delta.y;
+                    this.box.height = this.oldBox.height + delta.y;
+
                 });
             },
             /**
@@ -340,24 +282,29 @@
              */
             corner7Move(event) {
                 this.commonMove(event, function(delta) {
-                    this.box.width -= delta.x;
-                    this.box.height += delta.y;
-                    this.box.left += delta.x;
+                    this.box.width = this.oldBox.width - delta.x;
+                    this.box.height = this.oldBox.height + delta.y;
+                    this.box.left = this.oldBox.left + delta.x;
                 });
+
             },
             /**
              * corner 8
              */
             corner8Move(event) {
                 this.commonMove(event, function(delta) {
-                    this.box.width -= delta.x;
-                    this.box.left += delta.x;
+                    this.box.width = this.oldBox.width - delta.x;
+                    this.box.left = this.oldBox.left + delta.x;
                 });
             }
         },
         watch: {
             box: {
                 handler(val) {
+                    console.log(val);
+                    console.log(val);
+                    console.log(val);
+                    console.log(val);
                     this.$emit("input", val);
                 },
                 deep: true
@@ -366,6 +313,9 @@
                 handler(val) {
                     if (val) {
                         Object.assign(this.box, val);
+                        this.$nextTick(() => {
+                            this.refresh();
+                        })
                     }
                 },
                 deep: true,
@@ -374,3 +324,108 @@
         }
     };
 </script>
+<style scoped lang="less">
+    .eight-corner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 150px;
+        z-index: 2;
+        &.active {
+            border: 1px dashed #ccc;
+
+            .corner-wrap {
+                .corner {
+                    display: block;
+                }
+            }
+        }
+
+        .corner-wrap {
+            width: 0px;
+            height: 0px;
+
+            .corner {
+                display: none;
+                position: absolute;
+                width: 6px;
+                height: 6px;
+                padding: 1px;
+                border: 1px solid #666;
+
+                &:after {
+                    content: "";
+                    position: absolute;
+                    top: 1px;
+                    left: 1px;
+                    width: 6px;
+                    height: 6px;
+                    background: #666;
+                }
+
+                &.corner1 {
+                    top: 0;
+                    left: 0;
+                    transform: translate(-50%, -50%);
+                    cursor: nwse-resize;
+                }
+
+                &.corner2 {
+                    top: 0;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    cursor: ns-resize;
+                }
+
+                &.corner3 {
+                    top: 0;
+                    right: 0%;
+                    transform: translate(50%, -50%);
+                    cursor: nesw-resize;
+                }
+
+                &.corner4 {
+                    top: 50%;
+                    left: 100%;
+                    transform: translate(-50%, -50%);
+                    cursor: ew-resize;
+                }
+
+                &.corner5 {
+                    top: 100%;
+                    left: 100%;
+                    transform: translate(-50%, -50%);
+                    cursor: nwse-resize;
+                }
+
+                &.corner6 {
+                    top: 100%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    cursor: ns-resize;
+                }
+
+                &.corner7 {
+                    top: 100%;
+                    left: 0%;
+                    transform: translate(-50%, -50%);
+                    cursor: nesw-resize;
+                }
+
+                &.corner8 {
+                    top: 50%;
+                    left: 0%;
+                    transform: translate(-50%, -50%);
+                    cursor: ew-resize;
+                }
+            }
+        }
+
+        .eight-content {
+            width: 100%;
+            height: 100%;
+            cursor: move;
+        }
+    }
+</style>

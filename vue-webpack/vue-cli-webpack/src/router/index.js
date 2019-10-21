@@ -228,9 +228,14 @@ const router = new Router({
             component: resolve => require(['@/components/axiosGetData/mock.vue'], resolve)
         },
         {
-            path: "/eightcorner",
-            name: "eightcorner",
-            component: resolve => require(['@/components/eightCorner/index.vue'], resolve)
+            path: "/eightcorner1",
+            name: "eightcorner1",
+            component: resolve => require(['@/components/eightCorner/demo1/index.vue'], resolve)
+        },
+        {
+            path: "/eightcorner2",
+            name: "eightcorner2",
+            component: resolve => require(['@/components/eightCorner/demo2/index.vue'], resolve)
         },
         ...checkbox,
         ...vModel,
