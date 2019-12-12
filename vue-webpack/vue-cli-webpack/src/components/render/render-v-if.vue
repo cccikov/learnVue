@@ -163,6 +163,7 @@
         }
     };
 
+
     // <div>
     //     <p v-if="num">123123</p>
     //     <div>Lorem, ipsum dolor.</div>
@@ -171,6 +172,7 @@
     //     <p v-else-if="bool">123123</p>
     //     <p v-else>123123</p>
     // </div>
+    // 通过 ./getRender/getRender.vue 里面查看
     // var render = function() {
     //     var _vm = this
     //     var _h = _vm.$createElement
