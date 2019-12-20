@@ -83,6 +83,9 @@
             <router-link :to="{name:'eightcorner2'}">8角拖拽 demo2</router-link>
             <router-link :to="{name:'eightcorner3'}">8角拖拽 demo3</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'30-global-methods'}">30. 大批量全局都可以使用的方法</router-link>
+        </p>
     </div>
 </template>
 <script>

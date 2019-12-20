@@ -4,6 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import axios from 'axios'
+import commonMethod from "./common/commonMethods"
+import ajaxMethods from "./common/ajaxMethods"
 
 import "./mock" // mock
 
@@ -34,6 +36,14 @@ Vue.mixin({
             global: "全局信息",
         }
     },
+    methods: Object.assign({
+            log(str) {
+                console.log("%c" + str, "font-size:20px;color:red")
+            }
+        },
+        commonMethod,
+        ajaxMethods
+    ),
     created() {
         window.__vm__ = this;
     },
