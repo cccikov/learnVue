@@ -31,13 +31,13 @@ window.storage = storage;
 import $ from "jquery";
 console.log($);
 
-console.log(import("../../static/test.js"));
-console.log(() => import("../../static/test.js"));
+console.log(import("../../static/test.js")); // webpack 动态加载模块
+console.log(() => import("../../static/test.js")); // webpack 动态加载模块
 console.log(
   import("../../static/test.js").then(value => {
     console.log("promise里面", value.a);
   })
-);
+);  // webpack 动态加载模块
 
 console.log(1);
 console.log(() => 1);
