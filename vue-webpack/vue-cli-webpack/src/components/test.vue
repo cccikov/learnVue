@@ -32,7 +32,7 @@ import $ from "jquery";
 console.log($);
 
 console.log(import("../../static/test.js")); // webpack 动态加载模块
-console.log(() => import("../../static/test.js")); // webpack 动态加载模块
+console.log(() => import("../../static/test.js")); // webpack 动态加载模块 vue 里面路由 动态加载写法
 console.log(
   import("../../static/test.js").then(value => {
     console.log("promise里面", value.a);

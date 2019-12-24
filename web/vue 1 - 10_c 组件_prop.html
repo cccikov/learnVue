@@ -117,6 +117,7 @@
          * Symbol
          */
         /* 注意 props 会在组件实例创建之前进行校验，所以在 default 或 validator 函数里，诸如 data、computed 或 methods 等实例属性还无法使用。 */
+        /*可以是下列原生构造函数中的一种：String、Number、Boolean、Array、Object、Date、Function、Symbol、任何自定义构造函数、或上述内容组成的数组。*/
         Vue.component("tpl-a", {
             props: {
                 propA: null, // 表示任何类型都可以

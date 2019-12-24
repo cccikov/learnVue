@@ -238,6 +238,12 @@ const router = new Router({
             component: resolve => require(['@/components/eightCorner/demo2/index.vue'], resolve)
         },
         {
+            path: "/30/global/methods",
+            name: "30-global-methods",
+            component: resolve => require(['@/components/30.global-methods/index.vue'], resolve)
+        },
+        /* demo 30 */
+        {
             path: "/eightcorner3",
             name: "eightcorner3",
             component: resolve => require(['@/components/eightCorner/demo3/index.vue'], resolve)

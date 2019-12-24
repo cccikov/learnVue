@@ -1,3 +1,4 @@
+<!-- 单文件组件 (SFC) 版 -->
 <!-- 这是一个路由组件，是一个使用单文件组件的例子，模板写在单文件组件的template标签中，componentA 是一个组件，在当前组件中被引用 -->
 <!-- 用于对比，会在另外一个路由组件中，模板使用render函数来写，也引用组件componentA，来了解 createElement （返回VNode） 的用法。 -->
 <style lang="less" scoped>
