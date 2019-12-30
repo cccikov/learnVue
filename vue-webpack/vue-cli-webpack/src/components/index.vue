@@ -100,7 +100,7 @@
                 })
                 .catch(function(err) {
                     console.log(this);
-                    console.log(err);
+                    console.error(err);
                 });
         }
     };
