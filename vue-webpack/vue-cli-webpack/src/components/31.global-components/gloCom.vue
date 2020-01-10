@@ -22,3 +22,10 @@
         }
     };
 </script>
+<style lang="less" scoped>
+    div {
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3);
+    }
+</style>

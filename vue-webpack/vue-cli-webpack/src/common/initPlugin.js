@@ -84,9 +84,9 @@ initPlugin.install = function (Vue, option) {
 
 
     /**
-     * 全局组件
+     * 注册全局组件
      */
-    Vue.component('gloCom31', Vue.extend(gloCom))
+    Vue.component('gloCom', Vue.extend(gloCom))
 
 
     /**
