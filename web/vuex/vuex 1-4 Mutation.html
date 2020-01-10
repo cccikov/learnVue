@@ -45,12 +45,12 @@
             // 改变 store 中的状态的唯一途径就是显式地提交 (commit) mutation //
             /////////////////////////////////////////////////////
             store.commit("increment");
-            console.log("第一次commit increment", store.state.count);
+            console.log("第一次commit increment", store.state.count); // 1
 
 
             // 你可以向 store.commit 传入额外的参数，即 mutation 的 载荷（payload）：
             store.commit("incrementTo", 100);
-            console.log("第二次commit incrementTo", store.state.count);
+            console.log("第二次commit incrementTo", store.state.count); // 100
 
 
             // 对象风格的提交方式 提交 mutation 的另一种方式是直接使用包含 type 属性的对象
@@ -59,14 +59,14 @@
                 type: 'incrementTo',
                 count: 10
             });
-            console.log("第三次commit incrementTo", store.state.count);
+            console.log("第三次commit incrementTo", store.state.count); // {count: 10, type: "incrementTo"}
 
 
             store.commit({
                 type: 'incrementPayload',
                 count: 10
             });
-            console.log("第四次commit incrementPayload", store.state.count);
+            console.log("第四次commit incrementPayload", store.state.count); // 10
 
         }
 

@@ -27,3 +27,5 @@ $ vue init webpack my-project
 * VuePress
 
 * keep-alive
+
+[单文件组件规范](https://vue-loader.vuejs.org/zh/spec.html)

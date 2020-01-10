@@ -6,6 +6,7 @@ import router from './router'
 import axios from 'axios'
 import commonMethod from "./common/commonMethods"
 import ajaxMethods from "./common/ajaxMethods"
+import "./common/global-component";
 
 import "./mock" // mock
 
