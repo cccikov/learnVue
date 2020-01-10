@@ -242,6 +242,11 @@ const router = new Router({
             name: "30-global-methods",
             component: resolve => require(['@/components/30.global-methods/index.vue'], resolve)
         },
+        {
+            path: "/31/global/components",
+            name: "30-global-components",
+            component: resolve => require(['@/components/31.global-components/index.vue'], resolve)
+        },
         /* demo 30 */
         {
             path: "/eightcorner3",

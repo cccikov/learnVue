@@ -86,6 +86,9 @@
         <p>
             <router-link :to="{name:'30-global-methods'}">30. 大批量全局都可以使用的方法</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'30-global-components'}">31. 全局组件</router-link>
+        </p>
     </div>
 </template>
 <script>
