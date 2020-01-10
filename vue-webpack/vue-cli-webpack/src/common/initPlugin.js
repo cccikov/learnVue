@@ -48,7 +48,7 @@
 import axios from 'axios'
 import commonMethod from "./commonMethods"
 import ajaxMethods from "./ajaxMethods"
-import "./global-component";
+import gloCom from "../components/31.global-components/gloCom.vue";
 
 /* 对 Vue 构造函数的任何操作都可以写在里面 */
 const initPlugin = {}
@@ -83,6 +83,10 @@ initPlugin.install = function (Vue, option) {
     });
 
 
+    /**
+     * 全局组件
+     */
+    Vue.component('gloCom31', Vue.extend(gloCom))
 
 
     /**
