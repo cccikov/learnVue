@@ -50,6 +50,14 @@ import commonMethod from "./commonMethods"
 import ajaxMethods from "./ajaxMethods"
 import gloCom from "../components/31.global-components/gloCom.vue";
 
+
+/**
+ *  ../../build/webpack.dev.conf 里的 webpack.ProvidePlugin
+ */
+console.log(globalPlugin);
+console.log(globalPlugin_default);
+// console.log(globalPlugin_relative); // 一用就报错，因为模块providePlugin.js 相对于当前模块的路径是 ./providePlugin.js，而不是 webpack.ProvidePlugin 那里定义 ../src/common/providePlugin.js
+
 /* 对 Vue 构造函数的任何操作都可以写在里面 */
 const initPlugin = {}
 initPlugin.install = function (Vue, option) {
