@@ -255,6 +255,12 @@ const router = new Router({
             name: "32-provide-plugin",
             component: resolve => require(['@/components/32.provide-plugin/index.vue'], resolve)
         },
+        /* demo 33 */
+        {
+            path: "/33/table",
+            name: "33-table",
+            component: resolve => require(['@/components/33.table/index.vue'], resolve)
+        },
         {
             path: "/eightcorner3",
             name: "eightcorner3",

@@ -1,6 +1,6 @@
 <template>
     <!-- template标签相当于 render函数或者template属性 -->
-    <div>
+    <div class="wrap">
         <h5>index</h5>
         <p>
             <router-link to="/demo">demo</router-link>
@@ -92,6 +92,9 @@
         <p>
             <router-link :to="{name:'32-provide-plugin'}">32. 全局模块变量</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'33-table'}">33. 列行可变table</router-link>
+        </p>
     </div>
 </template>
 <script>
@@ -112,7 +115,10 @@
     };
 </script>
 <style scoped lang='less'>
-    a {
-        display: block;
+    .wrap {
+        padding: 10px 5px 50px;
+        a {
+            display: block;
+        }
     }
 </style>
