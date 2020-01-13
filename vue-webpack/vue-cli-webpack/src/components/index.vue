@@ -95,6 +95,9 @@
         <p>
             <router-link :to="{name:'33-table'}">33. 列行可变table</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'34-slot'}">34. slot</router-link>
+        </p>
     </div>
 </template>
 <script>

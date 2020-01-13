@@ -261,6 +261,12 @@ const router = new Router({
             name: "33-table",
             component: resolve => require(['@/components/33.table/index.vue'], resolve)
         },
+        /* demo 34 */
+        {
+            path: "/34/slot",
+            name: "34-slot",
+            component: resolve => require(['@/components/34.slot/index.vue'], resolve)
+        },
         {
             path: "/eightcorner3",
             name: "eightcorner3",
