@@ -143,10 +143,12 @@
 
 <style lang="less" scoped>
     .cell-content {
-        min-height: 50px;
-        line-height: 50px;
-        min-width: 100px;
+        min-height: 40px;
+        line-height: 40px;
+        min-width: 76px;
         text-align: center;
+        padding: 5px 12px;
+        white-space: nowrap;
     }
     table {
         border-collapse: collapse;
@@ -186,7 +188,7 @@
                 font-size: 16px;
             }
         }
-        .btn-wrap{
+        .btn-wrap {
             text-align: center;
         }
     }
