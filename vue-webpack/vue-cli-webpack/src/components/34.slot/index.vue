@@ -33,12 +33,12 @@
                         <!-- data 读取slot组件里面传出来的数据 -->
                         <p>下面是当前slot组件的数据 ↓</p>
                         <p>{{data}}</p>
-                        <button>{{data.companyName}}的小按钮1</button>
+                        <button @click="fn(data)">{{data.companyName}}的小按钮1</button>
                     </div>
                 </td>
                 <td :rowspan="data.rowspan" :class="data.className">
                     <div class="cell-content">
-                        <button>{{data.companyName}}小按钮2</button>
+                        <button @click="fn(data)">{{data.companyName}}小按钮2</button>
                     </div>
                 </td>
             </template>
@@ -66,9 +66,14 @@
         components: {
             tableSlot
         },
-        data(){
-            return{
-                time:new Date().toLocaleString()
+        data() {
+            return {
+                time: new Date().toLocaleString()
+            };
+        },
+        methods: {
+            fn(arg = {}) {
+                alert("执行的是当前组件的方法，传过来的数据是" + JSON.stringify(arg));
             }
         }
     };
