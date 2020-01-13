@@ -8,37 +8,22 @@
             <table>
                 <tr>
                     <th>
-                        <div class="cell-content">名字</div>
+                        <div class="cell-content">{{topname}}</div>
                     </th>
-                    <th>
-                        <div class="cell-content">选项</div>
+                    <th v-if="column.orderNo">
+                        <div class="cell-content">订单号</div>
                     </th>
-                    <th>
-                        <div class="cell-content">选项</div>
+                    <th v-if="column.productName">
+                        <div class="cell-content">产品名称</div>
                     </th>
-                    <th>
-                        <div class="cell-content">选项</div>
+                    <th v-if="column.productNo">
+                        <div class="cell-content">产品编号</div>
                     </th>
-                    <th>
-                        <div class="cell-content">选项</div>
+                    <th v-if="column.number">
+                        <div class="cell-content">数量</div>
                     </th>
-                    <th>
-                        <div class="cell-content">选项</div>
-                    </th>
-                    <th>
-                        <div class="cell-content">选项</div>
-                    </th>
-                    <th>
-                        <div class="cell-content">选项</div>
-                    </th>
-                    <th>
-                        <div class="cell-content">选项</div>
-                    </th>
-                    <th>
-                        <div class="cell-content">选项</div>
-                    </th>
-                    <th>
-                        <div class="cell-content">选项</div>
+                    <th v-if="column.price">
+                        <div class="cell-content">单价</div>
                     </th>
                     <slot name="th"></slot>
                 </tr>
@@ -47,7 +32,7 @@
                         <td>
                             <div class="cell-content">{{company.companyName}}</div>
                         </td>
-                        <td colspan="10"></td>
+                        <td :colspan="colspan"></td>
                         <!-- 单组操作 -->
                         <slot name="part" :companyName="company.companyName" class-name="action" :rowspan="company.list.length+1"></slot>
                         <!-- 全部操作 -->
@@ -59,36 +44,23 @@
                         <td>
                             <div class="cell-content"></div>
                         </td>
-                        <td class="border first">
-                            <div class="cell-content">{{product.str}}</div>
+                        <td v-if="column.orderNo" class="border">
+                            <div class="cell-content">{{product.orderNo}}</div>
                         </td>
-                        <td class="border">
-                            <div class="cell-content">{{product.str}}</div>
+                        <td v-if="column.productName" class="border">
+                            <div class="cell-content">{{product.productName}}</div>
                         </td>
-                        <td class="border">
-                            <div class="cell-content">{{product.str}}</div>
+                        <td v-if="column.productNo" class="border">
+                            <div class="cell-content">{{product.productNo}}</div>
                         </td>
-                        <td class="border">
-                            <div class="cell-content">{{product.str}}</div>
+                        <td v-if="column.number" class="border">
+                            <div class="cell-content">{{product.number}}</div>
                         </td>
-                        <td class="border">
-                            <div class="cell-content">{{product.str}}</div>
+                        <td v-if="column.price" class="border">
+                            <div class="cell-content">{{product.price}}</div>
                         </td>
-                        <td class="border">
-                            <div class="cell-content">{{product.str}}</div>
-                        </td>
-                        <td class="border">
-                            <div class="cell-content">{{product.str}}</div>
-                        </td>
-                        <td class="border">
-                            <div class="cell-content">{{product.str}}</div>
-                        </td>
-                        <td class="border">
-                            <div class="cell-content">{{product.str}}</div>
-                        </td>
-                        <td class="border end">
-                            <div class="cell-content">{{product.str}}</div>
-                        </td>
+                        <!-- 单元格 -->
+                        <slot name="td" :row="product" :companyName="company.companyName" class-name="border"></slot>
                     </tr>
                 </template>
             </table>
@@ -100,45 +72,39 @@
 </template>
 <script>
     export default {
+        props: {
+            tableData: Array,
+            colspan: {
+                type: [Number, String],
+                default: 5
+            },
+            topname: {
+                type: String,
+                default: '企业名称'
+            }
+        },
         data() {
             return {
-                name: "测试slot",
-                tableData: [
-                    {
-                        companyName: "乔欣",
-                        list: new Array(parseInt(Math.random() * 10 + 1)).fill("").map(v => {
-                            return {
-                                str: "---"
-                            };
-                        })
-                    },
-                    {
-                        companyName: "玉兰",
-                        list: new Array(parseInt(Math.random() * 10 + 1)).fill("").map(v => {
-                            return {
-                                str: "---"
-                            };
-                        })
-                    },
-                    {
-                        companyName: "梦尚智美",
-                        list: new Array(parseInt(Math.random() * 10 + 1)).fill("").map(v => {
-                            return {
-                                str: "---"
-                            };
-                        })
-                    }
-                ]
-            };
+                name: '测试slot'
+            }
         },
         methods: {
             btn() {
-                console.log(this.$slots);
-                console.log(this.$scopedSlots);
+                console.log(this.$slots)
+                console.log(this.$scopedSlots)
             }
         },
-        computed: {}
-    };
+        computed: {
+            column() {
+                let tableData = this.tableData
+                if (Array.isArray(tableData) && tableData.length > 0 && tableData[0].list) {
+                    return tableData[0].list[0]
+                } else {
+                    return []
+                }
+            }
+        }
+    }
 </script>
 
 <style lang="less" scoped>
@@ -161,10 +127,10 @@
                 &.border {
                     border-top: 1px solid #eee;
                     border-bottom: 1px solid #eee;
-                    &.first {
+                    &:nth-of-type(2) {
                         border-left: 1px solid #eee;
                     }
-                    &.end {
+                    &:last-of-type {
                         border-right: 1px solid #eee;
                     }
                 }
@@ -180,6 +146,8 @@
     .wrap {
         display: inline-block;
         padding: 12px;
+        border-radius: 12px;
+        margin: 12px;
         box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3);
         > .title {
             > * {
