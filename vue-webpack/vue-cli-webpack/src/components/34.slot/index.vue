@@ -9,21 +9,21 @@
             <!-- 表头 -->
             <!-- 表头 -->
             <!-- 表头 -->
-            <template v-slot:th>
+            <template v-slot:th="params">
                 <th>
-                    <div class="cell-content">详情</div>
+                    <div :class="params.contentClassName">详情</div>
                 </th>
                 <th>
-                    <div class="cell-content">小按钮</div>
+                    <div :class="params.contentClassName">小按钮</div>
                 </th>
                 <th>
-                    <div class="cell-content">小按钮</div>
+                    <div :class="params.contentClassName">小按钮</div>
                 </th>
                 <th>
-                    <div class="cell-content">大按钮</div>
+                    <div :class="params.contentClassName">大按钮</div>
                 </th>
                 <th>
-                    <div class="cell-content">大按钮</div>
+                    <div :class="params.contentClassName">大按钮</div>
                 </th>
             </template>
             <!-- td -->
@@ -31,7 +31,7 @@
             <!-- td -->
             <template v-slot:td="data">
                 <td :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                         <a href="javascript:void(0)">查看详情</a>
                     </div>
                 </td>
@@ -41,7 +41,7 @@
             <!-- 小按钮 -->
             <template v-slot:part="data">
                 <td :rowspan="data.rowspan" :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                         <!-- 读当前组件数据 -->
                         <p>下面是当前组件的数据 ↓</p>
                         <p>当前时间：{{time}}</p>
@@ -52,7 +52,7 @@
                     </div>
                 </td>
                 <td :rowspan="data.rowspan" :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                         <button @click="fn(data)">第二个{{data.companyName}}小按钮</button>
                     </div>
                 </td>
@@ -62,12 +62,12 @@
             <!-- 大按钮 -->
             <template v-slot:all="data">
                 <td :rowspan="data.rowspan" :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                         <button>大按钮I</button>
                     </div>
                 </td>
                 <td :rowspan="data.rowspan" :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                         <button>大按钮II</button>
                     </div>
                 </td>
@@ -79,55 +79,55 @@
             <!-- 表头 -->
             <!-- 表头 -->
             <!-- 表头 -->
-            <template v-slot:th>
+            <template #th="data">
                 <th>
-                    <div class="cell-content">家具类型</div>
+                    <div :class="data.contentClassName">家具类型</div>
                 </th>
                 <th>
-                    <div class="cell-content">家具编号</div>
+                    <div :class="data.contentClassName">家具编号</div>
                 </th>
                 <th>
-                    <div class="cell-content">规格编号</div>
+                    <div :class="data.contentClassName">规格编号</div>
                 </th>
                 <th>
-                    <div class="cell-content">数量</div>
+                    <div :class="data.contentClassName">数量</div>
                 </th>
                 <th>
-                    <div class="cell-content">单价</div>
+                    <div :class="data.contentClassName">单价</div>
                 </th>
                 <th>
-                    <div class="cell-content">小计</div>
+                    <div :class="data.contentClassName">小计</div>
                 </th>
                 <th>
-                    <div class="cell-content">总价</div>
+                    <div :class="data.contentClassName">总价</div>
                 </th>
             </template>
             <!-- td -->
             <!-- td -->
             <!-- td -->
-            <template v-slot:td="data">
+            <template #td="data">
                 <td :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                        {{data.row._productName}}
                     </div>
                 </td>
                 <td :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                        {{data.row._productNo}}
                     </div>
                 </td>
                 <td :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                        {{data.row._orderNo}}
                     </div>
                 </td>
                 <td :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                        {{data.row._number}}
                     </div>
                 </td>
                 <td :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                        {{data.row._price}}
                     </div>
                 </td>
@@ -135,9 +135,9 @@
             <!-- 小按钮 -->
             <!-- 小按钮 -->
             <!-- 小按钮 -->
-            <template v-slot:part="data">
+            <template #part="data">
                 <td :rowspan="data.rowspan" :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                         ￥ 10000
                     </div>
                 </td>
@@ -145,10 +145,9 @@
             <!-- 大按钮 -->
             <!-- 大按钮 -->
             <!-- 大按钮 -->
-            <template v-slot:all="data">
-
+            <template #all="data">
                 <td :rowspan="data.rowspan" :class="data.className">
-                    <div class="cell-content">
+                    <div :class="data.contentClassName">
                         ￥ 30000
                     </div>
                 </td>

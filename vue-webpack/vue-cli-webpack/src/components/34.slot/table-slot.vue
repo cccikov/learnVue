@@ -25,7 +25,7 @@
                     <th v-if="column.price">
                         <div class="cell-content">单价</div>
                     </th>
-                    <slot name="th"></slot>
+                    <slot name="th" content-class-name="cell-content"></slot>
                 </tr>
                 <template v-for="(company,company_index) in tableData">
                     <tr>
@@ -34,10 +34,10 @@
                         </td>
                         <td :colspan="colspan"></td>
                         <!-- 单组操作 -->
-                        <slot name="part" :companyName="company.companyName" class-name="action" :rowspan="company.list.length+1"></slot>
+                        <slot name="part" :companyName="company.companyName" class-name="action" content-class-name="cell-content" :rowspan="company.list.length+1"></slot>
                         <!-- 全部操作 -->
                         <template v-if="company_index == 0">
-                            <slot name="all" class-name="all-action" rowspan="0"></slot>
+                            <slot name="all" class-name="all-action" content-class-name="cell-content" rowspan="0"></slot>
                         </template>
                     </tr>
                     <tr v-for="(product,product_index) in company.list">
@@ -60,7 +60,7 @@
                             <div class="cell-content">{{product.price}}</div>
                         </td>
                         <!-- 单元格 -->
-                        <slot name="td" :row="product" :companyName="company.companyName" class-name="border"></slot>
+                        <slot name="td" :row="product" :companyName="company.companyName" content-class-name="cell-content" class-name="border"></slot>
                     </tr>
                 </template>
             </table>
