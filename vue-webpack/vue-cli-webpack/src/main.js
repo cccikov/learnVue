@@ -3,7 +3,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import "./mock" // mock
+import "./css/reset.less";
+// import "./mock" // mock
 
 import initPlugin from "./common/initPlugin"
 

@@ -3,27 +3,51 @@
 
 // 清除默认样式
 * {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border: 0;
+    // margin: 0;
+    // padding: 0;
+    // list-style: none;
+    // border: 0;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
 //超链接
-body{
+body {
     // font: 12px/1.5 Verdana, Arial, 'simsun';
+    margin: 0;
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, \\5fae\8f6f\96c5\9ed1, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    color: #495060;
 }
+
 a {
-    text-decoration: none;
-    color: inherit;
+    color: #0000ee;
+    color: #2196f3;
 }
-ul,li{
-    list-style:none;
+
+// a {
+//     text-decoration: none;
+//     color: inherit;
+// }
+
+p {
+    margin: 0;
 }
+
+.ulReset() {
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+
 // hover效果
 .mouse-hover:hover {
     text-decoration: underline;
 }
+
 // 清除浮动
 .clearfix() {
     &:after {
@@ -32,6 +56,7 @@ ul,li{
         clear: both
     }
 }
+
 //超出隐藏
 .elli() {
     white-space: nowrap;
@@ -41,44 +66,55 @@ ul,li{
 
 
 // 字体
-.SimSun(){
+.SimSun() {
     font-family: "SimSun"; // 宋体
 }
-.SimHei(){
+
+.SimHei() {
     font-family: "SimHei"; // 黑体
 }
-.Yahei(){
+
+.Yahei() {
     font-family: "Microsoft Yahei"; // 微软雅黑
 }
-.JhengHei(){
+
+.JhengHei() {
     font-family: "Microsoft JhengHei"; // 微软正黑体
 }
-.KaiTi(){
+
+.KaiTi() {
     font-family: "KaiTi"; // 楷体
 }
-.NSimSun(){
+
+.NSimSun() {
     font-family: "NSimSun"; // 新宋体
 }
-.FangSong(){
+
+.FangSong() {
     font-family: "FangSong"; // 仿宋
 }
 
 
-.placeholder(){
-    ::-webkit-input-placeholder{
-        padding:2px 00;
-        color:#ccc;
+.placeholder() {
+    ::-webkit-input-placeholder {
+        padding: 2px 00;
+        color: #ccc;
     }
-    ::-moz-placeholder{
-        padding:2px 00;
-        color:#ccc;
-    } /* firefox 19+ */
-    :-ms-input-placeholder{
-        padding:2px 00;
-        color:#ccc;
-    } /* ie */
-    input:-moz-placeholder{
-        padding:2px 00;
-        color:#ccc;
+
+    ::-moz-placeholder {
+        padding: 2px 00;
+        color: #ccc;
+    }
+
+    /* firefox 19+ */
+    :-ms-input-placeholder {
+        padding: 2px 00;
+        color: #ccc;
+    }
+
+    /* ie */
+    input:-moz-placeholder {
+        padding: 2px 00;
+        color: #ccc;
     }
 }

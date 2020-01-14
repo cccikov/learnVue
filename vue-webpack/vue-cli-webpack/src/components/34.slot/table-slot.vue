@@ -80,31 +80,31 @@
             },
             topname: {
                 type: String,
-                default: '企业名称'
+                default: "企业名称"
             }
         },
         data() {
             return {
-                name: '测试slot'
-            }
+                name: "测试slot"
+            };
         },
         methods: {
             btn() {
-                console.log(this.$slots)
-                console.log(this.$scopedSlots)
+                console.log(this.$slots);
+                console.log(this.$scopedSlots);
             }
         },
         computed: {
             column() {
-                let tableData = this.tableData
+                let tableData = this.tableData;
                 if (Array.isArray(tableData) && tableData.length > 0 && tableData[0].list) {
-                    return tableData[0].list[0]
+                    return tableData[0].list[0];
                 } else {
-                    return []
+                    return [];
                 }
             }
         }
-    }
+    };
 </script>
 
 <style lang="less" scoped>
@@ -152,8 +152,6 @@
         > .title {
             > * {
                 margin: 5px;
-                color: #404040;
-                font-size: 16px;
             }
         }
         .btn-wrap {

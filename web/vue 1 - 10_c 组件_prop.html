@@ -22,13 +22,13 @@
         Vue.component("tpl-first", {
             template: "<button v-on:click='add(counter)'>{{counter}}</button>",
             props: ['initialCounter'],
-            data: function() {
+            data: function () {
                 return {
                     counter: Number(this.initialCounter)
                 }
             },
             methods: {
-                add: function(num) {
+                add: function (num) {
                     this.counter += 2;
                     console.log(num);
                     // this.initialCounter += 1;// 如果我们直接操作这个 , 会报错
@@ -53,7 +53,7 @@
             template: "<div>{{normalizedSize}}</div>",
             props: ['size'],
             computed: {
-                normalizedSize: function() {
+                normalizedSize: function () {
                     return this.size.trim().toLowerCase()
                 }
             }
@@ -78,7 +78,7 @@
             template: "<div>{{obj.message}}{{txt}}</div>",
             props: ['obj'], // obj在子组件里面是prop , 是用来传输数据 , 有父组件传到子组件 , 所以在子组件里面只能读取prop的数据(或者子组件里面定义的数据) , 而不能直接读取父组件的数据(如someObj)
             computed: {
-                txt: function() {
+                txt: function () {
                     this.obj.message = "hi"; // 这里就影响了父组件的数据了 所以prop是个引用类型时一定要小心
                 }
             }
@@ -131,10 +131,18 @@
                     type: [Number, String], //类型
                     default: 100, // 默认值
                     required: false, // 必须传入
-                    validator: function(value) { // 验证函数
+                    validator: function (value) { // 验证函数
                         return value > 10;
                     }
                 },
+                propF: {
+                    type: Object,
+                    // 对象或数组默认值必须从一个工厂函数获取
+                    // Props with type Object/Array must use a factory function to return the default value.
+                    default: function () {
+                        return { message: 'hello' }
+                    }
+                }
             },
             template: "<div>{{propA}} {{propB}} {{propC}} {{propD}}  {{propE}}</div>"
         });
@@ -177,7 +185,8 @@
 
         <!-- 传递给组件的值会覆盖组件本身设定的值 ; class 和 style 这两个特性的值都会做合并 (merge) 操作-->
         <!-- 可以看出对于class 和 style 来说 , 父组件的值是会写在子组件后面的 , 所以实际style是这样写的 , html 会自动把color:red覆盖color:blue-->
-        <div data-val="100" class="main-top danger active danger" style="color: blue; font-size: 16px; color:red">hello world!</div>
+        <div data-val="100" class="main-top danger active danger" style="color: blue; font-size: 16px; color:red">hello
+            world!</div>
 
     </div>
     <script>
