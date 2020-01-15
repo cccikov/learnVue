@@ -5,7 +5,7 @@
             <slot name="default" :name-out="name"></slot>
         </div>
         <div class="table-wrap">
-            <table>
+            <table :class="{test:test !== void 0}">
                 <tr>
                     <th>
                         <div class="cell-content">{{topname}}</div>
@@ -81,6 +81,7 @@
 <script>
     export default {
         props: {
+            test: null,
             tableData: Array,
             colspan: {
                 type: [Number, String],
@@ -131,6 +132,11 @@
             border: 1px solid transparent;
             box-sizing: border-box;
             border-collapse: collapse;
+            &.test {
+                th,td {
+                    outline: 1px solid #f00; // 测试
+                }
+            }
             tr {
                 th {
                     background: #eee;

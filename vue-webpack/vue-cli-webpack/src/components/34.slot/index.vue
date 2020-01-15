@@ -1,6 +1,6 @@
 <template>
     <div>
-        <tableSlot :tableData="tableData"></tableSlot>
+        <tableSlot test :tableData="tableData"></tableSlot>
 
         <tableSlot :tableData="tableData" :colspan="6" topname="企业名称">
             <template v-slot:default>
