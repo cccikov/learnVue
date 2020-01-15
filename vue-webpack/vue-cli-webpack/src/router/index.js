@@ -267,6 +267,12 @@ const router = new Router({
             name: "34-slot",
             component: resolve => require(['@/components/34.slot/index.vue'], resolve)
         },
+        /* demo 35 */
+        {
+            path: "/35/global/timer",
+            name: "35-global-timer",
+            component: resolve => require(['@/components/35.global-timer/index.vue'], resolve)
+        },
         {
             path: "/eightcorner3",
             name: "eightcorner3",

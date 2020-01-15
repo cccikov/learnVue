@@ -1,10 +1,10 @@
 <template>
-    <div class="wrap">
+    <div class="table-slot">
         <div v-if="$scopedSlots.default" class="title">
             <p>有默认插槽</p>
             <slot name="default" :name-out="name"></slot>
         </div>
-        <div>
+        <div class="table-wrap">
             <table>
                 <tr>
                     <th>
@@ -26,6 +26,10 @@
                         <div class="cell-content">单价</div>
                     </th>
                     <slot name="th" content-class-name="cell-content"></slot>
+                    <!-- 占位 -->
+                    <th v-if="!($scopedSlots.all || $scopedSlots.part)">
+                        <div class="cell-content"></div>
+                    </th>
                 </tr>
                 <template v-for="(company,company_index) in tableData">
                     <tr>
@@ -37,7 +41,11 @@
                         <slot name="part" :companyName="company.companyName" class-name="action" content-class-name="cell-content" :rowspan="company.list.length+1"></slot>
                         <!-- 全部操作 -->
                         <template v-if="company_index == 0">
-                            <slot name="all" class-name="all-action" content-class-name="cell-content" rowspan="0"></slot>
+                            <slot v-if="$scopedSlots.all" name="all" class-name="all-action" content-class-name="cell-content" rowspan="0"></slot>
+                            <!-- 占位 -->
+                            <td v-if="!($scopedSlots.all || $scopedSlots.part)" rowspan="0">
+                                <div class="cell-content"></div>
+                            </td>
                         </template>
                     </tr>
                     <tr v-for="(product,product_index) in company.list">
@@ -116,35 +124,41 @@
         padding: 5px 12px;
         white-space: nowrap;
     }
-    table {
-        border-collapse: collapse;
-        tr {
-            th {
-                background: #eee;
-                vertical-align: middle;
-            }
-            td {
-                &.border {
-                    border-top: 1px solid #eee;
-                    border-bottom: 1px solid #eee;
-                    &:nth-of-type(2) {
-                        border-left: 1px solid #eee;
-                    }
-                    &:last-of-type {
-                        border-right: 1px solid #eee;
-                    }
+    .table-wrap {
+        overflow: auto;
+        table {
+            min-width: 100%;
+            border: 1px solid transparent;
+            box-sizing: border-box;
+            border-collapse: collapse;
+            tr {
+                th {
+                    background: #eee;
+                    vertical-align: middle;
                 }
-                &.action {
-                    border: 1px solid #eee;
-                }
-                &.all-action {
-                    border: 1px solid #eee;
+                td {
+                    &.border {
+                        border-top: 1px solid #eee;
+                        border-bottom: 1px solid #eee;
+                        &:nth-of-type(2) {
+                            border-left: 1px solid #eee;
+                        }
+                        &:last-of-type {
+                            border-right: 1px solid #eee;
+                        }
+                    }
+                    &.action {
+                        border: 1px solid #eee;
+                    }
+                    &.all-action {
+                        border: 1px solid #eee;
+                    }
                 }
             }
         }
     }
-    .wrap {
-        display: inline-block;
+
+    .table-slot {
         padding: 12px;
         border-radius: 12px;
         margin: 12px;

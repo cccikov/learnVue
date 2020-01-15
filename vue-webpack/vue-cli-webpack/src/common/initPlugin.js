@@ -75,11 +75,50 @@ initPlugin.install = function (Vue, option) {
         data() {
             return {
                 global: "全局信息",
+                mixin_timer: null,
             }
         },
         methods: Object.assign({
                 log(str) {
                     console.log("%c" + str, "font-size:20px;color:red")
+                },
+                /**
+                 * 关闭全局定时器
+                 */
+                mixin_clearTimer() {
+                    clearTimeout(this.mixin_timer);
+                },
+                /**
+                 * 全局定时器
+                 * @param {Function} per 每次执行的函数
+                 * @param {Function} end 停止执行的函数
+                 */
+                mixin_setTimer(per, end) {
+                    let _this = this;
+                    _this.mixin_clearTimer();
+
+                    function sco() {
+                        let n = 0;
+                        let arr = [300, 300, 600, 1000, 2000, 5000, 5000];
+
+                        function run() {
+                            _this.mixin_timer = setTimeout(() => {
+                                console.log(n);
+                                per && per();
+                                n++
+                                if (n < arr.length) {
+                                    run();
+                                } else {
+                                    console.log("---自动关闭---");
+                                    _this.mixin_clearTimer();
+                                    end && end()
+                                }
+                            }, arr[n]);
+                        }
+                        return run
+                    }
+                    let timeout = sco();
+                    timeout();
                 }
             },
             commonMethod,
@@ -87,6 +126,9 @@ initPlugin.install = function (Vue, option) {
         ),
         created() {
             window.__vm__ = this;
+        },
+        destroyed() {
+            this.mixin_clearTimer();
         },
     });
 

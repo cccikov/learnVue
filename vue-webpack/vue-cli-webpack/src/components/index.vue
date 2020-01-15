@@ -98,6 +98,9 @@
         <p>
             <router-link :to="{name:'34-slot'}">34. slot</router-link>
         </p>
+        <p>
+            <router-link :to="{name:'35-global-timer'}">35. 全局混合定时器</router-link>
+        </p>
     </div>
 </template>
 <script>
@@ -119,9 +122,14 @@
 </script>
 <style scoped lang='less'>
     .wrap {
-        padding: 10px 5px 50px;
-        a {
-            display: block;
+        padding: 5px 20px 50px;
+        font-size: 15px;
+        h5 {
+            font-size: 18px;
+            margin: 15px 0;
+        }
+        p {
+            margin: 15px 0;
         }
     }
 </style>
