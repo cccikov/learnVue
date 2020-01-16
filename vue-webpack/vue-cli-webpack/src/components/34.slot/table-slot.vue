@@ -105,11 +105,22 @@
         },
         computed: {
             column() {
+                // 查找有什么表头
                 let tableData = this.tableData;
-                if (Array.isArray(tableData) && tableData.length > 0 && tableData[0].list) {
-                    return tableData[0].list[0];
+                if (Array.isArray(tableData) && tableData.length > 0) {
+                    let obj = {};
+                    tableData.forEach(group => {
+                        if (Array.isArray(group.list)) {
+                            group.list.forEach(line => {
+                                Object.keys(line).forEach(key => {
+                                    obj[key] = true;
+                                });
+                            });
+                        }
+                    });
+                    return obj;
                 } else {
-                    return [];
+                    return {};
                 }
             }
         }
@@ -133,7 +144,8 @@
             box-sizing: border-box;
             border-collapse: collapse;
             &.test {
-                th,td {
+                th,
+                td {
                     outline: 1px solid #f00; // 测试
                 }
             }
