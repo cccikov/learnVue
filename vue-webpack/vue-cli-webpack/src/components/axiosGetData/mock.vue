@@ -149,7 +149,12 @@
             syntax() {
                 /**
                  * 语法
-                 * Mock.Random.占位符()
+                 * 属性名   name
+                 * 生成规则 rule
+                 * 属性值   value
+                    'name|rule': value
+
+                 * Mock.Random.占位符()  生成随机 value
                  * @占位符 或者 @占位符(参数[,参数])
                  */
 
