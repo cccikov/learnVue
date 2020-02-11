@@ -1,4 +1,5 @@
 <template>
+    <!-- 原项目：pc管理后台 src\views\companyManager\3d\companyFnt\addProduct\curtain\curtain-list-edit.vue -->
     <div>
         <!-- 添加表头 -->
         <div>
@@ -13,7 +14,7 @@
         <p>{{columns}}</p>
         <p>{{tableData}}</p>
 
-        <table>
+        <table v-show="!matListShow">
             <tr>
                 <th v-for="head in columns">
                     <div>{{head.name}}</div>
@@ -23,7 +24,7 @@
             <tr v-for="line in tableData">
                 <td v-for="head in columns">
                     <template v-if="typeof line[head.key] === 'object'">
-                        <a href="javascript:void(0)">选择材质</a>
+                        <a @click="selectMat(line[head.key])" href="javascript:void(0)">选择材质</a>
                         <p v-for="(val,key) in line[head.key]">{{key}} -- {{val}}</p>
                     </template>
                     <template v-else-if="head.key === 'name'">
@@ -37,7 +38,18 @@
                     </template>
                 </td>
             </tr>
+            <tr v-if="tableData.length>0">
+                <td :colspan="columns.length"><button @click="addLine">加一行</button></td>
+            </tr>
         </table>
+
+        <ul class="mat-list" v-show="matListShow">
+            <li v-for="val in matList">
+                <span>{{val.name}}</span>
+                <span>{{val.id}}</span>
+                <button @click="temporaryObj.mat = val,matListShow = false">选择</button>
+            </li>
+        </ul>
     </div>
 </template>
 <script>
@@ -47,7 +59,13 @@
                 name: "",
                 attrs: [],
                 columns: [], // 表头
-                tableData: []
+                tableData: [],
+                tableDataItem: "",
+
+                /* 选择材质 */
+                matListShow: false,
+                matList: [],
+                temporaryObj: {} // 临时对象，存储中间数据
             };
         },
         methods: {
@@ -91,16 +109,48 @@
                     tableDataItem[v.id] = {
                         name: v.name,
                         id: v.id,
-                        partId: "",
-                        matId: ""
+                        mat: {}
                     };
                 });
                 tableDataItem.name = "";
                 tableDataItem.checkbox = false;
                 tableDataItem = JSON.stringify(tableDataItem);
+                this.tableDataItem = tableDataItem;
 
                 this.tableData = [JSON.parse(tableDataItem)];
-                this.tableData.push(JSON.parse(tableDataItem));
+            },
+            /**
+             * 增加一行
+             */
+            addLine() {
+                this.tableData.push(JSON.parse(this.tableDataItem));
+            },
+            /**
+             * 点击选择材质
+             */
+            selectMat(obj) {
+                console.log(obj, obj.id); // 传个id过去获取对应材质列表也可以
+                this.temporaryObj = obj;
+
+                this.matList = this.getMatList(obj.id);
+                this.matListShow = true;
+            },
+            /**
+             * 获取材质列表
+             */
+            getMatList(id) {
+                if (id) {
+                    return Mock.mock({
+                        "list|5-20": [
+                            {
+                                id: "@id",
+                                name: "@name"
+                            }
+                        ]
+                    }).list;
+                } else {
+                    return [];
+                }
             }
         }
     };
@@ -153,6 +203,14 @@
                 color: #ccc;
                 margin: 0;
                 line-height: 1.2;
+            }
+        }
+    }
+    .mat-list {
+        li {
+            span {
+                display: inline-block;
+                width: 150px;
             }
         }
     }

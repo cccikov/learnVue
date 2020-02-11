@@ -43,7 +43,8 @@ module.exports = {
       author:"@/common/providePluginAuthor",
       author_first_name:["@/common/providePluginAuthor","firstName"],
       author_last_name:["@/common/providePluginAuthor","lastName"],
-      author_year:["@/common/providePluginAuthor","year"]
+      author_year:["@/common/providePluginAuthor","year"],
+      Mock:"mockjs"
     })
   ],
   output: {
