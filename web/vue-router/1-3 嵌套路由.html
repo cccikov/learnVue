@@ -20,7 +20,7 @@
     <script src="../vue-router.js"></script>
     <div id="app">
         <div>
-        	<div>
+            <div>
                 <router-link to="/">/</router-link>
             </div>
             <div>
@@ -28,6 +28,15 @@
             </div>
             <div>
                 <router-link to="/user/123123/child">/user/123123/child</router-link>
+            </div>
+            <div>
+                <router-link to="/user/123123/child/child">/user/123123/child/child</router-link>
+            </div>
+            <div>
+                <router-link to="/child">/child</router-link>
+            </div>
+            <div>
+                <router-link to="/child3">/child3</router-link>
             </div>
         </div>
         <div class="router">
@@ -57,25 +66,25 @@
     //////////////////////////////////////////////////
     let userComponent = {
         template: `<div>
-			<p>User {{ $route.params.id }}</p>
-			<div class="router">
-				<!-- 二级路由匹配到的组件将渲染在这里 -->
-				<router-view></router-view>
-			</div>
-		</div>`,
-		created(){
-			console.log(this.$route);
-		}
+            <p>User {{ $route.params.id || '无id' }} 一级路由</p>
+            <div class="router">
+                <!-- 二级路由匹配到的组件将渲染在这里 -->
+                <router-view></router-view>
+            </div>
+        </div>`,
+        created() {
+            console.log(this.$route);
+        }
     };
 
     let userChildComponent = {
         template: `<div>
-			<p>User {{ $route.params.id }}</p>
-			<div class="router">
-				<!-- 三级路由匹配到的组件将渲染在这里 -->
-				<router-view></router-view>
-			</div>
-		</div>`
+            <p>User {{ $route.params.id || '无id' }} 下级路由</p>
+            <div class="router">
+                <!-- 三级路由匹配到的组件将渲染在这里 -->
+                <router-view></router-view>
+            </div>
+        </div>`
     };
 
     let router = new VueRouter({
@@ -83,13 +92,22 @@
             path: '/user/:id',
             component: userComponent,
             children: [{
-                path: "child",
-                component: userChildComponent,
-            },
-            {
-                path: "/child",
-                component: userChildComponent,
-            }]
+                    path: "child",
+                    component: userChildComponent,
+                    children: [{
+                        path: "child",
+                        component: userChildComponent,
+                    }]
+                },
+                {
+                    path: "/child",
+                    component: userChildComponent,
+                    children: [{
+                        path: "/child3",
+                        component: userChildComponent,
+                    }]
+                }
+            ]
             /////////////////////////////////////////////////
             // 要注意，以 / 开头的嵌套路径会被当作根路径。 这让你充分的使用嵌套组件而无须设置嵌套的路径。 //
             /////////////////////////////////////////////////
