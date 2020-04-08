@@ -30,4 +30,5 @@ $ vue init webpack my-project
 
 [单文件组件规范](https://vue-loader.vuejs.org/zh/spec.html)
 
-* [vue相关组件资源](https://github.com/vuejs/awesome-vue) 
+* [vue相关组件资源](https://github.com/vuejs/awesome-vue)
+* [vue相关组件资源](https://www.awesomes.cn/subject/8311014)
