@@ -10,7 +10,7 @@
 
     `{name:'home'}` => `{name:'home'}` 报错
 
-    `{name:'home'}` => `{name:'home',query:{name:'123'}}` 不报错，但是不会触发 created（旧版也不会），可以通过watch $route 或者 $route.query
+    `{name:'home'}` => `{name:'home',query:{name:'123'}}` 不报错，但是不会触发 created（旧版也不会），可以通过watch $route 或者 $route.query; vue-router 2.2 新增一个 `beforeRouteUpdate` 钩子函数
 
     现在 `this.$router.push()` 返回的是一个 `promise` 对象
 
@@ -42,8 +42,8 @@
 
         // 重写路由的push方法
         const routerPush = VueRouter.prototype.push
-        VueRouter.prototype.push = function push(location) {
-            return routerPush.call(this, location).catch(err=> err)
+        VueRouter.prototype.push = function () {
+            return origin_push.call(this, ...arguments).catch(err=> err)
         }
         ```
     3. 在 `this.$router.push()` 后面加上一个 `catch`，不让报错
@@ -65,4 +65,3 @@
                 });
             }
             ```
-

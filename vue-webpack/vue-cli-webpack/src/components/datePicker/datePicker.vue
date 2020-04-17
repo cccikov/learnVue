@@ -96,10 +96,14 @@
                 console.log("str", str);
                 this.days.length = 0; // 清空数组
 
-                // 例今天是周五，放在第一行第5个位置，前面4个上个月的
-                //初始化本周
+                /* 以下为核心 */
+                /* 以下为核心 */
+                /* 以下为核心 */
+
+                // 例今天是周五，放在第一行第5个位置，前面4个上个月的，循环获取前几天日期
+                // 初始化本周的是上个月的日
                 for (let i = this.beginWeek - 1; i >= 0; i--) {
-                    const d = new Date(str);
+                    const d = new Date(str); // 这个月1号
                     d.setDate(d.getDate() - i); // 将日期设定为上个的日期
                     const dayObj = {}; //用一个对象包装Date对象 以便为以后预定功能添加属性
                     dayObj.day = d;
@@ -107,11 +111,11 @@
                     this.days.push(dayObj); //将日期放入data 中的days数组 供页面渲染使用
                 }
 
-                //列表显示的天数6*7减去前星期X
+                // 列表显示的天数6*7减去前星期X （一个月最多31天，除以7，4行余3天，3天如果分别处于两行，最多6行）
                 let i = 1;
                 while (i <= 42 - this.beginWeek) {
                     // 最大只能是42 - this.beginWeek
-                    const d = new Date(str);
+                    const d = new Date(str);  // 这个月1号
                     d.setDate(d.getDate() + i);
 
                     let month = d.getMonth() + 1;
