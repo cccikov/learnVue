@@ -102,6 +102,9 @@
             <p>
                 <router-link :to="{name:'35-global-timer'}">35. 全局混合定时器</router-link>
             </p>
+            <p>
+                <router-link :to="{name:'36-table-simple'}">36. 自定义表格再研究</router-link>
+            </p>
         </div>
     </div>
 </template>

@@ -273,6 +273,12 @@ const router = new Router({
             name: "35-global-timer",
             component: resolve => require(['@/components/35.global-timer/index.vue'], resolve)
         },
+        /* demo 36 */
+        {
+            path: "/36/table/simple",
+            name: "36-table-simple",
+            component: resolve => require(['@/components/36.table-simple-demo/index.vue'], resolve)
+        },
         {
             path: "/eightcorner3",
             name: "eightcorner3",
