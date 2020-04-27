@@ -22,6 +22,7 @@ $ vue init webpack my-project
 
 * vue-router
 * vuex
+* vuex-persistedstate vux持久化
 * vue ssr , Nuxt.js
 
 * VuePress
@@ -32,3 +33,16 @@ $ vue init webpack my-project
 
 * [vue相关组件资源](https://github.com/vuejs/awesome-vue)
 * [vue相关组件资源](https://www.awesomes.cn/subject/8311014)
+
+
+* 控制台报错：组件报错
+```
+found in
+
+---> <Home> at src/views/consumer/home/home.vue
+       <Layout> at src/views/consumer/home/layout.vue
+         <Index> at src/views/consumer/index.vue
+           <App> at src/App.vue
+             <Root>
+```
+`<Home>` 组件报错 `src/views/consumer/home/home.vue` 对应的组件文件，像这种大写开头，不是自己定义的组件，一般就是路由组件
