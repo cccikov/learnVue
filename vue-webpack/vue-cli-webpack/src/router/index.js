@@ -279,6 +279,34 @@ const router = new Router({
             name: "36-table-simple",
             component: resolve => require(['@/components/36.table-simple-demo/index.vue'], resolve)
         },
+        /* demo 37 */
+        {
+            path: "/37/index",
+            name: "37-index",
+            component: resolve => require(['@/components/37.same-js/index.vue'], resolve),
+            children: [
+                {
+                    path: "a",
+                    name: "37-index-a",
+                    component: resolve => require(['@/components/37.same-js/a.vue'], resolve),
+                },
+                {
+                    path: "b",
+                    name: "37-index-b",
+                    component: resolve => require(['@/components/37.same-js/b.vue'], resolve),
+                },
+                {
+                    path: "a-fix",
+                    name: "37-index-a-fix",
+                    component: resolve => require(['@/components/37.same-js/a-fix.vue'], resolve),
+                },
+                {
+                    path: "b-fix",
+                    name: "37-index-b-fix",
+                    component: resolve => require(['@/components/37.same-js/b-fix.vue'], resolve),
+                }
+            ]
+        },
         {
             path: "/eightcorner3",
             name: "eightcorner3",

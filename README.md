@@ -34,6 +34,16 @@ $ vue init webpack my-project
 * [vue相关组件资源](https://github.com/vuejs/awesome-vue)
 * [vue相关组件资源](https://www.awesomes.cn/subject/8311014)
 
+* 框架
+    - 移动端
+        1. 有赞 vant
+        2. 饿了么 mint-ui
+        3. quasar
+    - pc（管理）
+        1. iview 、iview-admin
+        2. element-ui
+        3. element-admin
+
 
 * 控制台报错：组件报错
 ```
@@ -46,3 +56,7 @@ found in
              <Root>
 ```
 `<Home>` 组件报错 `src/views/consumer/home/home.vue` 对应的组件文件，像这种大写开头，不是自己定义的组件，一般就是路由组件
+
+* 打包压缩[https://www.jianshu.com/p/957ed8a7ca73]
+
+* 拖拽组件 vue-slicksort

@@ -105,6 +105,9 @@
             <p>
                 <router-link :to="{name:'36-table-simple'}">36. 自定义表格再研究</router-link>
             </p>
+            <p>
+                <router-link :to="{name:'37-index'}">37. 同一个js，不同template</router-link>
+            </p>
         </div>
     </div>
 </template>
