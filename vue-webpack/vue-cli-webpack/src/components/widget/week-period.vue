@@ -202,7 +202,7 @@
         }
     }
 
-    /* 数字转为时间，一天分成48份 */
+    /* 数字转为时间，一天分成(0-48)49份 */
     function number2Date(num) {
         var hour = parseInt(num / 2);
         hour = (hour > 9 ? "" : "0") + hour;
@@ -213,8 +213,8 @@
     /* 去连续，连续的分成一组 */
     function times2groups(dayTimes) {
         var dayTimeGroups = []; // 去连续返回结果
-        var last = 0; // 中间变量变量，处理用
-        var arr = []; // 中间变量变量，处理用
+        var last = 0; // 中间变量变量，处理用，连续数组的最后一个值
+        var arr = []; // 中间变量变量，处理用，【连续数字第一个，连续数字最后一个】
         var max = dayTimes.length - 1;
         dayTimes.forEach((val, i) => {
             if (i === 0) {
