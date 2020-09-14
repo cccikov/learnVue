@@ -35,14 +35,35 @@ $ vue init webpack my-project
 * [vue相关组件资源](https://www.awesomes.cn/subject/8311014)
 
 * 框架
+    
     - 移动端
         1. 有赞 vant
         2. 饿了么 mint-ui
         3. quasar
+        
     - pc（管理）
-        1. iview 、iview-admin
-        2. element-ui
-        3. element-admin
+        1. iview-admin（基于iview-ui ）
+            * 官网 https://lison16.github.io/iview-admin-doc/#/
+            * github地址 https://github.com/iview/iview-admin
+            * demo https://admin.iviewui.com/
+        2. element-admin（基于element-ui）
+            * 官网 https://panjiachen.github.io/vue-element-admin-site/zh/
+            * 官网 https://panjiachen.gitee.io/vue-element-admin-site/zh/
+            * github地址 https://github.com/PanJiaChen/vue-element-admin
+            * demo https://panjiachen.gitee.io/vue-element-admin/
+        3. eladmin (基于 element-ui)
+            * 官网 https://el-admin.vip/
+            * github前端 https://github.com/elunez/eladmin-web
+            * 码云前端 https://gitee.com/elunez/eladmin-web
+            * demo https://el-admin.xin/dashboard
+
+    - ps: 
+        * element-ui
+            - 官网 https://element.eleme.cn/#/
+            - github地址 https://github.com/ElemeFE/element
+        * iview-ui
+            - 官网 https://iviewui.com/
+            - github地址 https://github.com/view-design/ViewUI
 
 
 * 控制台报错：组件报错
