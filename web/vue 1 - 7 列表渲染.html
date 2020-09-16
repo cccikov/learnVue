@@ -9,15 +9,15 @@
 
 <body>
     <ul id="app1">
-        <li v-for="item in arr" :key="item.id"> {{item.message}}{{item.id}}</li>
+        <li v-for="item in arr" :key="item.id + Math.random()"> {{item.message}}{{item.id}}</li>
         <!-- key这个属性是vue里面的特殊特性 , 是不会渲染出来的 , 是为了避免复用渲染 -->
-        <li v-for="(item,index) in arr" :key="item.id"> {{index}} --- {{item.message}}</li>
+        <li v-for="(item,index) in arr" :key="item.id + Math.random()"> {{index}} --- {{item.message}}</li>
         <li v-for="(a,b) in arr" :key="a.id"> {{b}} --- {{a.message}}</li>
         <!-- 可以采用of 代替 in ，js两种遍历for...in for...of （vue用of和in都一样，不同于原生js的in和of是不同的；只是为了让前端觉得语法友好）-->
-        <li v-for="(item,index) of arr" :key="item.id"> {{index}} --- {{item.message}}</li>
+        <li v-for="(item,index) of arr" :key="item.id + Math.random()"> {{index}} --- {{item.message}}</li>
         <li v-for="val in obj" :key="val"> {{val}}</li>
-        <li v-for="(val,key) of obj" :key="key">{{key}} ------ {{val}}</li>
-        <li v-for="(val,key,index) of obj" :key="key">{{index}}-----{{key}} ------ {{val}}</li>
+        <li v-for="(val,key) of obj" :key="key + Math.random()">{{key}} ------ {{val}}</li>
+        <li v-for="(val,key,index) of obj" :key="key + Math.random()">{{index}}-----{{key}} ------ {{val}}</li>
         <!-- index可能会因为不同的js引擎读取对象属性顺序而不同 , 要有明确顺序只能使用数组-->
         <!-- key属性的值一定要是唯一的有效的 , 如果数据里面有id最好就用id , 没有的话 , 数组型数据可以用index , 对象型属性可以用属性名 -->
         <!-- (属性值，属性名，索引(对象的话)) -->
@@ -151,6 +151,24 @@
                 }
             });
         }, false);
+
+        // 当你把一个普通的 JavaScript 对象传入 Vue 实例作为 data 选项，Vue 将遍历此对象所有的 property（这指的是data上面的根属性，但是对象的属性同理），并使用 Object.defineProperty 把这些 property（这指的是data上面的根属性，但是对象的属性同理） 全部转为 getter/setter。
+
+        // Vue 无法检测 property（这指的是data上面的根属性，但是对象的属性同理） 的添加或移除。由于 Vue 会在初始化实例时对 property（这指的是data上面的根属性，但是对象的属性同理） 执行 getter/setter 转化，所以 property 必须在 data 对象上存在才能让 Vue 将它转换为响应式的。
+
+        // https://cn.vuejs.org/v2/guide/reactivity.html
+
+        // 响应式属性
+        //  1. 赋值新对象的时候（新的内容位置）（vue自动处理） this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
+        //  2. 使用Vue.set 或者 this.$set
+        //  3. 对于数组使用数组自带会修改原数组的方法
+        //  注意对于对象（数组）里面的对象（或者数组）
+        //  {
+        //      obj:{
+        //          obj:{},
+        //          arr:[]
+        //      }
+        //  }
     </script>
 
 

@@ -50,7 +50,7 @@
                 <router-link to="/warning">各种坑</router-link>
             </p>
             <p>
-                <router-link to="/week-period">时间段 选择</router-link>
+                <router-link to="/week-period">周时间段选择（臭茄需求）</router-link>
             </p>
             <p>
                 <router-link :to="{name:'nesting'}">多层组件嵌套处理</router-link>
