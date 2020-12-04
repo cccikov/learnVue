@@ -15,7 +15,7 @@
             <p>{{obj}}</p>
         </div>
         <div>
-            <!-- v-model 和 .sync 的区别就是 .sync 可以双向绑定多个值 -->
+            <!-- v-model 和 .sync 的区别就是 .sync 可以双向绑定多个值，v-model一个组件只能同步一个 -->
             <sv v-model="json" :obj.sync="obj" :arr.sync="arr"></sv>
         </div>
     </div>

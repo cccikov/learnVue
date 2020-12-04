@@ -130,8 +130,11 @@
     <div id="app3">
         <h5>app3</h5>
         <comp :foo.sync="bar"></comp>
+        <!-- 相当于 分开prop和事件 -->
+        <comp :foo="bar" @update:foo="bar"></comp>
         <!-- 相当于 -->
         <comp :foo="bar" @update:foo="(val) => {bar = val}"></comp>
+        <!-- v-on:update:foo， "update:foo" 是一个事件名 -->
         <hr>
     </div>
     <script>
