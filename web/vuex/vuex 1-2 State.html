@@ -201,9 +201,13 @@
                 /* 问题来了，这个组件（实例）需要用到好多 vuex state，那不是要写好多个计算属性；vuex为我们提供了 mapState 辅助函数帮助我们生成计算属性 */
                 computed: Vuex.mapState({
                     count: state => state.count, // 箭头函数，因为原本计算属性里面不可以用箭头函数，否则会this不是指向vue实例
+
+
                     name: 'name', // 'name' 等同于 `state => state.name`。
                     age: 'age', // 不能直接使用es6对象简写模式{name,age,cartNum}因为值是一个字符串，不是一个变量，除非这个变量定义了
                     cartNum: 'cartNum',
+
+
                     userId(state) { // 有计算时使用常规函数
                         return state.userId + this.name
                     }

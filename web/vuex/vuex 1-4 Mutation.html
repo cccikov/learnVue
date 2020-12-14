@@ -35,7 +35,7 @@
                     incrementTo(state, val) { // val为载荷
                         state.count = val
                     },
-                    incrementPayload(state, payload) { // 由于当使用对象风格的提交方式，整个对象都作为载荷传给 mutation 函数；荷应该是一个对象，并且这样可以包含多个字段
+                    incrementPayload(state, payload) { // 由于当使用对象风格的提交方式，整个对象都作为载荷传给 mutation 函数；荷应该是一个对象，并且这样可以包含多个字段，一个mutation可以改变多个state
                         state.count = payload.count
                     }
                 }
@@ -71,7 +71,8 @@
         }
 
         ////////////////////////////////////////////////////////////////////////////////////
-        //！！！ Mutation 必须是同步函数，因为 vue devtools 调试工具，都需要捕捉到前一状态和后一状态的快照。//
+        // ！！！ Mutation 必须是同步函数，因为 vue devtools 调试工具，都需要捕捉到前一状态和后一状态的快照。//
+        // ！！！ 甚至可以不通过mutation改变state，直接赋值也可以，通过mutation改变state是为了调试方便，方便知道状态的变化 //
         ////////////////////////////////////////////////////////////////////////////////////
     </script>
 

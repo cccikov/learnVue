@@ -331,7 +331,11 @@
 
 
     scope="slotScope" vue2.5 改为 slot-scope="slotScope"
-    slot-scope="slotScope" 和 slot="slotName" 都整合到v-slot:slotName="slotScope" #slotName="slotScope"
+
+    slot="slotName" 相当于=> v-slot:slotName 或 #slotName ，v-slot指令可以只有参数，没有值
+
+    slot-scope="slotScope" + slot="slotName" 相当于=> v-slot:slotName="slotScope" 或 #slotName="slotScope"
+
 </body>
 
 </html>

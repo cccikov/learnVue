@@ -155,6 +155,7 @@
         <p>userId：{{userId}}</p>
         <p>identity：{{identity}}</p>
         <p>niceGirl：{{niceGirl}}</p>
+        <p>niceGirl2：{{niceGirl2}}</p>
         <p>查找gini:{{findGirl("gini")}}</p>
     </div>
     <script>
@@ -225,7 +226,11 @@
                     identity(){
                         return this.$store.getters.identity;
                     },
-                    ...Vuex.mapGetters(["niceGirl"])
+                    ...Vuex.mapGetters(["niceGirl"]),
+
+                    ...Vuex.mapGetters({
+                        niceGirl2:"niceGirl"
+                    })
                 },
                 methods:{
                     findGirl(name){
