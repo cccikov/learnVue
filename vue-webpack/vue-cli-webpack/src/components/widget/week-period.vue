@@ -3,6 +3,9 @@
     <div>
         <div :class="[select.includes(twoPoint[0])?'del':'add']" id="touch" @mousedown="mousedown" @mousemove="mousemove">
             <p v-for="day in 7" :key="day">
+                <!-- 通过 data-id 标记住这个元素的坐标，通过dom上的信息记录，其实有点jq时代的思路 -->
+                <!-- 但是jq时代操作dom，在事件监听的时候就有优势，能实现事件委托 -->
+                <!-- 事件委托的话，数据只能存在标签属性上面，所以一般存的就是数据的下标 -->
                 <span :class="{active:select.includes(day+'-'+hour),selecting:multiple.includes(day+'-'+hour)}" v-for="hour in 48" :key="day+'-'+hour" :data-id="day+'-'+hour"></span>
             </p>
         </div>
@@ -37,6 +40,7 @@
             };
         },
         created() {
+            /* 事件委托，事件监听对象是document，是想要监听的是span */
             document.addEventListener("mouseup", this.mouseup, {
                 capture: false,
                 passive: false
@@ -61,7 +65,7 @@
                     return;
                 }
                 var tar = e.target;
-                this.$set(this.twoPoint, 1, tar.getAttribute("data-id"));
+                this.$set(this.twoPoint, 1, tar.getAttribute("data-id")); // 或者直接通过 tar.dataset.id 来读取
                 this.multipleHandler();
             },
             mouseup(e) {
@@ -79,10 +83,12 @@
                     this.toggleSelect(this.twoPoint[0]);
                 } else {
                     if (this.select.includes(this.twoPoint[0])) {
+                        // 如果开始的点是在已选择的区域里面，代表用户想要删除
                         this.multiple.forEach(val => {
                             this.removeSelect(val);
                         });
                     } else {
+                        // 如果开始的点是在已选择的区域里面，代表用户想要删除
                         this.multiple.forEach(val => {
                             this.addSelect(val);
                         });
