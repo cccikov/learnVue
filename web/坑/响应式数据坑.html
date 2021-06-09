@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>响应式数据坑</title>
+    <script type="text/javascript" src="../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p @click="changeA">点击我啊 {{obj}}</p>
+    </div>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                obj: {}
+            },
+            created() {
+                this.obj.a = "a"
+                this.$set(this.obj, "a", 1) ; // 只有某个属性不是响应式属性，即使后面用 Vue.set() 重新设置，也是无补于事。最好还是删除属性，重新用Vue.set()设置；或者整个对象重新等于一个新对象
+                console.log(this.obj);
+            },
+            methods: {
+                changeA() {
+                    this.obj.a++
+                    console.log(this.obj.a)
+                    console.log(this.obj)
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
